@@ -19,6 +19,7 @@ public class nkolkoikrzyzyk {
 				plansza[i]=0;
 			for(int j=0;j<9;j++)
 			{
+				plansza = siec.outputSignal(plansza);
 				for(int i=0;i<9;i++)
 				{
 					if(i%3==2)
@@ -30,6 +31,20 @@ public class nkolkoikrzyzyk {
 						System.out.print(plansza[i]);
 					}
 				}
+				if(ifwin(plansza)==true)
+				{
+					System.out.println("Komputer wygra³");
+					siec.youWin(plansza);
+					break;
+				}
+				
+				if(noMoreMove(plansza)==true)
+				{
+					siec.youLost();
+					System.out.println("Remis");
+					break;
+				}
+				
 				int input;
 				if(k>max)
 				{
@@ -55,19 +70,8 @@ public class nkolkoikrzyzyk {
 					siec.youLost();
 					break;
 				}
-				if(noMoreMove(plansza)==true)
-				{
-					siec.youLost();
-					System.out.println("Remis");
-					break;
-				}
-				plansza = siec.outputSignal(plansza);
-				if(ifwin(plansza)==true)
-				{
-					System.out.println("Komputer wygra³");
-					siec.youWin(plansza);
-					break;
-				}
+				
+				
 			}
 			k++;
 		}

@@ -57,8 +57,10 @@ public class neurons {
 			}
 		}
 		Random generator = new Random();
-		System.out.println("wywala tutaj najwieksze.size="+najwieksze.size());
+		//System.out.println("wywala tutaj najwieksze.size="+najwieksze.size());
+		
 		int randomNumber = generator.nextInt(najwieksze.size());
+		System.out.println("Wybra³em neuoron o wartoœci: "+hiddenNeurons[size][najwieksze.get(randomNumber)]);
 		signals[najwieksze.get(randomNumber)]=-1;
 		stos.push(najwieksze.get(randomNumber));
 		size++;
@@ -76,7 +78,7 @@ public class neurons {
 			size--;
 			int temp = stos.pop();
 			hiddenNeurons[size][temp]=hiddenNeurons[size][temp]+a*(hiddenNeurons[size+1][previous]-hiddenNeurons[size][temp]);
-			System.out.println("Nowa wartosc neuronu ("+size+","+temp+") to "+hiddenNeurons[size][temp]);
+			//System.out.println("Nowa wartosc neuronu ("+size+","+temp+") to "+hiddenNeurons[size][temp]);
 			previous=temp;
 		}
 		size=0;
