@@ -1,5 +1,6 @@
 package nkolkoikrzyzyk;
 
+import java.util.Random;
 import java.util.Scanner;
 
 
@@ -9,10 +10,11 @@ public class nkolkoikrzyzyk {
 	public static void main(String[] args) {
 		neurons siec = new neurons(0.5);
 		int[] plansza = new int[9];
-		
+		int k=0;
+		int max=100;
 		while(true)
 		{
-			System.out.println("Kolejna gra");
+			System.out.println("Gra nr "+k);
 			for(int i=0;i<9;i++)
 				plansza[i]=0;
 			for(int j=0;j<9;j++)
@@ -28,24 +30,56 @@ public class nkolkoikrzyzyk {
 						System.out.print(plansza[i]);
 					}
 				}
-				Scanner reader = new Scanner(System.in);
-				System.out.println("podaj pozycje krzyzka");
-				int input = reader.nextInt();
+				int input;
+				if(k>max)
+				{
+					Scanner reader = new Scanner(System.in);
+					System.out.println("podaj pozycje krzyzka");
+					input = reader.nextInt();
+				}
+				else
+				{
+					int liczba;
+					Random losowa = new Random();
+					liczba = losowa.nextInt(9);
+					while(plansza[liczba]!=0)
+					{
+						liczba=losowa.nextInt(9);
+					}
+					input = liczba;
+				}
 				plansza[input]=1;
 				if(ifwin(plansza)==true)
 				{
 					System.out.println("Gracz wygra³");
+					siec.youLost();
+					break;
+				}
+				if(noMoreMove(plansza)==true)
+				{
+					siec.youLost();
+					System.out.println("Remis");
 					break;
 				}
 				plansza = siec.outputSignal(plansza);
 				if(ifwin(plansza)==true)
 				{
 					System.out.println("Komputer wygra³");
+					siec.youWin(plansza);
 					break;
 				}
 			}
-			
+			k++;
 		}
+	}
+
+	private static boolean noMoreMove(int[] plansza) {
+		for(int i=0;i<9;i++)
+		{
+			if(plansza[i]==0)
+				return false;
+		}
+		return true;
 	}
 
 	private static boolean ifwin(int[] plansza) {
