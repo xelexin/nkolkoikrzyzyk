@@ -20,17 +20,7 @@ public class nkolkoikrzyzyk {
 			for(int j=0;j<9;j++)
 			{
 				plansza = siec.outputSignal(plansza);
-				for(int i=0;i<9;i++)
-				{
-					if(i%3==2)
-					{
-						System.out.println(plansza[i]);
-					}
-					else
-					{
-						System.out.print(plansza[i]);
-					}
-				}
+				printBoard(plansza);
 				if(ifwin(plansza)==true)
 				{
 					System.out.println("Komputer wygra³");
@@ -49,11 +39,11 @@ public class nkolkoikrzyzyk {
 				if(k>max)
 				{
 					Scanner reader = new Scanner(System.in);
-					System.out.println("podaj pozycje krzyzka");
+					System.out.println("podaj pozycje krzyzyka");
 					input = reader.nextInt();
 					while(plansza[input]!=0)
 					{
-						System.out.println("podaj pozycje krzyzka");
+						System.out.println("podaj pozycje krzyzyka");
 						input = reader.nextInt();
 					}
 				}
@@ -81,7 +71,23 @@ public class nkolkoikrzyzyk {
 			k++;
 		}
 	}
+	
+	private static void printBoard(int[] plansza) {
+		for(int i=0;i<9;i++)
+		{
 
+			if(plansza[i]<0)
+				System.out.print("O");
+			else if(plansza[i]>0)
+				System.out.print("X");
+			else
+				System.out.print(".");
+			
+			if (i%3==2)
+				System.out.println();
+		}
+	}
+	
 	private static boolean noMoreMove(int[] plansza) {
 		for(int i=0;i<9;i++)
 		{
