@@ -51,6 +51,11 @@ public class nkolkoikrzyzyk {
 					Scanner reader = new Scanner(System.in);
 					System.out.println("podaj pozycje krzyzka");
 					input = reader.nextInt();
+					while(plansza[input]!=0)
+					{
+						System.out.println("podaj pozycje krzyzka");
+						input = reader.nextInt();
+					}
 				}
 				else
 				{
