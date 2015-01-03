@@ -1,4 +1,4 @@
-package nkolkoikrzyzyk;
+package nkolkoikrzyzyk.model;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -92,6 +92,7 @@ public class NeuralNetwork
 	}
 
 	Layer[] layers = null;
+	private String name;
 
 	/**
 	 * Create multi-layer neural network
@@ -236,6 +237,10 @@ public class NeuralNetwork
 		}
 
 		return true;
+	}
+
+	public String getName() {
+		return name;
 	}
 
 

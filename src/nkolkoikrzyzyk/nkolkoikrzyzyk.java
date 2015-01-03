@@ -3,12 +3,14 @@ package nkolkoikrzyzyk;
 import java.util.Random;
 import java.util.Scanner;
 
+import nkolkoikrzyzyk.model.neurons;
+
 
 
 public class nkolkoikrzyzyk {
 
 	public static void main(String[] args) {
-		neurons siec = new neurons(0.5);
+		neurons siec = new neurons(0.5, -1);
 		int[] plansza = new int[9];
 		int k=0;
 		int max=100;

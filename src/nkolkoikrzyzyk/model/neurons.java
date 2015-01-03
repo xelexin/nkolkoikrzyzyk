@@ -1,4 +1,4 @@
-package nkolkoikrzyzyk;
+package nkolkoikrzyzyk.model;
 
 import java.util.Random;
 import java.util.Stack;
@@ -12,7 +12,9 @@ public class neurons {
 	private double[][] hiddenNeurons;
 	private int size;
 	Stack<Integer> stos;
-	public neurons(double d) {
+	private int out;
+	public neurons(double d, int out) {
+		this.out = out;
 		a = d;
 		hiddenNeurons = new double[5][9];
 		size=0;
@@ -61,7 +63,7 @@ public class neurons {
 		
 		int randomNumber = generator.nextInt(najwieksze.size());
 		System.out.println("Wybra³em neuoron o wartoœci: "+hiddenNeurons[size][najwieksze.get(randomNumber)]);
-		signals[najwieksze.get(randomNumber)]=-1;
+		signals[najwieksze.get(randomNumber)]=out;
 		stos.push(najwieksze.get(randomNumber));
 		size++;
 		return signals;
