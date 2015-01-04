@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.model.HumanPlayer;
 import nkolkoikrzyzyk.model.Mark;

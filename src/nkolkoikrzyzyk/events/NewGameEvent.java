@@ -1,9 +1,8 @@
 /**
  * 
  */
-package nkolkoikrzyzyk.view;
+package nkolkoikrzyzyk.events;
 
-import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.model.Player;
 
 /**

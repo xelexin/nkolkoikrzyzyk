@@ -18,8 +18,9 @@ public class View {
 
 	private final BlockingQueue<ProgramEvent> blockingQueue;
 
-	private AppFrame frame;
-	private GameWindow gameWindow;
+	private AppFrame mainFrame = null;
+	private GameWindow gameWindow = null;
+	private NeuralNetworksWindow neuralNetworksWindow = null;
 
 	/**
 	 * Creates new View
@@ -32,7 +33,7 @@ public class View {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				View.this.frame = new AppFrame(blockingQueue);
+				View.this.mainFrame = new AppFrame(blockingQueue);
 			}
 		});
 	}
@@ -44,6 +45,13 @@ public class View {
 	}
 
 	public void setAppWindowVisible(boolean b) {
-		this.frame.setVisible(b);
+		this.mainFrame.setVisible(b);
+	}
+
+	public void invokeNeuralNetworksWindow() 
+	{
+		if ( this.neuralNetworksWindow == null)
+			this.neuralNetworksWindow = new NeuralNetworksWindow(this.blockingQueue);
+		this.neuralNetworksWindow.setVisible(true);
 	}
 }

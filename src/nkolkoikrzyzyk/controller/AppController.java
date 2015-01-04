@@ -9,13 +9,17 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import nkolkoikrzyzyk.commons.GameData;
+import nkolkoikrzyzyk.events.CloseNeuralNetworksModuleEvent;
+import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
+import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
+import nkolkoikrzyzyk.events.TrainNNEvent;
 import nkolkoikrzyzyk.model.GameModel;
 import nkolkoikrzyzyk.model.Mark;
 import nkolkoikrzyzyk.model.Model;
 import nkolkoikrzyzyk.model.NeuralNetworkPlayer;
+import nkolkoikrzyzyk.model.Player;
 import nkolkoikrzyzyk.view.GameWindow;
-import nkolkoikrzyzyk.view.NewGameEvent;
 import nkolkoikrzyzyk.view.View;
 
 /**
@@ -99,6 +103,40 @@ public class AppController
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				AppController.this.view.setAppWindowVisible( true );
+			}
+		});
+		
+		this.eventActionMap.put( TrainNNEvent.class, new ProgramAction()
+		{
+			@Override
+			public void go( ProgramEvent event ) {
+				TrainNNEvent tNNE = ( TrainNNEvent ) event;
+				System.out.println("Train NN button clicked");
+				Player player1 = new NeuralNetworkPlayer("Siec X", Mark.CROSS, null);
+				Player player2 = new NeuralNetworkPlayer("Siec O", Mark.NOUGHT, null);
+				for(int i = 0; i <100; i++)
+				{
+					new GameModel().fastPlay(player1, player2);
+				}
+			}
+		});
+		
+		this.eventActionMap.put( StartNeuralNetworksModuleEvent.class, new ProgramAction()
+		{
+			@Override
+			public void go( ProgramEvent event ) {
+				StartNeuralNetworksModuleEvent sNNME = ( StartNeuralNetworksModuleEvent ) event;
+				AppController.this.view.invokeNeuralNetworksWindow();
+				AppController.this.view.setAppWindowVisible( false );
+			}
+		});
+		
+		this.eventActionMap.put( CloseNeuralNetworksModuleEvent.class, new ProgramAction()
+		{
+			@Override
+			public void go( ProgramEvent event ) {
+				CloseNeuralNetworksModuleEvent eNNME = ( CloseNeuralNetworksModuleEvent ) event;
 				AppController.this.view.setAppWindowVisible( true );
 			}
 		});

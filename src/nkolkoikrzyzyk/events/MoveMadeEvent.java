@@ -1,9 +1,8 @@
 /**
  * 
  */
-package nkolkoikrzyzyk.controller;
+package nkolkoikrzyzyk.events;
 
-import nkolkoikrzyzyk.events.ProgramEvent;
 
 /**
  * @author Johhny

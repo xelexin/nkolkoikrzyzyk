@@ -12,8 +12,9 @@ import java.util.concurrent.BlockingQueue;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import nkolkoikrzyzyk.commons.BoardMockup;
 import nkolkoikrzyzyk.events.ProgramEvent;
+import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
+import nkolkoikrzyzyk.events.TrainNNEvent;
 
 /**
  * @author elohhim
@@ -30,10 +31,10 @@ public class AppFrame extends JFrame {
 
 	private void initialize()
 	{
-		this.setBounds(100, 100, 200, 600);
+		this.setBounds(100, 100, 600, 600);
 		this.setResizable( false );
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout( new GridLayout(0,1) );
+		this.setLayout( new GridLayout(0,2) );
 		this.setVisible( true );
 		
 		fill();
@@ -50,7 +51,23 @@ public class AppFrame extends JFrame {
 		});
 		this.add(newGameButton);
 		
-		JButton newNeuralNetworkButton = new JButton("New NN");
-		this.add(newNeuralNetworkButton);
+		JButton neuralNetworksButton = new JButton("Neural Networks");
+		neuralNetworksButton.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				blockingQueue.add( new StartNeuralNetworksModuleEvent());
+			}
+		});
+		this.add(neuralNetworksButton);
+		
+		JButton trainNNButton = new JButton("Train NN");
+		trainNNButton.addActionListener( new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				blockingQueue.add( new TrainNNEvent() );
+			}
+		});
+		this.add(trainNNButton);
 	}
 }

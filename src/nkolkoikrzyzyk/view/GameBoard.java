@@ -1,6 +1,7 @@
 package nkolkoikrzyzyk.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -11,10 +12,8 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.util.concurrent.BlockingQueue;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import nkolkoikrzyzyk.commons.BoardMockup;
 import nkolkoikrzyzyk.events.BoardClickedEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.model.Mark;
@@ -95,7 +94,7 @@ public class GameBoard extends JPanel
 			{
 				Line2D l = new Line2D.Double(0,0,this.getWidth(), this.getHeight());
 				g2d.draw(l);
-				l = new Line2D.Double(0,this.getWidth(), this.getHeight(), 0);
+				l = new Line2D.Double(0,this.getHeight(), this.getWidth(), 0);
 				g2d.draw(l);
 			}
 			else if(this.state == Mark.NOUGHT)
@@ -112,7 +111,7 @@ public class GameBoard extends JPanel
 	private BlockingQueue<ProgramEvent> blockingQueue;
 	
 	private int gameId;
-	private BoardField[] fields = null;
+	private BoardField[] fields = null; 	
 	
 	public GameBoard(BlockingQueue<ProgramEvent> blockingQueue, int gameId) 
 	{
@@ -123,7 +122,7 @@ public class GameBoard extends JPanel
 	
 	private void initialize()
 	{
-		this.setBounds(0, 0, 300, 300);
+		this.setPreferredSize(new Dimension(300,300));
 		this.setBackground(Color.BLACK);
 		this.setLayout( new GridLayout(3,3, 5, 5));
 		this.fields = new BoardField[9];

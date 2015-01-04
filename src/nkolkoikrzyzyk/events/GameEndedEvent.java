@@ -1,9 +1,8 @@
 /**
  * 
  */
-package nkolkoikrzyzyk.controller;
+package nkolkoikrzyzyk.events;
 
-import nkolkoikrzyzyk.events.ProgramEvent;
 
 /**
  * @author Johhny
@@ -15,7 +14,7 @@ public class GameEndedEvent extends ProgramEvent
 	{ 
 		PLAYER1_WON( "Player 1 won!" ),
 		PLAYER2_WON( "Player 2 won!" ),
-		DRAW( " Game ended with draw." );
+		DRAW( "Game ended with draw." );
 		
 		private final String str;
 		private EndState( final String string )

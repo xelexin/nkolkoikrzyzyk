@@ -36,6 +36,7 @@ public class GameModel {
 		System.out.println("Gra nr " + id);
 		
 		Player activePlayer = player1;
+		Player waitingPlayer = player2;
 		
 		for(int j=0;j<9;j++)
 		{
@@ -45,6 +46,7 @@ public class GameModel {
 			{
 				System.out.println(activePlayer.getName() + " won!");
 				activePlayer.youWin(board);
+				waitingPlayer.youLost();
 				break;
 			}
 			if(noMoreMove()==true)
@@ -55,7 +57,9 @@ public class GameModel {
 				break;
 			}			
 			//swapping players
-			activePlayer = activePlayer==player2?player1:player2;
+			Player temp = waitingPlayer; 
+			waitingPlayer = activePlayer;
+			activePlayer = temp;
 		}
 	}
 	
@@ -120,5 +124,11 @@ public class GameModel {
 			win=true;
 		}
 		return win;
+	}
+
+	public void reset() 
+	{
+		for(int i=0;i<9;i++)
+			board[i]=0;
 	}
 }

@@ -8,6 +8,9 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
 
+import nkolkoikrzyzyk.commons.NeuralNetworkMockup;
+import nkolkoikrzyzyk.commons.NeuralNetworkMockup.LayerMockup;
+
 public class NeuralNetwork
 {
 	/*
@@ -18,6 +21,23 @@ public class NeuralNetwork
 		float[] output;
 		float[] input;
 		float[] weights;
+		
+		public float[] getWeights() {
+			return weights;
+		}
+
+		public void setWeights(float[] weights) {
+			this.weights = weights;
+		}
+
+		public boolean isSigmoid() {
+			return isSigmoid;
+		}
+
+		public void setSigmoid(boolean isSigmoid) {
+			this.isSigmoid = isSigmoid;
+		}
+
 		float[] dweights; // used for learning
 		boolean isSigmoid = true; // apply sigmoid function for the neuron outputs?
 
@@ -28,12 +48,7 @@ public class NeuralNetwork
 			weights = new float[(inputSize + 1) * outputSize];
 			dweights = new float[weights.length];
 		}
-
-		public void setIsSigmoid(boolean isSigmoid)
-		{
-			this.isSigmoid = isSigmoid;
-		}
-
+	
 		public void initWeights(Random r)
 		{
 			for (int i = 0; i < weights.length; i++)
@@ -242,7 +257,16 @@ public class NeuralNetwork
 	public String getName() {
 		return name;
 	}
-
+	
+	public NeuralNetworkMockup mockup()
+	{
+		NeuralNetworkMockup mockup = new NeuralNetworkMockup(this.layers.length);
+		for(Layer element : layers)
+		{
+			mockup.addLayer(element.getWeights(), element.isSigmoid());
+		}
+		return mockup;
+	}
 
 	// EXAMPLE USAGE
 	/*

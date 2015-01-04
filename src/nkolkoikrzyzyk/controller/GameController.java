@@ -7,15 +7,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
-import nkolkoikrzyzyk.controller.GameEndedEvent.EndState;
 import nkolkoikrzyzyk.events.BoardClickedEvent;
+import nkolkoikrzyzyk.events.GameEndedEvent;
+import nkolkoikrzyzyk.events.GameRestartEvent;
 import nkolkoikrzyzyk.events.GameTerminatedEvent;
+import nkolkoikrzyzyk.events.MoveMadeEvent;
+import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
+import nkolkoikrzyzyk.events.StartGameEvent;
+import nkolkoikrzyzyk.events.GameEndedEvent.EndState;
 import nkolkoikrzyzyk.model.GameModel;
 import nkolkoikrzyzyk.model.NeuralNetworkPlayer;
 import nkolkoikrzyzyk.model.Player;
 import nkolkoikrzyzyk.view.GameWindow;
-import nkolkoikrzyzyk.view.StartGameEvent;
+import nkolkoikrzyzyk.view.RematchEvent;
 
 /**
  * @author Johhny
@@ -23,10 +28,41 @@ import nkolkoikrzyzyk.view.StartGameEvent;
  */
 public class GameController
 {
+	private enum ActivePlayer {
+		PLAYER1("Player 1"),
+		PLAYER2("Player 2");
+		
+		private final String str;
+		
+		public String str()
+		{
+			return str;
+		}
+				
+		private ActivePlayer( final String string)
+		{
+			this.str = string;
+		}
+	}
 	private Player player1;
 	private Player player2;
 	
-	private Player activePlayer;
+	private ActivePlayer activePlayer;
+	
+	private Player activePlayer()
+	{
+		return activePlayer==ActivePlayer.PLAYER1?player1:player2;
+	}
+	
+	private Player waitingPlayer()
+	{
+		return activePlayer==ActivePlayer.PLAYER2?player1:player2;
+	}
+	
+	private void swapPlayers()
+	{
+		activePlayer=activePlayer==ActivePlayer.PLAYER2?ActivePlayer.PLAYER1:ActivePlayer.PLAYER2;
+	}
 	
 	/** reference to MVC View*/
 	private final GameWindow view;
@@ -49,7 +85,7 @@ public class GameController
 	{
 		this.player1 = player1;
 		this.player2 = player2;
-		this.activePlayer = player1;
+		this.activePlayer = ActivePlayer.PLAYER1;
 		
 		this.model = model;
 		this.appQueue = appQueue;
@@ -101,7 +137,8 @@ public class GameController
 				System.out.println("Game #"+bCE.gameId+" Clicked: " + bCE.position);
 				if( waitingForHuman )
 				{
-					GameController.this.gameQueue.add( new MoveMadeEvent(activePlayer.makeMove(model.getBoard(), bCE.position)));
+					GameController.this.gameQueue.add( 
+							new MoveMadeEvent(activePlayer().makeMove(model.getBoard(), bCE.position)));
 					waitingForHuman = false;
 				}
 			}
@@ -114,6 +151,7 @@ public class GameController
 			{
 				GameTerminatedEvent gTE = (GameTerminatedEvent) event;
 				System.out.println("Game #"+ model.getId() +" terminated. Returning controlls to AppController.");
+				GameController.this.view.dispose();
 			}
 		});
 		
@@ -123,6 +161,7 @@ public class GameController
 			public void go(ProgramEvent event) {
 				StartGameEvent sGE = (StartGameEvent) event;
 				System.out.println("Game #" + model.getId() + " started.");
+				view.setBoardEnabled(true);
 				GameController.this.playTurn();
 			}
 		});
@@ -133,7 +172,11 @@ public class GameController
 			public void go(ProgramEvent event) {
 				GameEndedEvent gEE = (GameEndedEvent) event;
 				System.out.println("Game #" + model.getId() + " ended.");
+				
 				view.setMessage( gEE.state.str());
+				view.refresh(model.getBoard());
+				
+				view.setBoardEnabled(false);
 			}
 		});
 		
@@ -142,16 +185,48 @@ public class GameController
 			@Override
 			public void go(ProgramEvent event) {
 				MoveMadeEvent mME = (MoveMadeEvent) event;
-				System.out.println("Move made by " + activePlayer.getName());
+				System.out.println("Move made by " + activePlayer().getName());
 				endTurn(mME.newBoard);
+			}
+		});
+		
+		this.eventActionMap.put( GameRestartEvent.class, new ProgramAction() 
+		{
+			@Override
+			public void go(ProgramEvent event) {
+				GameRestartEvent gRE = (GameRestartEvent) event;
+				System.out.println("Game #" + model.getId() + " restarted.");
+				GameController.this.model.reset();
+				GameController.this.view.refresh(model.getBoard());
+			}
+		});
+		
+		this.eventActionMap.put( RematchEvent.class, new ProgramAction() 
+		{
+			@Override
+			public void go(ProgramEvent event) {
+				RematchEvent rE = (RematchEvent) event;
+				GameController.this.appQueue.add( 
+							new NewGameEvent(GameController.this.player1, GameController.this.player2));
+				
+				GameController.this.gameQueue.add(new GameTerminatedEvent());
 			}
 		});
 	}
 	
 	private void playTurn() 
 	{
-		if( activePlayer.getClass() == NeuralNetworkPlayer.class )
-			gameQueue.add( new MoveMadeEvent( activePlayer.makeMove( model.getBoard(), -1 ) ) );
+		this.view.setMessage(activePlayer.str() + " move..." );
+		if( activePlayer().getClass() == NeuralNetworkPlayer.class )
+		{
+			try {
+				Thread.sleep(250);
+				gameQueue.add( new MoveMadeEvent( activePlayer().makeMove( model.getBoard(), -1 ) ) );
+				Thread.sleep(250);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		else
 			waitingForHuman = true;
 	}
@@ -165,9 +240,10 @@ public class GameController
 		
 		if(model.ifWin()==true)
 		{
-			System.out.println(activePlayer.getName() + " won!");
-			activePlayer.youWin(newBoard);
-			gameQueue.add( new GameEndedEvent(activePlayer==player2?EndState.PLAYER1_WON:EndState.PLAYER2_WON) );
+			System.out.println(activePlayer().getName() + " won!");
+			activePlayer().youWin(newBoard);
+			waitingPlayer().youLost();
+			gameQueue.add( new GameEndedEvent(activePlayer==ActivePlayer.PLAYER1?EndState.PLAYER1_WON:EndState.PLAYER2_WON) );
 			return;
 		}
 			
@@ -180,7 +256,7 @@ public class GameController
 			return;
 		}		
 		//swapping players
-		activePlayer = activePlayer==player2?player1:player2;
+		swapPlayers();
 		playTurn();
 	}
 }
