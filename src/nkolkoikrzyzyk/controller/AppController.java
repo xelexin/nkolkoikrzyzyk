@@ -10,13 +10,16 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import nkolkoikrzyzyk.commons.GameData;
 import nkolkoikrzyzyk.events.CloseNeuralNetworksModuleEvent;
+import nkolkoikrzyzyk.events.LoadNetworkEvent;
 import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
+import nkolkoikrzyzyk.events.SaveNetworkEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.TrainNNEvent;
 import nkolkoikrzyzyk.model.GameModel;
 import nkolkoikrzyzyk.model.Mark;
 import nkolkoikrzyzyk.model.Model;
+import nkolkoikrzyzyk.model.NeuralNetwork;
 import nkolkoikrzyzyk.model.NeuralNetworkPlayer;
 import nkolkoikrzyzyk.model.Player;
 import nkolkoikrzyzyk.view.GameWindow;
@@ -129,6 +132,15 @@ public class AppController
 				StartNeuralNetworksModuleEvent sNNME = ( StartNeuralNetworksModuleEvent ) event;
 				AppController.this.view.invokeNeuralNetworksWindow();
 				AppController.this.view.setAppWindowVisible( false );
+				
+				//TODO: Brzydki hack z public neuralNetworksWindow
+				AppController.this.view.neuralNetworksWindow.refreshList(
+						AppController.this.model.getNetworkList());
+				
+				//TODO: test
+				AppController.this.view.neuralNetworksWindow.setDrawPanelMockup(
+						AppController.this.model.testowa.getMockup());
+				AppController.this.view.neuralNetworksWindow.repaint();
 			}
 		});
 		
@@ -138,6 +150,27 @@ public class AppController
 			public void go( ProgramEvent event ) {
 				CloseNeuralNetworksModuleEvent eNNME = ( CloseNeuralNetworksModuleEvent ) event;
 				AppController.this.view.setAppWindowVisible( true );
+			}
+		});
+		
+		this.eventActionMap.put( LoadNetworkEvent.class, new ProgramAction()
+		{
+			@Override
+			public void go( ProgramEvent event ) {
+				LoadNetworkEvent lNE = ( LoadNetworkEvent ) event;
+				AppController.this.model.addNetwork( new NeuralNetwork(lNE.file) );
+				//TODO: Brzydki hack z public neuralNetworksWindow
+				AppController.this.view.neuralNetworksWindow.refreshList(
+						AppController.this.model.getNetworkList());
+			}
+		});
+		
+		this.eventActionMap.put( SaveNetworkEvent.class, new ProgramAction()
+		{
+			@Override
+			public void go( ProgramEvent event ) {
+				SaveNetworkEvent sNE = ( SaveNetworkEvent ) event;
+				sNE.network.saveToFile(sNE.file);
 			}
 		});
 	}

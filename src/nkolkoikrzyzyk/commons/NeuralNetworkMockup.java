@@ -11,18 +11,7 @@ import java.util.List;
  *
  */
 public class NeuralNetworkMockup
-{
-	public class LayerMockup {
-		public boolean isSigmoid = false;
-		public float[] weights = null;
-		
-		public LayerMockup( float[] weights, boolean isSigmoid)
-		{
-			this.weights=weights;
-			this.isSigmoid=isSigmoid;
-		}
-	};
-	
+{	
 	public List<LayerMockup> layers;
 	
 	public NeuralNetworkMockup( int layersCount )
@@ -30,8 +19,8 @@ public class NeuralNetworkMockup
 		this.layers = new ArrayList<LayerMockup>();
 	}
 	
-	public void addLayer(float[] weights, boolean isSigmoid)
+	public void addLayer(LayerMockup layer)
 	{
-		layers.add(new LayerMockup(weights, isSigmoid));
+		layers.add(layer);
 	}
 }

@@ -8,8 +8,8 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Random;
 
+import nkolkoikrzyzyk.commons.LayerMockup;
 import nkolkoikrzyzyk.commons.NeuralNetworkMockup;
-import nkolkoikrzyzyk.commons.NeuralNetworkMockup.LayerMockup;
 
 public class NeuralNetwork
 {
@@ -21,21 +21,9 @@ public class NeuralNetwork
 		float[] output;
 		float[] input;
 		float[] weights;
-		
-		public float[] getWeights() {
-			return weights;
-		}
-
-		public void setWeights(float[] weights) {
-			this.weights = weights;
-		}
 
 		public boolean isSigmoid() {
 			return isSigmoid;
-		}
-
-		public void setSigmoid(boolean isSigmoid) {
-			this.isSigmoid = isSigmoid;
 		}
 
 		float[] dweights; // used for learning
@@ -104,10 +92,32 @@ public class NeuralNetwork
 			}
 			return nextError;
 		}
+
+		public void setIsSigmoid(boolean b) {
+			isSigmoid = b;
+		}
+		
+		public LayerMockup getMockup()
+		{
+			return new LayerMockup(output.length, input.length, weights, isSigmoid);
+		}
 	}
 
 	Layer[] layers = null;
 	private String name;
+	private static int count = 0;
+
+	public NeuralNetwork()
+	{
+		count ++;
+		this.name = "Network #" + count; 
+	}
+	
+	public NeuralNetwork(File file) 
+	{
+		count++;
+		this.loadFromFile(file);
+	}
 
 	/**
 	 * Create multi-layer neural network
@@ -171,11 +181,11 @@ public class NeuralNetwork
 	/**
 	 * Serialize network to a file
 	 */
-	public boolean saveToFile(String fileName)
+	public boolean saveToFile(File file)
 	{
 		try {
-			PrintWriter out = new PrintWriter(fileName);
-
+			PrintWriter out = new PrintWriter(file);
+			
 			out.println(layers.length);
 
 			out.print(layers[0].input.length);	
@@ -209,10 +219,10 @@ public class NeuralNetwork
 	/**
 	 * Deserialize network from a file
 	 */
-	public boolean loadFromFile(String fileName)
+	public boolean loadFromFile(File file)
 	{
 		try {
-			FileInputStream fin = new FileInputStream(new File(fileName));
+			FileInputStream fin = new FileInputStream(file);
 			java.util.Scanner scanner = new java.util.Scanner(fin);
 			scanner.useLocale(Locale.ENGLISH); 
 
@@ -258,12 +268,12 @@ public class NeuralNetwork
 		return name;
 	}
 	
-	public NeuralNetworkMockup mockup()
+	public NeuralNetworkMockup getMockup()
 	{
 		NeuralNetworkMockup mockup = new NeuralNetworkMockup(this.layers.length);
 		for(Layer element : layers)
 		{
-			mockup.addLayer(element.getWeights(), element.isSigmoid());
+			mockup.addLayer(element.getMockup());
 		}
 		return mockup;
 	}
@@ -338,6 +348,6 @@ public class NeuralNetwork
 		}
 
 		mlp.saveToFile("ann.txt");
-	}
-	 */
+	}//*/
+	 
 }

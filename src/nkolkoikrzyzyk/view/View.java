@@ -9,6 +9,7 @@ import javax.swing.SwingUtilities;
 
 import nkolkoikrzyzyk.commons.GameData;
 import nkolkoikrzyzyk.events.ProgramEvent;
+import nkolkoikrzyzyk.view.neuralnetworks.NeuralNetworksWindow;
 
 /**
  * @author elohhim
@@ -20,7 +21,7 @@ public class View {
 
 	private AppFrame mainFrame = null;
 	private GameWindow gameWindow = null;
-	private NeuralNetworksWindow neuralNetworksWindow = null;
+	public NeuralNetworksWindow neuralNetworksWindow = null;
 
 	/**
 	 * Creates new View
