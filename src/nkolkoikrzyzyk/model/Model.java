@@ -26,11 +26,11 @@ public class Model {
 		this.blockingQueue = blockingQueue;
 		this.networkList = new LinkedList<NeuralNetwork>();
 		NeuralNetwork mlp1 = new NeuralNetwork();
-		mlp1.init(4, new int[]{ 3, 2, 3 });
+		mlp1.init(4, new int[]{ 3, 2, 3 }, 2.0f);
 		networkList.add(mlp1);
 		
 		NeuralNetwork mlp2 = new NeuralNetwork();
-		mlp2.init(2, new int[]{ 3,3,3,3,9 });
+		mlp2.init(2, new int[]{ 3,3,3,3,9 }, 1.0f);
 		networkList.add(mlp2);
 	}
 

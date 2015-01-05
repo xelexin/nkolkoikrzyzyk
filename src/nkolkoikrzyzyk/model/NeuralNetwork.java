@@ -37,10 +37,15 @@ public class NeuralNetwork
 			dweights = new float[weights.length];
 		}
 	
-		public void initWeights(Random r)
+		/**
+		 * Randomize weights. Normal distribution is used.
+		 * @param r			Random object instance
+		 * @param variance	Weights variance
+		 */
+		public void initWeights(Random r, float variance)
 		{
 			for (int i = 0; i < weights.length; i++)
-				weights[i] = (float)r.nextGaussian() * 2.0f;
+				weights[i] = (float)r.nextGaussian() * variance;
 		}
 
 		public float[] run(float[] in)
@@ -119,22 +124,29 @@ public class NeuralNetwork
 		this.loadFromFile(file);
 	}
 
+	public NeuralNetwork(int inputSize, int[] layersSize, float variance)
+	{
+		this();
+		this.init(inputSize, layersSize, variance);
+	}
+	
 	/**
 	 * Create multi-layer neural network
 	 * @param inputSize		Number of inputs
 	 * @param layersSize	Number of neurons in each layer
 	 * 						(last one is output layer, so it can't be empty)
+	 * @param variance		Initial weights variance
 	 */
-	public void init(int inputSize, int[] layersSize)
+	public void init(int inputSize, int[] layersSize, float variance)
 	{
 		layers = new Layer[layersSize.length];
-		Random r = new Random(1234);
+		Random r = new Random();
 		int prevLayerSize = inputSize;
 
 		for (int i = 0; i < layersSize.length; i++)
 		{
 			layers[i] = new Layer(prevLayerSize, layersSize[i]);
-			layers[i].initWeights(r);
+			layers[i].initWeights(r, variance);
 			prevLayerSize = layersSize[i];
 		}
 	}
@@ -186,6 +198,7 @@ public class NeuralNetwork
 		try {
 			PrintWriter out = new PrintWriter(file);
 			
+			out.println(this.name);
 			out.println(layers.length);
 
 			out.print(layers[0].input.length);	
@@ -222,10 +235,13 @@ public class NeuralNetwork
 	public boolean loadFromFile(File file)
 	{
 		try {
+			System.out.println("Loading neural network from a file...");
+			
 			FileInputStream fin = new FileInputStream(file);
 			java.util.Scanner scanner = new java.util.Scanner(fin);
 			scanner.useLocale(Locale.ENGLISH); 
 
+			this.name = scanner.next();
 			int numLayers = scanner.nextInt();
 			System.out.println("Num layers = " + numLayers);
 
@@ -242,7 +258,7 @@ public class NeuralNetwork
 				layersSize[i] = scanner.nextInt();
 
 			// create network structure
-			this.init(inputSize, layersSize);
+			this.init(inputSize, layersSize, 0.0f);
 
 			// load weights
 			for (int i = 0; i < numLayers; i++)
@@ -285,7 +301,6 @@ public class NeuralNetwork
 	}
 
 	// EXAMPLE USAGE
-	/*
 	public static void main(String[] args) throws Exception
 	{
 		// inputs
@@ -318,11 +333,11 @@ public class NeuralNetwork
 			new float[]{ 1, 0, 0, 1 },
 		};
 
-		NeuralNetwork mlp = new NeuralNetwork();
-		mlp.init(15, new int[]{ 7, 4 }); // 15 inputs, 7 neurons in hidden layer, 4 outpus
+		// 15 inputs, 7 neurons in hidden layer, 4 outputs
+		NeuralNetwork mlp = new NeuralNetwork(15, new int[]{ 7, 4 }, 1.0f); 
 		mlp.getLayer(1).setIsSigmoid(false);
 
-//		mlp.loadFromFile("ann.txt");
+//		mlp.loadFromFile(new File("ann.txt"));
 //		for (int i = 0; i < outputs.length; i++)
 //		{
 //			float[] t = inputs[i];
@@ -353,7 +368,7 @@ public class NeuralNetwork
 			}
 		}
 
-		mlp.saveToFile("ann.txt");
-	}//*/
+		mlp.saveToFile(new File("ann.txt"));
+	}
 	 
 }
