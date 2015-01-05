@@ -98,8 +98,46 @@ public class NeuralNetwork
 			return nextError;
 		}
 
+		/**
+		 * Should be sigmoid function applied to the output?
+		 */
 		public void setIsSigmoid(boolean b) {
 			isSigmoid = b;
+		}
+	
+		/**
+		 * Get weight of a specific neuron input
+		 * @param neuronIdx			Index of a neuron in the layer
+		 * @param neuronInputIdx	Index of a neuron input of the neuron
+		 */
+		public float getWeight(int neuronIdx, int neuronInputIdx)
+		{
+			int inputsNum = input.length;
+			int outputsNum = output.length;
+			if (neuronIdx < 0 || neuronIdx >= outputsNum)
+				throw new ArrayIndexOutOfBoundsException("neuronIdx out of range");  
+			if (neuronInputIdx < 0 || neuronInputIdx > inputsNum)
+				throw new ArrayIndexOutOfBoundsException("neuronInputIdx out of range"); 
+
+			return weights[(inputsNum + 1) * neuronIdx + neuronInputIdx];
+		}
+		
+		/**
+		 * Set a new weight for a specific neuron input
+		 * @param neuronIdx			Index of a neuron in the layer
+		 * @param neuronInputIdx	Index of a neuron input of the neuron
+		 * @param newWeigth			Input weight
+		 */
+		public void setWeight(int neuronIdx, int neuronInputIdx, float newWeigth)
+		{
+			int inputsNum = input.length;
+			int outputsNum = output.length;
+			if (neuronIdx < 0 || neuronIdx >= outputsNum)
+				throw new ArrayIndexOutOfBoundsException("neuronIdx out of range");  
+			if (neuronInputIdx < 0 || neuronInputIdx > inputsNum)
+				throw new ArrayIndexOutOfBoundsException("neuronInputIdx out of range"); 
+
+			weights[(inputsNum + 1) * neuronIdx + neuronInputIdx] = newWeigth;
 		}
 		
 		public LayerMockup getMockup()
@@ -155,7 +193,12 @@ public class NeuralNetwork
 	{
 		return layers[idx];
 	}
-
+	
+	public int getLayersNumber()
+	{
+		return layers.length;
+	}
+	
 	/**
 	 * Calculate neural network output based on input
 	 * @param input Input values
@@ -334,9 +377,9 @@ public class NeuralNetwork
 		};
 
 		// 15 inputs, 7 neurons in hidden layer, 4 outputs
-		NeuralNetwork mlp = new NeuralNetwork(15, new int[]{ 7, 4 }, 1.0f); 
+		NeuralNetwork mlp = new NeuralNetwork(15, new int[]{ 10, 4 }, 1.0f); 
 		mlp.getLayer(1).setIsSigmoid(false);
-
+		
 //		mlp.loadFromFile(new File("ann.txt"));
 //		for (int i = 0; i < outputs.length; i++)
 //		{
@@ -345,11 +388,14 @@ public class NeuralNetwork
 //			System.out.printf("%s => %s\n", Arrays.toString(t), Arrays.toString(ret));
 //		}
 
+		long time = 0;
 		int en = 1000;
 		for (int e = 1; e <= en; e++)
 		{
+			long startTime = System.nanoTime();
 			for (int i = 0; i < outputs.length; i++)
 				mlp.train(inputs[i], outputs[i], 0.1f, 0.6f);
+			time += System.nanoTime() - startTime;
 
 			if (e % 100 == 0)
 			{
@@ -359,7 +405,12 @@ public class NeuralNetwork
 				{
 					float[] t = inputs[i];
 					float[] ret = mlp.run(t);
-					System.out.printf("%s => %s\n", Arrays.toString(t), Arrays.toString(ret));
+					
+					float error = 0.0f;
+					for (int j = 0; j < ret.length; j++)
+						error += Math.abs(ret[j] - outputs[i][j]);
+					
+					System.out.printf("%s => %s (tot. error = %f)\n", Arrays.toString(t), Arrays.toString(ret), error);
 				}
 
 				float[] t = new float[]{ 0.97f, 1.01f, 0.93f,  1.01f, 0.04f, 0.08f,  0.94f, 0.98f, 1.1f,  0.91f, 0.04f, 1.03f,  0.96f, 0.98f, 0.91f };
@@ -367,6 +418,8 @@ public class NeuralNetwork
 				System.out.printf("%s => %s\n", Arrays.toString(t), Arrays.toString(ret));
 			}
 		}
+		
+		System.out.printf("Learning time per epoch: %f ms\n", (float)time / (float)en / 1000000.0f);
 
 		mlp.saveToFile(new File("ann.txt"));
 	}
