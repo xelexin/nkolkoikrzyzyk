@@ -9,6 +9,9 @@ import javax.swing.SwingUtilities;
 
 import nkolkoikrzyzyk.commons.GameData;
 import nkolkoikrzyzyk.events.ProgramEvent;
+import nkolkoikrzyzyk.model.NeuralNetwork;
+import nkolkoikrzyzyk.view.game.GameWindow;
+import nkolkoikrzyzyk.view.game.NewGameWindow;
 import nkolkoikrzyzyk.view.neuralnetworks.NeuralNetworksWindow;
 
 /**
@@ -21,7 +24,8 @@ public class View {
 
 	private AppFrame mainFrame = null;
 	private GameWindow gameWindow = null;
-	public NeuralNetworksWindow neuralNetworksWindow = null;
+	private NewGameWindow newGameWindow = null;
+	private NeuralNetworksWindow neuralNetworksWindow = null;
 
 	/**
 	 * Creates new View
@@ -39,20 +43,38 @@ public class View {
 		});
 	}
 	
+	public void setAppWindowVisible(boolean b) {
+		this.mainFrame.setVisible(b);
+	}
+	
 	public GameWindow invokeGameWindow(final BlockingQueue<ProgramEvent> blockingQueue, final GameData gameData)
 	{
 		this.gameWindow = new GameWindow(blockingQueue, gameData);
 		return this.gameWindow;
 	}
 
-	public void setAppWindowVisible(boolean b) {
-		this.mainFrame.setVisible(b);
+	public void invokeNewGameWindow( NeuralNetwork[] networkList )
+	{
+		if( this.newGameWindow == null)
+			this.newGameWindow = new NewGameWindow(this.blockingQueue);
+		this.newGameWindow.setVisible(true);
+		this.newGameWindow.populateNetworkList( networkList );
+		
+		
 	}
-
+	
 	public void invokeNeuralNetworksWindow() 
 	{
-		if ( this.neuralNetworksWindow == null)
+		if( this.getNeuralNetworksWindow() == null)
 			this.neuralNetworksWindow = new NeuralNetworksWindow(this.blockingQueue);
-		this.neuralNetworksWindow.setVisible(true);
+		this.getNeuralNetworksWindow().setVisible(true);
 	}
+
+	/**
+	 * @return the neuralNetworksWindow
+	 */
+	public NeuralNetworksWindow getNeuralNetworksWindow()
+	{
+		return neuralNetworksWindow;
+	}	
 }

@@ -14,6 +14,7 @@ import nkolkoikrzyzyk.events.LoadNetworkEvent;
 import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.SaveNetworkEvent;
+import nkolkoikrzyzyk.events.StartGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.TrainNNEvent;
 import nkolkoikrzyzyk.model.GameModel;
@@ -22,8 +23,8 @@ import nkolkoikrzyzyk.model.Model;
 import nkolkoikrzyzyk.model.NeuralNetwork;
 import nkolkoikrzyzyk.model.NeuralNetworkPlayer;
 import nkolkoikrzyzyk.model.Player;
-import nkolkoikrzyzyk.view.GameWindow;
 import nkolkoikrzyzyk.view.View;
+import nkolkoikrzyzyk.view.game.GameWindow;
 
 /**
  * @author elohhim
@@ -134,13 +135,8 @@ public class AppController
 				AppController.this.view.setAppWindowVisible( false );
 				
 				//TODO: Brzydki hack z public neuralNetworksWindow
-				AppController.this.view.neuralNetworksWindow.refreshList(
-						AppController.this.model.getNetworkList());
-				
-				//TODO: test
-				AppController.this.view.neuralNetworksWindow.setDrawPanelMockup(
-						AppController.this.model.testowa.getMockup());
-				AppController.this.view.neuralNetworksWindow.repaint();
+				AppController.this.view.getNeuralNetworksWindow().populateNetworkList(
+						AppController.this.model.getNetworkListModel());
 			}
 		});
 		
@@ -160,8 +156,8 @@ public class AppController
 				LoadNetworkEvent lNE = ( LoadNetworkEvent ) event;
 				AppController.this.model.addNetwork( new NeuralNetwork(lNE.file) );
 				//TODO: Brzydki hack z public neuralNetworksWindow
-				AppController.this.view.neuralNetworksWindow.refreshList(
-						AppController.this.model.getNetworkList());
+				AppController.this.view.getNeuralNetworksWindow().populateNetworkList(
+						AppController.this.model.getNetworkListModel());
 			}
 		});
 		
@@ -173,6 +169,16 @@ public class AppController
 				sNE.network.saveToFile(sNE.file);
 			}
 		});
+		
+		this.eventActionMap.put( StartGameModuleEvent.class, new ProgramAction()
+		{
+			@Override
+			public void go( ProgramEvent event )
+			{
+				StartGameModuleEvent sGME = (StartGameModuleEvent) event;
+				AppController.this.view.invokeNewGameWindow(
+						AppController.this.model.getNetworkListModel());				
+			}
+		});
 	}
-
 }

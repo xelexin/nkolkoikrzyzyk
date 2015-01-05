@@ -28,5 +28,7 @@ public abstract class Player
 	
 	public abstract int[] makeMove(int[] board, int position);
 	public abstract void youWin(int[] board);
+	public abstract void youDraw(int[] board);
 	public abstract void youLost();
+	
 }

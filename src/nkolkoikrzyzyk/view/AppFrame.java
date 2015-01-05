@@ -3,7 +3,6 @@
  */
 package nkolkoikrzyzyk.view;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,8 +12,10 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 
 import nkolkoikrzyzyk.events.ProgramEvent;
+import nkolkoikrzyzyk.events.StartGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.TrainNNEvent;
+import nkolkoikrzyzyk.view.game.NewGameWindow;
 
 /**
  * @author elohhim
@@ -46,7 +47,7 @@ public class AppFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new NewGameWindow(blockingQueue);
+				blockingQueue.add( new StartGameModuleEvent());
 			}
 		});
 		this.add(newGameButton);

@@ -4,8 +4,6 @@ import java.util.Random;
 import java.util.Stack;
 import java.util.Vector;
 
-import com.sun.xml.internal.ws.api.pipe.Fiber;
-
 public class neurons {
 	
 	private double a;

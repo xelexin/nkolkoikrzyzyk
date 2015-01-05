@@ -1,7 +1,7 @@
 /**
  * 
  */
-package nkolkoikrzyzyk.view;
+package nkolkoikrzyzyk.view.game;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,10 +22,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import nkolkoikrzyzyk.commons.GameData;
-import nkolkoikrzyzyk.events.GameRestartEvent;
-import nkolkoikrzyzyk.events.GameTerminatedEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
-import nkolkoikrzyzyk.events.StartGameEvent;
+import nkolkoikrzyzyk.events.game.GameRestartEvent;
+import nkolkoikrzyzyk.events.game.GameTerminatedEvent;
+import nkolkoikrzyzyk.events.game.RematchEvent;
+import nkolkoikrzyzyk.events.game.StartGameEvent;
 
 /**
  * @author Johhny
@@ -76,6 +77,7 @@ public class GameWindow extends JFrame implements WindowListener
 
 	private void fillGlassPanel() {
 		glass = new JPanel() {
+			@Override
 			protected void paintComponent(Graphics g)
 		    {
 		        g.setColor( getBackground() );

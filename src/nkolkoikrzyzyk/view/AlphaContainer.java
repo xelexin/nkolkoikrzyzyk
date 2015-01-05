@@ -2,6 +2,7 @@ package nkolkoikrzyzyk.view;
 
 import java.awt.BorderLayout;
 import java.awt.Graphics;
+
 import javax.swing.JComponent;
 
 /**

@@ -1,5 +1,6 @@
-package nkolkoikrzyzyk.view;
+package nkolkoikrzyzyk.view.game;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -14,8 +15,8 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.swing.JPanel;
 
-import nkolkoikrzyzyk.events.BoardClickedEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
+import nkolkoikrzyzyk.events.game.BoardClickedEvent;
 import nkolkoikrzyzyk.model.Mark;
 
 @SuppressWarnings("serial")
@@ -88,18 +89,21 @@ public class GameBoard extends JPanel
 			super.paintComponent(g);
 			Graphics2D g2d = (Graphics2D) g;
 			g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2d.setColor( Color.BLACK );
+			g2d.setStroke( new BasicStroke(5));
+			int spacing = 10;
 			
 			if( this.state == Mark.CROSS)
 			{
-				Line2D l = new Line2D.Double(0,0,this.getWidth(), this.getHeight());
+				g2d.setColor( Color.RED );
+				Line2D l = new Line2D.Double(spacing, spacing, this.getWidth()-spacing, this.getHeight()-spacing);
 				g2d.draw(l);
-				l = new Line2D.Double(0,this.getHeight(), this.getWidth(), 0);
+				l = new Line2D.Double(spacing,this.getHeight()-spacing, this.getWidth()-spacing, spacing);
 				g2d.draw(l);
 			}
 			else if(this.state == Mark.NOUGHT)
 			{
-				Ellipse2D e = new Ellipse2D.Double( 0, 0, this.getWidth(), this.getHeight());
+				g2d.setColor( Color.BLUE );
+				Ellipse2D e = new Ellipse2D.Double( spacing, spacing, this.getWidth()-2*spacing, this.getHeight()-2*spacing);
 				g2d.draw(e);
 			}			
 			

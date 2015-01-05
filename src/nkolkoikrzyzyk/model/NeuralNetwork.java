@@ -115,7 +115,7 @@ public class NeuralNetwork
 	
 	public NeuralNetwork(File file) 
 	{
-		count++;
+		this();
 		this.loadFromFile(file);
 	}
 
@@ -276,6 +276,12 @@ public class NeuralNetwork
 			mockup.addLayer(element.getMockup());
 		}
 		return mockup;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return name;
 	}
 
 	// EXAMPLE USAGE

@@ -7,20 +7,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
-import nkolkoikrzyzyk.events.BoardClickedEvent;
-import nkolkoikrzyzyk.events.GameEndedEvent;
-import nkolkoikrzyzyk.events.GameRestartEvent;
-import nkolkoikrzyzyk.events.GameTerminatedEvent;
-import nkolkoikrzyzyk.events.MoveMadeEvent;
 import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
-import nkolkoikrzyzyk.events.StartGameEvent;
-import nkolkoikrzyzyk.events.GameEndedEvent.EndState;
+import nkolkoikrzyzyk.events.game.BoardClickedEvent;
+import nkolkoikrzyzyk.events.game.GameEndedEvent;
+import nkolkoikrzyzyk.events.game.GameEndedEvent.EndState;
+import nkolkoikrzyzyk.events.game.GameRestartEvent;
+import nkolkoikrzyzyk.events.game.GameTerminatedEvent;
+import nkolkoikrzyzyk.events.game.MoveMadeEvent;
+import nkolkoikrzyzyk.events.game.RematchEvent;
+import nkolkoikrzyzyk.events.game.StartGameEvent;
 import nkolkoikrzyzyk.model.GameModel;
 import nkolkoikrzyzyk.model.NeuralNetworkPlayer;
 import nkolkoikrzyzyk.model.Player;
-import nkolkoikrzyzyk.view.GameWindow;
-import nkolkoikrzyzyk.view.RematchEvent;
+import nkolkoikrzyzyk.view.game.GameWindow;
 
 /**
  * @author Johhny
@@ -249,8 +249,8 @@ public class GameController
 			
 		if(model.noMoreMove()==true)
 		{
-			player1.youLost();
-			player2.youLost();
+			player1.youDraw( newBoard );
+			player2.youDraw( newBoard );
 			System.out.println("Remis");
 			gameQueue.add( new GameEndedEvent(EndState.DRAW) );
 			return;

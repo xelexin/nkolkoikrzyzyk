@@ -3,13 +3,9 @@ package nkolkoikrzyzyk.model;
 import java.util.Scanner;
 
 public class HumanPlayer extends Player 
-{
-	private Scanner reader;
-	
+{	
 	public HumanPlayer(String name, Mark markType) {
-		super(name, markType);
-		this.reader = new Scanner(System.in);
-		
+		super(name, markType);		
 	}
 
 	@Override
@@ -27,6 +23,13 @@ public class HumanPlayer extends Player
 
 	@Override
 	public void youLost() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void youDraw(int[] board)
+	{
 		// TODO Auto-generated method stub
 		
 	}

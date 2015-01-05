@@ -30,4 +30,9 @@ public class NeuralNetworkPlayer extends Player
 	public void youLost() {
 		siec.youLost();
 	}
+	
+	@Override
+	public void youDraw(int[] board) {
+		siec.youWin(board);
+	}
 }

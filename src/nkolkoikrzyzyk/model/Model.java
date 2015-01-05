@@ -17,8 +17,6 @@ public class Model {
 
 	private final BlockingQueue<ProgramEvent> blockingQueue;
 	private List<NeuralNetwork> networkList;
-	//TODO: testowe
-	public NeuralNetwork testowa;
 	
 	public List<NeuralNetwork> getNetworkList() {
 		return networkList;
@@ -27,13 +25,23 @@ public class Model {
 	public Model( BlockingQueue<ProgramEvent> blockingQueue ) {
 		this.blockingQueue = blockingQueue;
 		this.networkList = new LinkedList<NeuralNetwork>();
-		NeuralNetwork mlp = new NeuralNetwork();
-		mlp.init(9, new int[]{ 3, 3, 9 });
-		networkList.add(mlp);
-		testowa = mlp;
+		NeuralNetwork mlp1 = new NeuralNetwork();
+		mlp1.init(4, new int[]{ 3, 2, 3 });
+		networkList.add(mlp1);
+		
+		NeuralNetwork mlp2 = new NeuralNetwork();
+		mlp2.init(2, new int[]{ 3,3,3,3,9 });
+		networkList.add(mlp2);
 	}
 
 	public void addNetwork(NeuralNetwork neuralNetwork) {
 		this.networkList.add(neuralNetwork);
+	}
+
+	public NeuralNetwork[] getNetworkListModel()
+	{
+		NeuralNetwork[] array = new NeuralNetwork[networkList.size()];
+		networkList.toArray(array);
+		return array;
 	}
 }
