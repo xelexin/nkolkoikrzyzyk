@@ -38,9 +38,9 @@ import nkolkoikrzyzyk.view.ViewUtilities;
  */
 public class TrainNetworkPanel extends JPanel
 {
-	private static final int MIN_WIDTH = 500;
+	private static final int MIN_WIDTH = 480;
 	private static final int MIN_HEIGHT= 200;
-	private static final int MAX_WIDTH = 500;
+	private static final int MAX_WIDTH = 480;
 	private static final int MAX_HEIGHT = 200;
 	
 	//outside
@@ -82,14 +82,11 @@ public class TrainNetworkPanel extends JPanel
 	{
 		this.fileChooser = new JFileChooser();
 		
-		this.momentum = new JSpinner();
-		this.momentum.setModel(new SpinnerNumberModel(0.50, 0.0, 1.0, 0.01));
+		this.momentum = ViewUtilities.spinner(0.5, 0.0, 1.0, 0.01, "0.00");
 		
-		this.learningRatio = new JSpinner();
-		this.learningRatio.setModel(new SpinnerNumberModel(0.50, 0.0, 1.0, 0.01));
+		this.learningRatio = ViewUtilities.spinner(0.5, 0.0, 1.0, 0.01, "0.00");
 		
-		this.epoches = new JSpinner();
-		this.epoches.setModel(new SpinnerNumberModel(1000, 100, 10000, 100));
+		this.epoches = ViewUtilities.spinner(1000, 100, 10000, 100, "0");
 	}
 
 	private void fill()
@@ -171,7 +168,9 @@ public class TrainNetworkPanel extends JPanel
 	{
 		JPanel bottomPanel = new JPanel( );
 		bottomPanel.setLayout(new BorderLayout(5,5));
+		
 		JButton trainButton = new JButton("Train ANN");
+		trainButton.setMnemonic('T');
 		trainButton.addActionListener(new ActionListener()
 		{
 			@Override
@@ -182,6 +181,7 @@ public class TrainNetworkPanel extends JPanel
 			}
 		});
 		bottomPanel.add(trainButton, BorderLayout.LINE_START);
+		
 		JProgressBar progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
 		progressBar.setValue(0);
 		progressBar.setStringPainted(true);
@@ -190,11 +190,11 @@ public class TrainNetworkPanel extends JPanel
 	}
 
 	
-//	@Override
-//	public Dimension getMinimumSize()
-//	{
-//		return new Dimension(MIN_WIDTH, MIN_HEIGHT);
-//	}
+	@Override
+	public Dimension getPreferredSize()
+	{
+		return new Dimension(MIN_WIDTH, MIN_HEIGHT);
+	}
 	
 	@Override
 	public Dimension getMaximumSize()

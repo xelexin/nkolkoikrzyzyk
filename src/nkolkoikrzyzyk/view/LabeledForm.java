@@ -10,6 +10,7 @@ import java.awt.GridLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 
 /**
  * @author Johhny
@@ -27,19 +28,25 @@ public class LabeledForm extends JPanel
 	    
 	    for (int i = 0; i < labels.length; i += 1) 
 	    {
-	    	JLabel label = new JLabel(labels[i], JLabel.RIGHT);
+	    	JLabel label = new JLabel(labels[i]);
 	    	label.setLabelFor(fields[i]);
 	    	if (i < mnemonics.length)
 	    	{
 	    		label.setDisplayedMnemonic(mnemonics[i]);
 	    	}
-	    	labelPanel.add(label);
 	    	
-//	    	JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-//	    	p.add(fields[i]);
-//	    	fieldPanel.add(p);
+	    	JPanel l = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+	    	l.add(label);
+	    	labelPanel.add(l);
 	    	
-	    	fieldPanel.add(fields[i]);
+	    	JPanel f = new JPanel(new FlowLayout(FlowLayout.LEFT));
+	    	f.add(fields[i]);
+	    	fieldPanel.add(f);
 	    }
+	}
+
+	public LabeledForm(Component[] fields, String[] labels)
+	{
+		this(fields, labels, new char[0]);
 	}
 }

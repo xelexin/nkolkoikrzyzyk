@@ -12,6 +12,7 @@ import nkolkoikrzyzyk.commons.GameData;
 import nkolkoikrzyzyk.events.CloseNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.LoadNetworkEvent;
 import nkolkoikrzyzyk.events.NewGameEvent;
+import nkolkoikrzyzyk.events.NewNetworkEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.SaveNetworkEvent;
 import nkolkoikrzyzyk.events.StartGameModuleEvent;
@@ -155,7 +156,6 @@ public class AppController
 			public void go( ProgramEvent event ) {
 				LoadNetworkEvent lNE = ( LoadNetworkEvent ) event;
 				AppController.this.model.addNetwork( new NeuralNetwork(lNE.file) );
-				//TODO: Brzydki hack z public neuralNetworksWindow
 				AppController.this.view.getNeuralNetworksWindow().populateNetworkList(
 						AppController.this.model.getNetworkListModel());
 			}
@@ -178,6 +178,19 @@ public class AppController
 				StartGameModuleEvent sGME = (StartGameModuleEvent) event;
 				AppController.this.view.invokeNewGameWindow(
 						AppController.this.model.getNetworkListModel());				
+			}
+		});
+		
+		this.eventActionMap.put( NewNetworkEvent.class, new ProgramAction()
+		{
+			@Override
+			public void go(ProgramEvent event)
+			{
+				NewNetworkEvent nNE = (NewNetworkEvent) event;
+				NeuralNetwork network = new NeuralNetwork(nNE.name, nNE.inputSize, nNE.layersSize, nNE.variance, nNE.isSigmoid);
+				AppController.this.model.addNetwork(network);
+				AppController.this.view.getNeuralNetworksWindow().populateNetworkList(
+						AppController.this.model.getNetworkListModel());
 			}
 		});
 	}

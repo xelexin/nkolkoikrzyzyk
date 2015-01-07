@@ -153,7 +153,6 @@ public class NeuralNetwork
 	public NeuralNetwork()
 	{
 		count ++;
-		this.name = "Network #" + count; 
 	}
 	
 	public NeuralNetwork(File file) 
@@ -164,10 +163,30 @@ public class NeuralNetwork
 
 	public NeuralNetwork(int inputSize, int[] layersSize, float variance)
 	{
-		this();
-		this.init(inputSize, layersSize, variance);
+		this(null, inputSize, layersSize, variance, new boolean[0]);
 	}
 	
+	public NeuralNetwork(String name, int inputSize, int[] layersSize, float variance,
+			boolean[] isSigmoid)
+	{
+		this();
+		if( name != null)
+		{
+			this.name = name; 
+		}
+		else
+		{
+			this.name = "Network #" + count;
+		}
+		
+		this.init(inputSize, layersSize, variance);
+		
+		for(int i = 0; i<isSigmoid.length; i++)
+		{
+			this.layers[i].setIsSigmoid(isSigmoid[i]);
+		}
+	}
+
 	/**
 	 * Create multi-layer neural network
 	 * @param inputSize		Number of inputs

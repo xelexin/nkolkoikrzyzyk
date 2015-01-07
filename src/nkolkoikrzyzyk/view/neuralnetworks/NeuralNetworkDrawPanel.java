@@ -25,11 +25,13 @@ import nkolkoikrzyzyk.commons.NeuralNetworkMockup;
  */
 public class NeuralNetworkDrawPanel extends JPanel 
 {
+	private static final int PREF_WIDTH = 600;
+	private static final int PREF_HEIGHT = 600;
 	private NeuralNetworkMockup mockup = null;
 	private static int size = 15;
 	private static int spacingX = 200;
 	private static int spacingY = 100;
-	private static int marginsX = spacingX/2;
+	private static int marginsX = spacingX/4;
 	private static int marginsY = spacingY/2;
 	
 	public NeuralNetworkDrawPanel() 
@@ -150,22 +152,18 @@ public class NeuralNetworkDrawPanel extends JPanel
 		
 		if(mockup != null)
 		{	
-			//TODO: zastanowiæ siê czy przerzuciæ t¹ logikê na poziom tworzenia makiety
 			int max = mockup.layers.get(0).outputSize;
 			for( LayerMockup element : mockup.layers)
 			{
 				max = element.outputSize>max?element.outputSize:max;
 			}
-			//TODOEND
 			int x = (mockup.layers.size())*spacingX+size+2*marginsX;
 			int y = (max-1)*spacingY+size+2*marginsY;
 			return new Dimension( x, y);
 		}
 		else
 		{
-			return super.getPreferredSize();
+			return new Dimension( PREF_WIDTH, PREF_HEIGHT);
 		}
-		
 	}
-	
 }

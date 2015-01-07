@@ -10,6 +10,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
 import javax.swing.text.NumberFormatter;
 
@@ -30,5 +32,14 @@ public class ViewUtilities
 	public static JScrollPane scroll(Component component)
 	{
 		return new JScrollPane(component);
+	}
+	
+	public static JSpinner spinner(Number val, Comparable min, Comparable max, Number step, String format )
+	{
+		JSpinner spinner = new JSpinner();
+		spinner.setModel(new SpinnerNumberModel(val, min, max, step));
+		spinner.setEditor(new JSpinner.NumberEditor(spinner, format));
+		spinner.setToolTipText( "from " + min + " to " + max);
+		return spinner;
 	}
 }
