@@ -2,18 +2,12 @@ package nkolkoikrzyzyk.view;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.text.NumberFormat;
 
 import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.Border;
-import javax.swing.text.NumberFormatter;
 
 public class ViewUtilities
 {
