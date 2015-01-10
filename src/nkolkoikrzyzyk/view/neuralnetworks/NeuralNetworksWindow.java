@@ -5,7 +5,9 @@ package nkolkoikrzyzyk.view.neuralnetworks;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -32,6 +34,7 @@ import nkolkoikrzyzyk.events.LoadNetworkEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.SaveNetworkEvent;
 import nkolkoikrzyzyk.model.NeuralNetwork;
+import nkolkoikrzyzyk.model.TrainingData;
 import nkolkoikrzyzyk.view.ViewUtilities;
 
 /**
@@ -44,6 +47,7 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 	private NeuralNetworkDrawPanel drawPanel;
 	private JList<NeuralNetwork> networkList;
 	private JFileChooser fileChooserNetwork;
+	private TrainNetworkPanel trainPanel;
 	
 	public NeuralNetworksWindow(BlockingQueue<ProgramEvent> blockingQueue) {
 		this.blockingQueue = blockingQueue;
@@ -54,7 +58,6 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 	{
 		this.addWindowListener(this);
 		this.setTitle("Neural Networks Module");
-		this.setResizable( true );
 		JPanel padding = new JPanel();
 		padding.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 		this.setContentPane(padding);
@@ -65,9 +68,19 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 		fileChooserNetwork = new JFileChooser();
 		
 		fill();
+		
 		this.pack();
-		this.setMinimumSize(this.getSize());
+		
+		Rectangle  bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+		Dimension mSize =new Dimension(
+				Math.min( this.getSize().width, bounds.width),
+				Math.min( this.getSize().height, bounds.height-10)
+				);
+		this.setMinimumSize(mSize);
+		this.setResizable( true );
+			
 		this.setVisible( true );
+		
 	}
 
 	private void initializeNetworkList() 
@@ -185,8 +198,8 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 		JPanel bottomLeftPanel = new NewNetworkPanel(blockingQueue);
 		bottomPanel.add(bottomLeftPanel);
 		
-		JPanel bottomRightPanel = new TrainNetworkPanel( blockingQueue, networkList, drawPanel);
-		bottomPanel.add(bottomRightPanel);
+		trainPanel = new TrainNetworkPanel( blockingQueue, networkList, drawPanel);
+		bottomPanel.add(trainPanel);
 		
 		this.add(bottomPanel, BorderLayout.PAGE_END);
 	}
@@ -194,6 +207,11 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 	public void populateNetworkList(NeuralNetwork[] networkListModel) 
 	{
 		this.networkList.setListData(networkListModel);		
+	}
+	
+	public void populateTrainingDataList(TrainingData[] trainingDataListModel) 
+	{
+		this.trainPanel.populateList( trainingDataListModel );
 	}
 	
 	public void setDrawPanelMockup(NeuralNetworkMockup mockup)
@@ -223,4 +241,5 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 
 	@Override
 	public void windowOpened(WindowEvent arg0) {}
+
 }

@@ -11,12 +11,12 @@ import java.util.Random;
 import nkolkoikrzyzyk.commons.LayerMockup;
 import nkolkoikrzyzyk.commons.NeuralNetworkMockup;
 
-public class NeuralNetwork
+public class NeuralNetwork implements Cloneable
 {
 	/*
 	 * Neural network layer
 	 */
-	public static class Layer
+	public static class Layer implements Cloneable
 	{
 		float[] output;
 		float[] input;
@@ -143,6 +143,18 @@ public class NeuralNetwork
 		public LayerMockup getMockup()
 		{
 			return new LayerMockup(output.length, input.length, weights, isSigmoid);
+		}
+		
+		@Override
+		public Object clone() throws CloneNotSupportedException
+		{
+				Layer cloned = (Layer)super.clone();
+				cloned.input = Arrays.copyOf(this.input, this.input.length);
+				cloned.output = Arrays.copyOf(this.output, this.output.length);
+				cloned.dweights = Arrays.copyOf(this.dweights, this.dweights.length);
+				cloned.weights = Arrays.copyOf(this.weights, this.weights.length);
+				
+				return cloned;
 		}
 	}
 
@@ -362,38 +374,38 @@ public class NeuralNetwork
 		return name;
 	}
 
-	// EXAMPLE USAGE
+/*	// EXAMPLE USAGE
 	public static void main(String[] args) throws Exception
 	{
-		// inputs
-		float[][] inputs = new float[][]
-		{
-			new float[]{ 1, 1, 1,  1, 0, 1,  1, 0, 1,  1, 0, 1,  1, 1, 1 }, // 0
-			new float[]{ 0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1 }, // 1
-			new float[]{ 1, 1, 1,  0, 0, 1,  1, 1, 1,  1, 0, 0,  1, 1, 1 }, // 2
-			new float[]{ 1, 1, 1,  0, 0, 1,  1, 1, 1,  0, 0, 1,  1, 1, 1 }, // 3
-			new float[]{ 1, 0, 1,  1, 0, 1,  1, 1, 1,  0, 0, 1,  0, 0, 1 }, // 4
-			new float[]{ 1, 1, 1,  1, 0, 0,  1, 1, 1,  0, 0, 1,  1, 1, 1 }, // 5
-			new float[]{ 1, 1, 1,  1, 0, 0,  1, 1, 1,  1, 0, 1,  1, 1, 1 }, // 6
-			new float[]{ 1, 1, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1 }, // 7
-			new float[]{ 1, 1, 1,  1, 0, 1,  1, 1, 1,  1, 0, 1,  1, 1, 1 }, // 8
-			new float[]{ 1, 1, 1,  1, 0, 1,  1, 1, 1,  0, 0, 1,  1, 1, 1 }, // 9
-		};
-
-		// outputs
-		float[][] outputs = new float[][]
-		{
-			new float[]{ 0, 0, 0, 0 },
-			new float[]{ 0, 0, 0, 1 },
-			new float[]{ 0, 0, 1, 0 },
-			new float[]{ 0, 0, 1, 1 },
-			new float[]{ 0, 1, 0, 0 },
-			new float[]{ 0, 1, 0, 1 },
-			new float[]{ 0, 1, 1, 0 },
-			new float[]{ 0, 1, 1, 1 },
-			new float[]{ 1, 0, 0, 0 },
-			new float[]{ 1, 0, 0, 1 },
-		};
+			// inputs
+			float[][] inputs = new float[][]
+			{
+				new float[]{ 1, 1, 1,  1, 0, 1,  1, 0, 1,  1, 0, 1,  1, 1, 1 }, // 0
+				new float[]{ 0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1 }, // 1
+				new float[]{ 1, 1, 1,  0, 0, 1,  1, 1, 1,  1, 0, 0,  1, 1, 1 }, // 2
+				new float[]{ 1, 1, 1,  0, 0, 1,  1, 1, 1,  0, 0, 1,  1, 1, 1 }, // 3
+				new float[]{ 1, 0, 1,  1, 0, 1,  1, 1, 1,  0, 0, 1,  0, 0, 1 }, // 4
+				new float[]{ 1, 1, 1,  1, 0, 0,  1, 1, 1,  0, 0, 1,  1, 1, 1 }, // 5
+				new float[]{ 1, 1, 1,  1, 0, 0,  1, 1, 1,  1, 0, 1,  1, 1, 1 }, // 6
+				new float[]{ 1, 1, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1 }, // 7
+				new float[]{ 1, 1, 1,  1, 0, 1,  1, 1, 1,  1, 0, 1,  1, 1, 1 }, // 8
+				new float[]{ 1, 1, 1,  1, 0, 1,  1, 1, 1,  0, 0, 1,  1, 1, 1 }, // 9
+			};
+	
+			// outputs
+			float[][] outputs = new float[][]
+			{
+				new float[]{ 0, 0, 0, 0 },
+				new float[]{ 0, 0, 0, 1 },
+				new float[]{ 0, 0, 1, 0 },
+				new float[]{ 0, 0, 1, 1 },
+				new float[]{ 0, 1, 0, 0 },
+				new float[]{ 0, 1, 0, 1 },
+				new float[]{ 0, 1, 1, 0 },
+				new float[]{ 0, 1, 1, 1 },
+				new float[]{ 1, 0, 0, 0 },
+				new float[]{ 1, 0, 0, 1 },
+			};
 
 		// 15 inputs, 7 neurons in hidden layer, 4 outputs
 		NeuralNetwork mlp = new NeuralNetwork(15, new int[]{ 10, 4 }, 1.0f); 
@@ -441,6 +453,17 @@ public class NeuralNetwork
 		System.out.printf("Learning time per epoch: %f ms\n", (float)time / (float)en / 1000000.0f);
 
 		mlp.saveToFile(new File("ann.txt"));
+	}*/
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException
+	{
+		NeuralNetwork cloned = (NeuralNetwork)super.clone();
+		cloned.layers = new Layer[ this.layers.length ];
+		for( int i = 0; i < this.layers.length; i++)
+		{
+			cloned.layers[i] = (Layer)this.layers[i].clone();
+		}
+		return cloned;
 	}
-	 
 }

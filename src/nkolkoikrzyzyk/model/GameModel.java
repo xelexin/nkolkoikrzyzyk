@@ -3,6 +3,8 @@
  */
 package nkolkoikrzyzyk.model;
 
+import nkolkoikrzyzyk.controller.Player;
+
 
 /**
  * @author Johhny

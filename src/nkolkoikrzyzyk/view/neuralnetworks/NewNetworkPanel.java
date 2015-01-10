@@ -33,9 +33,9 @@ import nkolkoikrzyzyk.view.ViewUtilities;
  */
 public class NewNetworkPanel extends JPanel
 {
-	private static final int PREF_WIDTH = 450;
+	private static final int PREF_WIDTH = 500;
 	private static final int PREF_HEIGHT= 200;
-	private static final int MAX_WIDTH = 450;
+	private static final int MAX_WIDTH = 500;
 	private static final int MAX_HEIGHT = 200;
 	
 	private static final int MAX_INPUT = 20;
@@ -183,7 +183,7 @@ public class NewNetworkPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				//TODO: wynieœæ logikê poza listener, zostawiæ wywo³ania
+				//TODO: wynieï¿½ï¿½ logikï¿½ poza listener, zostawiï¿½ wywoï¿½ania
 				String name = NewNetworkPanel.this.name.getText();
 				if (name.trim().length() == 0)
 					name = null;

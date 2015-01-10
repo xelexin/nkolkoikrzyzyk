@@ -14,7 +14,7 @@ import javax.swing.JFrame;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.StartGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
-import nkolkoikrzyzyk.events.TrainNNEvent;
+import nkolkoikrzyzyk.events.StartTrainingEvent;
 import nkolkoikrzyzyk.view.game.NewGameWindow;
 
 /**
@@ -66,7 +66,7 @@ public class AppFrame extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				blockingQueue.add( new TrainNNEvent() );
+				blockingQueue.add( new StartTrainingEvent() );
 			}
 		});
 		this.add(trainNNButton);

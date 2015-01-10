@@ -1,7 +1,9 @@
 /**
  * 
  */
-package nkolkoikrzyzyk.model;
+package nkolkoikrzyzyk.controller;
+
+import nkolkoikrzyzyk.model.Mark;
 
 /**
  * @author Johhny

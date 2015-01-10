@@ -9,6 +9,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 
@@ -23,7 +25,10 @@ import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
 
 import nkolkoikrzyzyk.events.ProgramEvent;
+import nkolkoikrzyzyk.events.StartTrainingEvent;
 import nkolkoikrzyzyk.model.NeuralNetwork;
+import nkolkoikrzyzyk.model.Trainer;
+import nkolkoikrzyzyk.model.TrainingData;
 import nkolkoikrzyzyk.view.LabeledForm;
 import nkolkoikrzyzyk.view.ViewUtilities;
 
@@ -31,11 +36,11 @@ import nkolkoikrzyzyk.view.ViewUtilities;
  * @author Johhny
  *
  */
-public class TrainNetworkPanel extends JPanel
+public class TrainNetworkPanel extends JPanel implements PropertyChangeListener 
 {
-	private static final int MIN_WIDTH = 480;
+	private static final int MIN_WIDTH = 500;
 	private static final int MIN_HEIGHT= 200;
-	private static final int MAX_WIDTH = 480;
+	private static final int MAX_WIDTH = 500;
 	private static final int MAX_HEIGHT = 200;
 	
 	//outside
@@ -47,7 +52,8 @@ public class TrainNetworkPanel extends JPanel
 	private JSpinner momentum;
 	private JSpinner learningRatio;
 	private JSpinner epoches;
-	private JList dataList;
+	private JList<TrainingData> dataList;
+	private JProgressBar progressBar;
 	
 	public TrainNetworkPanel(
 			BlockingQueue<ProgramEvent> blockingQueue,
@@ -77,9 +83,9 @@ public class TrainNetworkPanel extends JPanel
 	{
 		this.fileChooser = new JFileChooser();
 		
-		this.momentum = ViewUtilities.spinner(0.5, 0.0, 1.0, 0.01, "0.00");
+		this.momentum = ViewUtilities.spinner(0.5f, 0.0f, 1.0f, 0.01f, "0.00");
 		
-		this.learningRatio = ViewUtilities.spinner(0.5, 0.0, 1.0, 0.01, "0.00");
+		this.learningRatio = ViewUtilities.spinner(0.5f, 0.0f, 1.0f, 0.01f, "0.00");
 		
 		this.epoches = ViewUtilities.spinner(1000, 100, 10000, 100, "0");
 	}
@@ -164,6 +170,11 @@ public class TrainNetworkPanel extends JPanel
 		JPanel bottomPanel = new JPanel( );
 		bottomPanel.setLayout(new BorderLayout(5,5));
 		
+		//TODO: wyniesc do funkcji inicjalizujacej
+		progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
+		progressBar.setValue(0);
+		progressBar.setStringPainted(true);
+		
 		JButton trainButton = new JButton("Train ANN");
 		trainButton.setMnemonic('T');
 		trainButton.addActionListener(new ActionListener()
@@ -171,19 +182,27 @@ public class TrainNetworkPanel extends JPanel
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
-				
+				Trainer trainer = getTrainer();
+				trainer.addPropertyChangeListener( TrainNetworkPanel.this );
+				trainer.execute();
 			}
 		});
 		bottomPanel.add(trainButton, BorderLayout.LINE_START);
-		
-		JProgressBar progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
-		progressBar.setValue(0);
-		progressBar.setStringPainted(true);
 		bottomPanel.add(progressBar, BorderLayout.CENTER);
 		return bottomPanel;
 	}
 
+	private Trainer getTrainer()
+	{
+		return new Trainer(
+				this.blockingQueue,
+				this.networkList.getSelectedValue(), 
+				this.dataList.getSelectedValue(),
+				(Float)this.learningRatio.getValue(),
+				(Float)this.momentum.getValue(),
+				(Integer)this.epoches.getValue()
+				);
+	}
 	
 	@Override
 	public Dimension getPreferredSize()
@@ -195,5 +214,20 @@ public class TrainNetworkPanel extends JPanel
 	public Dimension getMaximumSize()
 	{
 		return new Dimension(MAX_WIDTH, MAX_HEIGHT);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) 
+	{
+		if( "progress" == evt.getPropertyName()) 
+		{
+			int progress = (Integer) evt.getNewValue();
+			progressBar.setValue(progress);
+		}
+	}
+
+	public void populateList(TrainingData[] trainingDataListModel) 
+	{
+		this.dataList.setListData(trainingDataListModel);
 	}
 }

@@ -1,4 +1,6 @@
-package nkolkoikrzyzyk.model;
+package nkolkoikrzyzyk.controller;
+
+import nkolkoikrzyzyk.model.Mark;
 
 public class HumanPlayer extends Player 
 {	

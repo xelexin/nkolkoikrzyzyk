@@ -18,8 +18,6 @@ import nkolkoikrzyzyk.events.game.MoveMadeEvent;
 import nkolkoikrzyzyk.events.game.RematchEvent;
 import nkolkoikrzyzyk.events.game.StartGameEvent;
 import nkolkoikrzyzyk.model.GameModel;
-import nkolkoikrzyzyk.model.NeuralNetworkPlayer;
-import nkolkoikrzyzyk.model.Player;
 import nkolkoikrzyzyk.view.game.GameWindow;
 
 /**

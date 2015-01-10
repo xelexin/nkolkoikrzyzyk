@@ -6,6 +6,7 @@ package nkolkoikrzyzyk.controller;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import nkolkoikrzyzyk.commons.GameData;
@@ -17,13 +18,14 @@ import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.SaveNetworkEvent;
 import nkolkoikrzyzyk.events.StartGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
-import nkolkoikrzyzyk.events.TrainNNEvent;
+import nkolkoikrzyzyk.events.StartTrainingEvent;
+import nkolkoikrzyzyk.events.TrainingEndedEvent;
 import nkolkoikrzyzyk.model.GameModel;
 import nkolkoikrzyzyk.model.Mark;
 import nkolkoikrzyzyk.model.Model;
 import nkolkoikrzyzyk.model.NeuralNetwork;
-import nkolkoikrzyzyk.model.NeuralNetworkPlayer;
-import nkolkoikrzyzyk.model.Player;
+import nkolkoikrzyzyk.model.Trainer;
+import nkolkoikrzyzyk.model.TrainingData;
 import nkolkoikrzyzyk.view.View;
 import nkolkoikrzyzyk.view.game.GameWindow;
 
@@ -112,17 +114,30 @@ public class AppController
 			}
 		});
 		
-		this.eventActionMap.put( TrainNNEvent.class, new ProgramAction()
+		this.eventActionMap.put( StartTrainingEvent.class, new ProgramAction()
 		{
 			@Override
 			public void go( ProgramEvent event ) {
-				TrainNNEvent tNNE = ( TrainNNEvent ) event;
-				System.out.println("Train NN button clicked");
-				Player player1 = new NeuralNetworkPlayer("Siec X", Mark.CROSS, null);
-				Player player2 = new NeuralNetworkPlayer("Siec O", Mark.NOUGHT, null);
-				for(int i = 0; i <100; i++)
-				{
-					new GameModel().fastPlay(player1, player2);
+				StartTrainingEvent sTE = ( StartTrainingEvent ) event;				
+			}
+		});
+		
+		this.eventActionMap.put( TrainingEndedEvent.class, new ProgramAction() 
+		{	
+			@Override
+			public void go(ProgramEvent event) 
+			{
+				TrainingEndedEvent tEE = ( TrainingEndedEvent ) event;
+				try {
+					AppController.this.model.addNetwork(tEE.trainer.get());
+					AppController.this.view.getNeuralNetworksWindow().populateNetworkList(
+							AppController.this.model.getNetworkListModel());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		});
@@ -134,10 +149,10 @@ public class AppController
 				StartNeuralNetworksModuleEvent sNNME = ( StartNeuralNetworksModuleEvent ) event;
 				AppController.this.view.invokeNeuralNetworksWindow();
 				AppController.this.view.setAppWindowVisible( false );
-				
-				//TODO: Brzydki hack z public neuralNetworksWindow
 				AppController.this.view.getNeuralNetworksWindow().populateNetworkList(
 						AppController.this.model.getNetworkListModel());
+				AppController.this.view.getNeuralNetworksWindow().populateTrainingDataList(
+						AppController.this.model.getTrainingDataListModel());
 			}
 		});
 		

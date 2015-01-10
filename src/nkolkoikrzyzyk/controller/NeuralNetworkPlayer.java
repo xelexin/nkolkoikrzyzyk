@@ -1,7 +1,10 @@
-package nkolkoikrzyzyk.model;
+package nkolkoikrzyzyk.controller;
 
 import java.util.Arrays;
 import java.util.Random;
+
+import nkolkoikrzyzyk.model.Mark;
+import nkolkoikrzyzyk.model.NeuralNetwork;
 
 public class NeuralNetworkPlayer extends Player 
 {

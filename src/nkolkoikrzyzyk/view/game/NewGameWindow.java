@@ -18,13 +18,13 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import nkolkoikrzyzyk.controller.HumanPlayer;
+import nkolkoikrzyzyk.controller.NeuralNetworkPlayer;
+import nkolkoikrzyzyk.controller.Player;
 import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
-import nkolkoikrzyzyk.model.HumanPlayer;
 import nkolkoikrzyzyk.model.Mark;
 import nkolkoikrzyzyk.model.NeuralNetwork;
-import nkolkoikrzyzyk.model.NeuralNetworkPlayer;
-import nkolkoikrzyzyk.model.Player;
 import nkolkoikrzyzyk.view.ViewUtilities;
 
 /**
