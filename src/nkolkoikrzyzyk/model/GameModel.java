@@ -203,7 +203,7 @@ public class GameModel
 
 	public static int[] unhash( double hash )
 	{
-		System.out.println("Unhashing " + hash);
+		//System.out.println("Unhashing " + hash);
 		int[] unhashed = new int[]{0,0,0,0,0,0,0,0,0};
 		for(int i=-9; i<9; i++)
 		{
@@ -213,7 +213,7 @@ public class GameModel
 			{
 				unhashed[Math.abs(i)-1] = Math.abs(i)/i;
 				hash -= Math.pow(0.5, i);
-				GameModel.printBoard(unhashed);
+				//GameModel.printBoard(unhashed);
 			}
 		}
 		return unhashed;
@@ -340,6 +340,16 @@ public class GameModel
 //			GameModel.printBoard(history.get(i));
 		}
 		return stack;
+	}
+	
+	public static float[] toFloat( int[] board)
+	{
+		float[] result = new float[board.length];
+		for( int i = 0; i < board.length; i++)
+		{
+			result[i] = (float) board[i];
+		}
+		return result;
 	}
 
 }

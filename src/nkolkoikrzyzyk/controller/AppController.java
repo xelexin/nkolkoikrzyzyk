@@ -22,6 +22,7 @@ import nkolkoikrzyzyk.events.StartTestEvent;
 import nkolkoikrzyzyk.events.StartTrainingEvent;
 import nkolkoikrzyzyk.events.TrainingEndedEvent;
 import nkolkoikrzyzyk.model.GameModel;
+import nkolkoikrzyzyk.model.LookupTable;
 import nkolkoikrzyzyk.model.Mark;
 import nkolkoikrzyzyk.model.Model;
 import nkolkoikrzyzyk.model.NeuralNetwork;
@@ -96,13 +97,29 @@ public class AppController
 			{
 				StartTestEvent sTE = ( StartTestEvent ) event;
 				
-				LookupTablePlayer p1 = new LookupTablePlayer("p1", Mark.CROSS);
-				LookupTablePlayer p2 = new LookupTablePlayer("p2", Mark.NOUGHT);
-				int games = 500000;
+				//tworzenie tabel
+				LookupTable tableX = new LookupTable("Table X");
+				model.addLookupTable(tableX);
+				LookupTable tableO = new LookupTable("Table O");
+				model.addLookupTable(tableO);
+				
+				//gracze treningowi
+				LookupTablePlayer p1 = new LookupTablePlayer("Player X", Mark.CROSS, tableX);
+				LookupTablePlayer p2 = new LookupTablePlayer("Player O", Mark.NOUGHT, tableO);
+				
+				//rozgrywanie gier
+				int games = 200000;
 				long start = System.currentTimeMillis();
 				for( int i = 0; i<games; i++)
 					new GameModel().fastPlay( p1, p2);
 				System.out.println("Playing " + games + " games took " + (System.currentTimeMillis()-start)/1000 + "s.");
+				
+				//generowanie danych testowych
+				AppController.this.model.addTrainingData( 
+						tableX.getAfterstateTrainingData(false));
+				AppController.this.model.addTrainingData( 
+						tableO.getAfterstateTrainingData(false));
+				
 				p2.setTrainingInProgress(false);
 				
 				blockingQueue.add( new NewGameEvent(new HumanPlayer("Human human", Mark.CROSS), p2 ));
@@ -211,7 +228,7 @@ public class AppController
 			{
 				StartGameModuleEvent sGME = (StartGameModuleEvent) event;
 				AppController.this.view.invokeNewGameWindow(
-						AppController.this.model.getFilteredNetworkListModel());				
+						AppController.this.model.getFilteredNetworkListModel(9, 1));				
 			}
 		});
 		

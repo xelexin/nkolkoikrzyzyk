@@ -35,6 +35,7 @@ public class Trainer extends SwingWorker<NeuralNetwork, Void>
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.student.setName( student.getName() + " [" + data.getName() + "] ");
 		this.data = data;
 		this.learningRate = learnigRare;
 		this.momentum = momentum;
@@ -55,7 +56,7 @@ public class Trainer extends SwingWorker<NeuralNetwork, Void>
 				
 			time += System.nanoTime() - startTime;
 
-			if (epoch % 100 == 0)
+			if (epoch % (epoches/100) == 0)
 			{
 				setProgress((100*epoch)/epoches);
 				System.out.println();

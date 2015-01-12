@@ -46,6 +46,11 @@ public class TrainingData
 				" o:" + this.outputs[0].length + 
 				" s:" + this.inputs.length + "]";
 	}
+
+	public String getName() 
+	{
+		return name;
+	}
 	
 	
 }

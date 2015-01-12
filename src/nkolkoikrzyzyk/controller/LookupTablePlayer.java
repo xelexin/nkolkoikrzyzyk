@@ -9,6 +9,7 @@ import java.util.Stack;
 
 import nkolkoikrzyzyk.model.LookupTable;
 import nkolkoikrzyzyk.model.Mark;
+import nkolkoikrzyzyk.model.TrainingData;
 
 /**
  * @author elohhim
@@ -18,13 +19,19 @@ public class LookupTablePlayer extends Player
 {
 	private static final double RANDOM_PROBABILITY = 0.15; 
 	
-	private LookupTable lookupTable = new LookupTable();
+	private LookupTable lookupTable;
 	private static Random random = new Random(System.nanoTime());
 	private boolean trainingInProgress = true;
 	
-	public LookupTablePlayer(String name, Mark markType) 
+	public LookupTablePlayer(String name, Mark markType)
+	{
+		this(name, markType, new LookupTable() );
+	}
+	
+	public LookupTablePlayer(String name, Mark markType, LookupTable lookupTable) 
 	{
 		super(name, markType);
+		this.lookupTable = lookupTable;
 	}
 
 	/* (non-Javadoc)
@@ -99,7 +106,7 @@ public class LookupTablePlayer extends Player
 	@Override
 	public void youDraw(Stack<int[]> historyStack) 
 	{
-		if(trainingInProgress) lookupTable.updateProcedure(historyStack, 1.0);
+		if(trainingInProgress) lookupTable.updateProcedure(historyStack, 0.5);
 	}
 
 	/* (non-Javadoc)
@@ -117,6 +124,11 @@ public class LookupTablePlayer extends Player
 
 	public void setTrainingInProgress(boolean trainingInProgress) {
 		this.trainingInProgress = trainingInProgress;
+	}
+
+	public LookupTable getLookupTable() 
+	{
+		return this.lookupTable;
 	}
 
 }

@@ -4,14 +4,15 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Stack;
 
+import nkolkoikrzyzyk.model.GameModel;
 import nkolkoikrzyzyk.model.Mark;
 import nkolkoikrzyzyk.model.NeuralNetwork;
 
 public class NeuralNetworkPlayer extends Player 
 {
-	private NeuralNetwork network;
-	private Mark markType;
-	private Random random;
+	protected NeuralNetwork network;
+	protected Mark markType;
+	protected Random random;
 		
 	public NeuralNetworkPlayer(String name, Mark markType, NeuralNetwork network) {
 		super(name, markType);
@@ -25,9 +26,7 @@ public class NeuralNetworkPlayer extends Player
 		int bestMove = -1;
 		
 		if (network != null) {
-			float[] input = new float[9];
-			for (int i = 0; i < 9; i++)
-				input[i] = (float)board[i];
+			float[] input = GameModel.toFloat(board);
 			// TODO: conversion from Xs to Os will be probably needed
 			
 			float[] output = network.run(input);

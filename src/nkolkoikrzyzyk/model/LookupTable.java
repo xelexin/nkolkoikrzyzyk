@@ -1,17 +1,27 @@
 package nkolkoikrzyzyk.model;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
 public class LookupTable 
 {
+	private static int counter = 1; // is one ahead
+	private String name;
 	private double alpha=0.5;
-	
 	private final Map<Double, Double> probabilityMap;
 
 	public LookupTable()
 	{
+		this( "Table " + counter );		
+	}
+	
+	public LookupTable( String name )
+	{
+		counter++;
+		this.name = name;
 		this.probabilityMap = new HashMap<Double, Double>();
 	}
 
@@ -52,9 +62,47 @@ public class LookupTable
 	
 	public double get( int[] board)
 	{
-		Double probability = probabilityMap.get(GameModel.hash(board));  
+		double hash = GameModel.hash(board);
+		Double probability = probabilityMap.get(hash);  
 		if( probability == null)
+		{
 			probability = 0.5;
+			probabilityMap.put(hash, probability);	
+		}
 		return probability;
+	}
+	
+	public TrainingData getAfterstateTrainingData( boolean hashed)
+	{
+		String dataName = name + " data";
+		List<float[]> inputs = new LinkedList<float[]>();
+		List<float[]> outputs = new LinkedList<float[]>();
+		
+		for( Map.Entry<Double, Double> entry : probabilityMap.entrySet() )
+		{
+			if(hashed)
+			{
+				inputs.add( new float[]{ entry.getKey().floatValue() } );
+			}
+			else
+			{
+				int[] unhashed = GameModel.unhash(entry.getKey());
+				float[] fUnhashed = new float[unhashed.length]; 
+				for( int i = 0; i<unhashed.length; i++)
+				{
+					fUnhashed[i] = (float)unhashed[i];
+				}
+				inputs.add(fUnhashed);
+			}
+			
+			outputs.add( new float[]{ entry.getValue().floatValue() } );
+		}
+		
+		float[][] inputsArray = new float[inputs.size()][];
+		inputs.toArray( inputsArray );
+		float[][] outputsArray = new float[outputs.size()][];
+		outputs.toArray( outputsArray );
+		
+		return new TrainingData(dataName, inputsArray, outputsArray);
 	}
 }

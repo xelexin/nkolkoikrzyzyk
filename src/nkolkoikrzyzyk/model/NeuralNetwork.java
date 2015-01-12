@@ -178,6 +178,11 @@ public class NeuralNetwork implements Cloneable
 		this(null, inputSize, layersSize, variance, new boolean[0]);
 	}
 	
+	public NeuralNetwork(String name, int inputSize, int[] layersSize, float variance)
+	{
+		this(name, inputSize, layersSize, variance, new boolean[0]);
+	}
+	
 	public NeuralNetwork(String name, int inputSize, int[] layersSize, float variance,
 			boolean[] isSigmoid)
 	{
@@ -475,5 +480,9 @@ public class NeuralNetwork implements Cloneable
 			cloned.layers[i] = (Layer)this.layers[i].clone();
 		}
 		return cloned;
+	}
+
+	public void setName(String string) {
+		this.name = string;
 	}
 }

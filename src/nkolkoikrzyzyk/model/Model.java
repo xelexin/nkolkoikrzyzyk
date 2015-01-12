@@ -22,8 +22,10 @@ public class Model {
 	private final BlockingQueue<ProgramEvent> blockingQueue;
 	private final List<NeuralNetwork> networkList;
 	private final List<TrainingData> trainingDataList;
+	private final List<LookupTable> lookupTableList;
 
-	public List<NeuralNetwork> getNetworkList() {
+	public List<NeuralNetwork> getNetworkList() 
+	{
 		return networkList;
 	}
 
@@ -32,19 +34,15 @@ public class Model {
 		this.blockingQueue = blockingQueue;
 		this.networkList = new LinkedList<NeuralNetwork>();
 		this.trainingDataList = new LinkedList<TrainingData>();
+		this.lookupTableList = new LinkedList<LookupTable>();
 		
 		//TEST
-		NeuralNetwork mlp1 = new NeuralNetwork(9, new int[]{ 9, 9, 9  }, 2.0f);
-		mlp1.getLayer(2).setIsSigmoid(false);
-		networkList.add(mlp1);
-
-		NeuralNetwork mlp2 = new NeuralNetwork(2, new int[]{ 3,3,3,3,3 }, 1.0f);
-		networkList.add(mlp2);
-
-		NeuralNetwork mlp3 = new NeuralNetwork(15, new int[]{ 10, 4 }, 1.0f); 
+		NeuralNetwork mlp3 = new NeuralNetwork("15dots ANN" ,15, new int[]{ 10, 4 }, 1.0f); 
 		mlp3.getLayer(1).setIsSigmoid(false);
 		networkList.add(mlp3);
 
+		NeuralNetwork afterstates = new NeuralNetwork( "AfterstatesANN", 9, new int[]{27,81,27,9,1}, 1.0f);
+		networkList.add(afterstates);
 		// inputs
 		float[][] inputs = new float[][]
 				{
@@ -75,14 +73,26 @@ public class Model {
 				new float[]{ 1, 0, 0, 1 },
 				};
 
-		trainingDataList.add(new TrainingData("Dane testowe", inputs, outputs));
+		trainingDataList.add(new TrainingData("15dots data set", inputs, outputs));
 
 		//TEST END
 	}
 
-	public void addNetwork(NeuralNetwork neuralNetwork) {
+	public void addNetwork(NeuralNetwork neuralNetwork) 
+	{
 		this.networkList.add(neuralNetwork);
 	}
+	
+	public void addTrainingData(TrainingData trainingData) 
+	{
+		this.trainingDataList.add(trainingData);
+	}
+	
+	public void addLookupTable( LookupTable lookupTable)
+	{
+		this.lookupTableList.add(lookupTable);
+	}
+	
 
 	public NeuralNetwork[] getNetworkListModel()
 	{
@@ -91,7 +101,7 @@ public class Model {
 		return array;
 	}
 
-	public NeuralNetwork[] getFilteredNetworkListModel()
+	public NeuralNetwork[] getFilteredNetworkListModel(int inputSize, int outputSize)
 	{
 		LinkedList<NeuralNetwork> filteredList = new LinkedList<NeuralNetwork>();
 		Iterator<NeuralNetwork> iterator = networkList.iterator();
@@ -100,7 +110,7 @@ public class Model {
 			NeuralNetwork element = iterator.next();
 			System.out.println(element.getInputSize() + " " + element.getOutputSize());
 
-			if ( element.getInputSize() == 9 && element.getOutputSize() == 9)
+			if ( element.getInputSize() == inputSize && element.getOutputSize() == outputSize)
 			{
 				filteredList.add(element);
 			}

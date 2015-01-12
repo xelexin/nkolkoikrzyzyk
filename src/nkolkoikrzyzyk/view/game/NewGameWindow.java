@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import nkolkoikrzyzyk.controller.AfterstatesANNPlayer;
 import nkolkoikrzyzyk.controller.HumanPlayer;
 import nkolkoikrzyzyk.controller.NeuralNetworkPlayer;
 import nkolkoikrzyzyk.controller.Player;
@@ -92,8 +93,9 @@ public class NewGameWindow extends JFrame implements ActionListener
 			}
 			else
 			{
+				//TODO zrobić wybór afterstates, beforestates
 				NeuralNetwork network = networkCombo.getItemAt(networkCombo.getSelectedIndex());
-				return new NeuralNetworkPlayer( "Network " + id, mark, network);
+				return new AfterstatesANNPlayer( "Network " + id, mark, network);
 			}
 		}
 
