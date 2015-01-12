@@ -2,6 +2,7 @@ package nkolkoikrzyzyk.controller;
 
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Stack;
 
 import nkolkoikrzyzyk.model.Mark;
 import nkolkoikrzyzyk.model.NeuralNetwork;
@@ -52,14 +53,17 @@ public class NeuralNetworkPlayer extends Player
 	}
 
 	@Override
-	public void youWin(int[] board) {
+	public void youWin(Stack<int[]> history) 
+	{
 	}
 
 	@Override
-	public void youLost() {
+	public void youLost(Stack<int[]> history) 
+	{
 	}
 	
 	@Override
-	public void youDraw(int[] board) {
+	public void youDraw(Stack<int[]> history) 
+	{
 	}
 }

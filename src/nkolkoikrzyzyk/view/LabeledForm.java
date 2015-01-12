@@ -17,6 +17,11 @@ import javax.swing.JPanel;
  */
 public class LabeledForm extends JPanel
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public LabeledForm(Component[] fields, String[] labels, char[] mnemonics)
 	{
 		super(new BorderLayout(5,5));

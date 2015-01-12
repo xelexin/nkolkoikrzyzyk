@@ -25,7 +25,6 @@ import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
 
 import nkolkoikrzyzyk.events.ProgramEvent;
-import nkolkoikrzyzyk.events.StartTrainingEvent;
 import nkolkoikrzyzyk.model.NeuralNetwork;
 import nkolkoikrzyzyk.model.Trainer;
 import nkolkoikrzyzyk.model.TrainingData;
@@ -75,7 +74,7 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 		
 		initializeSpinners();
 		
-		this.dataList = new JList();
+		this.dataList = new JList<TrainingData>();
 		fill();
 	}
 

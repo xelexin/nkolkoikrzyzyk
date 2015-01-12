@@ -1,5 +1,7 @@
 package nkolkoikrzyzyk.controller;
 
+import java.util.Stack;
+
 import nkolkoikrzyzyk.model.Mark;
 
 public class HumanPlayer extends Player 
@@ -16,22 +18,21 @@ public class HumanPlayer extends Player
 	}
 
 	@Override
-	public void youWin(int[] board) {
+	public void youWin(Stack<int[]> history) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void youLost() {
+	public void youLost(Stack<int[]> history) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void youDraw(int[] board)
+	public void youDraw(Stack<int[]> history)
 	{
 		// TODO Auto-generated method stub
-		
 	}
 
 }

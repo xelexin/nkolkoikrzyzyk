@@ -3,6 +3,8 @@
  */
 package nkolkoikrzyzyk.controller;
 
+import java.util.Stack;
+
 import nkolkoikrzyzyk.model.Mark;
 
 /**
@@ -35,8 +37,8 @@ public abstract class Player
 	 * @return			Board state after executing a move.
 	 */
 	public abstract int[] makeMove(int[] board, int position);
-	public abstract void youWin(int[] board);
-	public abstract void youDraw(int[] board);
-	public abstract void youLost();
+	public abstract void youWin(Stack<int[]> history);
+	public abstract void youDraw(Stack<int[]> history);
+	public abstract void youLost(Stack<int[]> history);
 	
 }

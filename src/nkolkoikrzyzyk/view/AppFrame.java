@@ -14,8 +14,8 @@ import javax.swing.JFrame;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.StartGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
+import nkolkoikrzyzyk.events.StartTestEvent;
 import nkolkoikrzyzyk.events.StartTrainingEvent;
-import nkolkoikrzyzyk.view.game.NewGameWindow;
 
 /**
  * @author elohhim
@@ -61,14 +61,14 @@ public class AppFrame extends JFrame {
 		});
 		this.add(neuralNetworksButton);
 		
-		JButton trainNNButton = new JButton("Train NN");
-		trainNNButton.addActionListener( new ActionListener() {
+		JButton startTestButton = new JButton("Start test WARNING: long");
+		startTestButton.addActionListener( new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				blockingQueue.add( new StartTrainingEvent() );
+				blockingQueue.add( new StartTestEvent() );
 			}
 		});
-		this.add(trainNNButton);
+		this.add(startTestButton);
 	}
 }

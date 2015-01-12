@@ -18,14 +18,13 @@ import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.SaveNetworkEvent;
 import nkolkoikrzyzyk.events.StartGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
+import nkolkoikrzyzyk.events.StartTestEvent;
 import nkolkoikrzyzyk.events.StartTrainingEvent;
 import nkolkoikrzyzyk.events.TrainingEndedEvent;
 import nkolkoikrzyzyk.model.GameModel;
 import nkolkoikrzyzyk.model.Mark;
 import nkolkoikrzyzyk.model.Model;
 import nkolkoikrzyzyk.model.NeuralNetwork;
-import nkolkoikrzyzyk.model.Trainer;
-import nkolkoikrzyzyk.model.TrainingData;
 import nkolkoikrzyzyk.view.View;
 import nkolkoikrzyzyk.view.game.GameWindow;
 
@@ -89,7 +88,27 @@ public class AppController
 	 * fills container eventActionMap
 	 */
 	private void fillEventActionMap()
-	{
+	{	
+		this.eventActionMap.put( StartTestEvent.class, new ProgramAction()
+		{
+			@Override
+			public void go( ProgramEvent event ) 
+			{
+				StartTestEvent sTE = ( StartTestEvent ) event;
+				
+				LookupTablePlayer p1 = new LookupTablePlayer("p1", Mark.CROSS);
+				LookupTablePlayer p2 = new LookupTablePlayer("p2", Mark.NOUGHT);
+				int games = 500000;
+				long start = System.currentTimeMillis();
+				for( int i = 0; i<games; i++)
+					new GameModel().fastPlay( p1, p2);
+				System.out.println("Playing " + games + " games took " + (System.currentTimeMillis()-start)/1000 + "s.");
+				p2.setTrainingInProgress(false);
+				
+				blockingQueue.add( new NewGameEvent(new HumanPlayer("Human human", Mark.CROSS), p2 ));
+			}
+		});
+		
 		this.eventActionMap.put( NewGameEvent.class, new ProgramAction()
 		{
 			@Override
@@ -112,7 +131,7 @@ public class AppController
 				}
 				AppController.this.view.setAppWindowVisible( true );
 			}
-		});
+		});	
 		
 		this.eventActionMap.put( StartTrainingEvent.class, new ProgramAction()
 		{
@@ -192,7 +211,7 @@ public class AppController
 			{
 				StartGameModuleEvent sGME = (StartGameModuleEvent) event;
 				AppController.this.view.invokeNewGameWindow(
-						AppController.this.model.getNetworkListModel());				
+						AppController.this.model.getFilteredNetworkListModel());				
 			}
 		});
 		

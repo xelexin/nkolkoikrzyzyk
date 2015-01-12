@@ -368,6 +368,16 @@ public class NeuralNetwork implements Cloneable
 		return mockup;
 	}
 	
+	public int getInputSize() 
+	{
+		return this.layers[0].input.length;
+	}
+	
+	public int getOutputSize()
+	{
+		return this.layers[layers.length-1].output.length;
+	}
+	
 	@Override
 	public String toString()
 	{

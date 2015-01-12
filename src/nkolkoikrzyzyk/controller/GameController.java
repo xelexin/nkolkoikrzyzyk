@@ -26,7 +26,10 @@ import nkolkoikrzyzyk.view.game.GameWindow;
  */
 public class GameController
 {
-	private enum ActivePlayer {
+	private static final int DELAY = 100;
+	
+	private enum ActivePlayer 
+	{
 		PLAYER1("Player 1"),
 		PLAYER2("Player 2");
 		
@@ -42,6 +45,7 @@ public class GameController
 			this.str = string;
 		}
 	}
+	
 	private Player player1;
 	private Player player2;
 	
@@ -160,7 +164,7 @@ public class GameController
 				StartGameEvent sGE = (StartGameEvent) event;
 				System.out.println("Game #" + model.getId() + " started.");
 				view.setBoardEnabled(true);
-				GameController.this.playTurn();
+				GameController.this.startTurn();
 			}
 		});
 		
@@ -212,49 +216,48 @@ public class GameController
 		});
 	}
 	
-	private void playTurn() 
+	private void startTurn() 
 	{
 		this.view.setMessage(activePlayer.str() + " move..." );
-		if( activePlayer().getClass() == NeuralNetworkPlayer.class )
+		if( activePlayer().getClass() == HumanPlayer.class )
+		{
+			waitingForHuman = true;
+		}
+		else
 		{
 			try {
-				Thread.sleep(250);
+				Thread.sleep(DELAY);
 				gameQueue.add( new MoveMadeEvent( activePlayer().makeMove( model.getBoard(), -1 ) ) );
-				Thread.sleep(250);
+				Thread.sleep(DELAY);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		}
-		else
-			waitingForHuman = true;
+		}			
 	}
 
 	private void endTurn( int[] newBoard) 
 	{
 		model.setBoard(newBoard);	
-
 		this.view.refresh( newBoard );
-		this.model.printBoard();
 		
 		if(model.ifWin()==true)
 		{
 			System.out.println(activePlayer().getName() + " won!");
-			activePlayer().youWin(newBoard);
-			waitingPlayer().youLost();
+			activePlayer().youWin(model.getEnderHistoryStack());
+			waitingPlayer().youLost(model.getNotEnderHistoryStack());
+			model.printHistory();
 			gameQueue.add( new GameEndedEvent(activePlayer==ActivePlayer.PLAYER1?EndState.PLAYER1_WON:EndState.PLAYER2_WON) );
 			return;
 		}
 			
 		if(model.noMoreMove()==true)
 		{
-			player1.youDraw( newBoard );
-			player2.youDraw( newBoard );
-			System.out.println("Remis");
+			activePlayer().youDraw( model.getEnderHistoryStack() );
+			waitingPlayer().youDraw( model.getNotEnderHistoryStack() );
 			gameQueue.add( new GameEndedEvent(EndState.DRAW) );
 			return;
 		}		
-		//swapping players
 		swapPlayers();
-		playTurn();
+		startTurn();
 	}
 }
