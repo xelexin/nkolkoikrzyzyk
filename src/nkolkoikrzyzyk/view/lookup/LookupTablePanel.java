@@ -32,6 +32,7 @@ import javax.swing.SwingConstants;
 import nkolkoikrzyzyk.controller.Filler;
 import nkolkoikrzyzyk.controller.LookupTablePlayer;
 import nkolkoikrzyzyk.controller.Trainer;
+import nkolkoikrzyzyk.events.NewLookupTableEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.model.LookupTable;
 import nkolkoikrzyzyk.model.Mark;
@@ -40,6 +41,7 @@ import nkolkoikrzyzyk.model.TrainingData;
 import nkolkoikrzyzyk.view.LabeledForm;
 import nkolkoikrzyzyk.view.SteppedComboBox;
 import nkolkoikrzyzyk.view.ViewUtilities;
+import nkolkoikrzyzyk.view.neuralnetworks.NewNetworkPanel;
 import nkolkoikrzyzyk.view.neuralnetworks.TrainNetworkPanel;
 
 /**
@@ -91,11 +93,11 @@ public class LookupTablePanel extends JPanel implements PropertyChangeListener
 		this.table1ComboBox = new SteppedComboBox<LookupTable>();
 		Dimension d = table1ComboBox.getPreferredSize();
 		table1ComboBox.setPreferredSize(new Dimension(120, d.height));
-		table1ComboBox.setPopupWidth(d.width);
+		table1ComboBox.setPopupWidth(240);
 		this.table2ComboBox = new SteppedComboBox<LookupTable>();
 		d = table2ComboBox.getPreferredSize();
 		table2ComboBox.setPreferredSize(new Dimension(120, d.height));
-		table2ComboBox.setPopupWidth(d.width);
+		table2ComboBox.setPopupWidth(240);
 	}
 
 	private void initializeTableList()
@@ -154,6 +156,17 @@ public class LookupTablePanel extends JPanel implements PropertyChangeListener
 	{
 		JPanel buttons = new JPanel( new GridLayout(1,2));
 		JButton newTableButton = new JButton("New");
+		newTableButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				String name = LookupTablePanel.this.tableName.getText();
+				if (name.trim().length() == 0)
+					name = null;
+				blockingQueue.add( new NewLookupTableEvent(name) );
+			}
+		});
 		JButton deleteTableButton = new JButton("Delete");
 		buttons.add(newTableButton);
 		buttons.add(deleteTableButton);

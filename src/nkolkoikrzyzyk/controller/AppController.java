@@ -13,6 +13,7 @@ import nkolkoikrzyzyk.commons.GameData;
 import nkolkoikrzyzyk.events.CloseNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.LoadNetworkEvent;
 import nkolkoikrzyzyk.events.NewGameEvent;
+import nkolkoikrzyzyk.events.NewLookupTableEvent;
 import nkolkoikrzyzyk.events.NewNetworkEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.SaveNetworkEvent;
@@ -252,6 +253,19 @@ public class AppController
 				AppController.this.model.addNetwork(network);
 				AppController.this.view.getNeuralNetworksWindow().populateNetworkList(
 						AppController.this.model.getNetworkListModel());
+			}
+		});
+		
+		this.eventActionMap.put( NewLookupTableEvent.class, new ProgramAction()
+		{
+			@Override
+			public void go(ProgramEvent event)
+			{
+				NewLookupTableEvent nLTE = (NewLookupTableEvent) event;
+				LookupTable table = new LookupTable(nLTE.name);
+				AppController.this.model.addLookupTable(table);
+				AppController.this.view.getNeuralNetworksWindow().populateLookupTableList(
+						AppController.this.model.getLookupTableListModel());
 			}
 		});
 	}

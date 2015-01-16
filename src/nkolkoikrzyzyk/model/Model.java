@@ -79,10 +79,7 @@ public class Model {
 		LookupTable tableX = new LookupTable("Table X");
 		addLookupTable(tableX);
 		LookupTable tableO = new LookupTable("Table O");
-		addLookupTable(tableO);
-		LookupTable tableXO = new LookupTable("Table XO");
-		addLookupTable(tableXO);
-		
+		addLookupTable(tableO);		
 		//TEST END
 	}
 

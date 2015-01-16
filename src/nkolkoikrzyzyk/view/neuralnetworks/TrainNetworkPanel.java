@@ -86,7 +86,7 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 		this.networkComboBox = new SteppedComboBox<NeuralNetwork>();
 		Dimension d = networkComboBox.getPreferredSize();
 		networkComboBox.setPreferredSize(new Dimension(150, d.height));
-		networkComboBox.setPopupWidth(d.width);
+		networkComboBox.setPopupWidth(240);
 	}
 
 	private void initializeSpinners()

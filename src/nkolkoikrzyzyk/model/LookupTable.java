@@ -20,8 +20,12 @@ public class LookupTable
 	
 	public LookupTable( String name )
 	{
+		if( name != null)
+			this.name = name;
+		else
+			this.name = "Table " + counter;
+		
 		counter++;
-		this.name = name;
 		this.probabilityMap = new HashMap<Double, Double>();
 	}
 
