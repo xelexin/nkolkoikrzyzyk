@@ -1,6 +1,6 @@
 package nkolkoikrzyzyk.events;
 
-import nkolkoikrzyzyk.model.Trainer;
+import nkolkoikrzyzyk.controller.Trainer;
 
 
 public class StartTrainingEvent extends ProgramEvent 

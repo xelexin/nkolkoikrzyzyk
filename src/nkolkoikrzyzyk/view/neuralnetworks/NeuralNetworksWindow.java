@@ -33,9 +33,11 @@ import nkolkoikrzyzyk.events.CloseNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.LoadNetworkEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.SaveNetworkEvent;
+import nkolkoikrzyzyk.model.LookupTable;
 import nkolkoikrzyzyk.model.NeuralNetwork;
 import nkolkoikrzyzyk.model.TrainingData;
 import nkolkoikrzyzyk.view.ViewUtilities;
+import nkolkoikrzyzyk.view.lookup.LookupTablePanel;
 
 /**
  * @author Johhny
@@ -47,7 +49,9 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 	private NeuralNetworkDrawPanel drawPanel;
 	private JList<NeuralNetwork> networkList;
 	private JFileChooser fileChooserNetwork;
+	private NewNetworkPanel networkPanel;
 	private TrainNetworkPanel trainPanel;
+	private LookupTablePanel lookupPanel;
 	
 	public NeuralNetworksWindow(BlockingQueue<ProgramEvent> blockingQueue) {
 		this.blockingQueue = blockingQueue;
@@ -195,23 +199,32 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 		JPanel bottomPanel = new JPanel();
 		bottomPanel.setLayout( new BoxLayout(bottomPanel,BoxLayout.LINE_AXIS));
 		
-		JPanel bottomLeftPanel = new NewNetworkPanel(blockingQueue);
-		bottomPanel.add(bottomLeftPanel);
+		networkPanel = new NewNetworkPanel(blockingQueue);
+		bottomPanel.add(networkPanel);
 		
-		trainPanel = new TrainNetworkPanel( blockingQueue, networkList, drawPanel);
+		trainPanel = new TrainNetworkPanel( blockingQueue, drawPanel);
 		bottomPanel.add(trainPanel);
+		
+		lookupPanel = new LookupTablePanel(blockingQueue);
+		bottomPanel.add(lookupPanel);
 		
 		this.add(bottomPanel, BorderLayout.PAGE_END);
 	}
 	
 	public void populateNetworkList(NeuralNetwork[] networkListModel) 
 	{
-		this.networkList.setListData(networkListModel);		
+		this.networkList.setListData(networkListModel);
+		this.trainPanel.populateNetworkCombo(networkListModel);
 	}
 	
 	public void populateTrainingDataList(TrainingData[] trainingDataListModel) 
 	{
 		this.trainPanel.populateList( trainingDataListModel );
+	}
+	
+	public void populateLookupTableList(LookupTable[] trainingDataListModel) 
+	{
+		this.lookupPanel.populateList( trainingDataListModel );
 	}
 	
 	public void setDrawPanelMockup(NeuralNetworkMockup mockup)

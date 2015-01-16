@@ -3,7 +3,7 @@
  */
 package nkolkoikrzyzyk.events;
 
-import nkolkoikrzyzyk.model.Trainer;
+import nkolkoikrzyzyk.controller.Trainer;
 
 /**
  * @author elohhim

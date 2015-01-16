@@ -102,16 +102,24 @@ public class AppController
 				model.addLookupTable(tableX);
 				LookupTable tableO = new LookupTable("Table O");
 				model.addLookupTable(tableO);
-				
+				LookupTable tableXO = new LookupTable("Table XO");
 				//gracze treningowi
 				LookupTablePlayer p1 = new LookupTablePlayer("Player X", Mark.CROSS, tableX);
 				LookupTablePlayer p2 = new LookupTablePlayer("Player O", Mark.NOUGHT, tableO);
 				
+				LookupTablePlayer p3 = new LookupTablePlayer("Player XO-X", Mark.CROSS, tableXO);
+				LookupTablePlayer p4 = new LookupTablePlayer("Player XO-O", Mark.NOUGHT, tableXO);
+
 				//rozgrywanie gier
-				int games = 200000;
+				int games = 5000;
 				long start = System.currentTimeMillis();
 				for( int i = 0; i<games; i++)
 					new GameModel().fastPlay( p1, p2);
+				System.out.println("Playing " + games + " games took " + (System.currentTimeMillis()-start)/1000 + "s.");
+				
+				start = System.currentTimeMillis();
+				for( int i = 0; i<games; i++)
+					new GameModel().fastPlay( p3, p4);
 				System.out.println("Playing " + games + " games took " + (System.currentTimeMillis()-start)/1000 + "s.");
 				
 				//generowanie danych testowych
@@ -189,6 +197,8 @@ public class AppController
 						AppController.this.model.getNetworkListModel());
 				AppController.this.view.getNeuralNetworksWindow().populateTrainingDataList(
 						AppController.this.model.getTrainingDataListModel());
+				AppController.this.view.getNeuralNetworksWindow().populateLookupTableList(
+						AppController.this.model.getLookupTableListModel());
 			}
 		});
 		

@@ -59,8 +59,6 @@ public class View {
 			this.newGameWindow = new NewGameWindow(this.blockingQueue);
 		this.newGameWindow.setVisible(true);
 		this.newGameWindow.populateNetworkList( networkList );
-		
-		
 	}
 	
 	public void invokeNeuralNetworksWindow() 

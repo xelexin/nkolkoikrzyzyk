@@ -1,7 +1,7 @@
 /**
  * 
  */
-package nkolkoikrzyzyk.model;
+package nkolkoikrzyzyk.controller;
 
 import java.awt.Toolkit;
 import java.util.Arrays;
@@ -11,6 +11,8 @@ import javax.swing.SwingWorker;
 
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.TrainingEndedEvent;
+import nkolkoikrzyzyk.model.NeuralNetwork;
+import nkolkoikrzyzyk.model.TrainingData;
 
 /**
  * @author elohhim

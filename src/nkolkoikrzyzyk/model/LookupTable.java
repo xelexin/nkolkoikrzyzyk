@@ -57,7 +57,6 @@ public class LookupTable
 		}
 		//TODO trzeba to dopracować, jak ta alpha powinna się zmieniać
 		alpha*=0.9999;
-		System.out.println("Number of unique afterstates in table: " + probabilityMap.size());
 	}
 	
 	public double get( int[] board)
@@ -104,5 +103,11 @@ public class LookupTable
 		outputs.toArray( outputsArray );
 		
 		return new TrainingData(dataName, inputsArray, outputsArray);
+	}
+	
+	@Override
+	public String toString()
+	{
+		return name + " [" + probabilityMap.size() + "]";
 	}
 }

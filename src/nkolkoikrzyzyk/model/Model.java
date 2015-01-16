@@ -75,6 +75,14 @@ public class Model {
 
 		trainingDataList.add(new TrainingData("15dots data set", inputs, outputs));
 
+		//tworzenie tabel
+		LookupTable tableX = new LookupTable("Table X");
+		addLookupTable(tableX);
+		LookupTable tableO = new LookupTable("Table O");
+		addLookupTable(tableO);
+		LookupTable tableXO = new LookupTable("Table XO");
+		addLookupTable(tableXO);
+		
 		//TEST END
 	}
 
@@ -124,6 +132,13 @@ public class Model {
 	{
 		TrainingData[] array = new TrainingData[trainingDataList.size()];
 		trainingDataList.toArray(array);
+		return array;
+	}
+
+	public LookupTable[] getLookupTableListModel()
+	{
+		LookupTable[] array = new LookupTable[lookupTableList.size()];
+		lookupTableList.toArray(array);
 		return array;
 	}
 }

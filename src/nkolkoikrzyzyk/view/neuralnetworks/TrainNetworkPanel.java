@@ -14,7 +14,9 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -24,11 +26,12 @@ import javax.swing.JProgressBar;
 import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
 
+import nkolkoikrzyzyk.controller.Trainer;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.model.NeuralNetwork;
-import nkolkoikrzyzyk.model.Trainer;
 import nkolkoikrzyzyk.model.TrainingData;
 import nkolkoikrzyzyk.view.LabeledForm;
+import nkolkoikrzyzyk.view.SteppedComboBox;
 import nkolkoikrzyzyk.view.ViewUtilities;
 
 /**
@@ -44,10 +47,11 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	
 	//outside
 	private BlockingQueue<ProgramEvent> blockingQueue;
-	private JList<NeuralNetwork> networkList;
 	private NeuralNetworkDrawPanel drawPanel;
+	
 	//inside
 	private JFileChooser fileChooser;
+	private SteppedComboBox<NeuralNetwork> networkComboBox;
 	private JSpinner momentum;
 	private JSpinner learningRatio;
 	private JSpinner epoches;
@@ -56,11 +60,9 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	
 	public TrainNetworkPanel(
 			BlockingQueue<ProgramEvent> blockingQueue,
-			JList<NeuralNetwork> networkList,
 			NeuralNetworkDrawPanel drawPanel)
 	{
 		this.blockingQueue = blockingQueue;
-		this.networkList = networkList;
 		this.drawPanel = drawPanel;
 		
 		initialize();
@@ -73,9 +75,18 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 		this.setLayout(new BorderLayout(5,5));
 		
 		initializeSpinners();
-		
+		initializeComboBox();
 		this.dataList = new JList<TrainingData>();
+		
 		fill();
+	}
+
+	private void initializeComboBox()
+	{
+		this.networkComboBox = new SteppedComboBox<NeuralNetwork>();
+		Dimension d = networkComboBox.getPreferredSize();
+		networkComboBox.setPreferredSize(new Dimension(150, d.height));
+		networkComboBox.setPopupWidth(d.width);
 	}
 
 	private void initializeSpinners()
@@ -157,9 +168,9 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	
 	private JPanel rightPanel()
 	{
-		String[] labels = { "Momentum", "Learning ratio", "Epoches"};
-	    char[] mnemonics = {'M','R','E'};
-	    Component[] fields = {momentum, learningRatio, epoches};
+		String[] labels = { "ANN", "Momentum", "Learning ratio", "Epoches"};
+	    char[] mnemonics = { '0', 'M','R','E'};
+	    Component[] fields = { networkComboBox, momentum, learningRatio, epoches};
 		LabeledForm form = new LabeledForm(fields, labels, mnemonics);		
 		return form;
 	}
@@ -195,7 +206,7 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	{
 		return new Trainer(
 				this.blockingQueue,
-				this.networkList.getSelectedValue(), 
+				this.networkComboBox.getItemAt(this.networkComboBox.getSelectedIndex()),
 				this.dataList.getSelectedValue(),
 				(Float)this.learningRatio.getValue(),
 				(Float)this.momentum.getValue(),
@@ -228,5 +239,10 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	public void populateList(TrainingData[] trainingDataListModel) 
 	{
 		this.dataList.setListData(trainingDataListModel);
+	}
+	
+	public void populateNetworkCombo(NeuralNetwork[] networkList)
+	{
+		this.networkComboBox.setModel( new DefaultComboBoxModel<>(networkList));
 	}
 }

@@ -39,7 +39,7 @@ public class NewNetworkPanel extends JPanel
 	private static final int MAX_HEIGHT = 200;
 	
 	private static final int MAX_INPUT = 20;
-	private static final int MAX_OUTPUT = 20;
+	private static final int MAX_OUTPUT = 9;
 	private static final int MAX_HIDDEN_LAYERS = 10;
 	private static final int MAX_LAYER_SIZE = 20;
 
@@ -99,7 +99,7 @@ public class NewNetworkPanel extends JPanel
 	private void initializeOutputSize()
 	{
 		this.outputSize = ViewUtilities.spinner(9, 1, MAX_OUTPUT, 1, "0");
-		outputSize.setEnabled(false);		
+		//outputSize.setEnabled(false);		
 	}
 
 	private void initializeInputSize()
