@@ -1,5 +1,6 @@
 package nkolkoikrzyzyk.controller;
 
+import java.awt.Toolkit;
 import java.util.concurrent.BlockingQueue;
 
 import javax.swing.JButton;
@@ -50,9 +51,7 @@ public class Filler extends SwingWorker<Void, Void>
 	@Override 
 	public void done()
 	{
+		Toolkit.getDefaultToolkit().beep();
 		this.button.setEnabled(true);
-		//blockingQueue.add( new FillingLookupTableEnded() );
 	}
-	
-	
 }

@@ -61,7 +61,8 @@ public class LookupTablePlayer extends Player
 		{
 			choice=random.nextInt(9);
 		}
-		System.out.println(name + " selected " + choice + " as a exploratory move");
+		//TODO: print
+		//System.out.println(name + " selected " + choice + " as a exploratory move");
 		return choice;
 	}
 
@@ -76,7 +77,8 @@ public class LookupTablePlayer extends Player
 			{
 				temp[i] = markType.value();
 				Double tempP = lookupTable.get(temp);
-				System.out.print(tempP + "\t");
+				//TODO: print
+//				System.out.print(tempP + "\t");
 				if( tempP >= choiceP)
 				{
 					choice = i;
@@ -84,10 +86,14 @@ public class LookupTablePlayer extends Player
 				}
 			}
 			else
-				System.out.print("_\t");
+			{
+				//TODO: print
+				//System.out.print("_\t");
+			}
 		}
-		System.out.println("");
-		System.out.println(name + " selected " + choice + " as a best move");
+		//TODO: print
+		//System.out.println("");
+		//System.out.println(name + " selected " + choice + " as a best move");
 		return choice;
 	}
 

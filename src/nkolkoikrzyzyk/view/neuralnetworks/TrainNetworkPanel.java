@@ -57,6 +57,7 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	private JSpinner epoches;
 	private JList<TrainingData> dataList;
 	private JProgressBar progressBar;
+	private JButton trainButton;
 	
 	public TrainNetworkPanel(
 			BlockingQueue<ProgramEvent> blockingQueue,
@@ -77,6 +78,7 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 		initializeSpinners();
 		initializeComboBox();
 		this.dataList = new JList<TrainingData>();
+		initializeTrainButton();
 		
 		fill();
 	}
@@ -98,6 +100,34 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 		this.learningRatio = ViewUtilities.spinner(0.5f, 0.0f, 1.0f, 0.01f, "0.00");
 		
 		this.epoches = ViewUtilities.spinner(1000, 100, 10000, 100, "0");
+	}
+
+	private void initializeTrainButton()
+	{
+		trainButton = new JButton("Train ANN");
+		trainButton.setMnemonic('T');
+		trainButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if( TrainNetworkPanel.this.dataList.isSelectionEmpty() )
+				{
+					JOptionPane.showMessageDialog(null,"You must select training data!");
+				}
+				else if( TrainNetworkPanel.this.networkComboBox.getSelectedIndex() == -1)
+				{
+					JOptionPane.showMessageDialog(null,"You must select ANN!");
+				}
+				else
+				{
+					TrainNetworkPanel.this.trainButton.setEnabled(false);
+					Trainer trainer = getTrainer();
+					trainer.addPropertyChangeListener( TrainNetworkPanel.this );
+					trainer.execute();
+				}
+			}
+		});
 	}
 
 	private void fill()
@@ -163,6 +193,7 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 				// TODO Auto-generated method stub
 			}
 		});
+		showButton.setEnabled(false);
 		return showButton;
 	}
 	
@@ -185,18 +216,6 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 		progressBar.setValue(0);
 		progressBar.setStringPainted(true);
 		
-		JButton trainButton = new JButton("Train ANN");
-		trainButton.setMnemonic('T');
-		trainButton.addActionListener(new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				Trainer trainer = getTrainer();
-				trainer.addPropertyChangeListener( TrainNetworkPanel.this );
-				trainer.execute();
-			}
-		});
 		bottomPanel.add(trainButton, BorderLayout.LINE_START);
 		bottomPanel.add(progressBar, BorderLayout.CENTER);
 		return bottomPanel;
@@ -210,7 +229,8 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 				this.dataList.getSelectedValue(),
 				(Float)this.learningRatio.getValue(),
 				(Float)this.momentum.getValue(),
-				(Integer)this.epoches.getValue()
+				(Integer)this.epoches.getValue(),
+				this.trainButton
 				);
 	}
 	

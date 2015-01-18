@@ -7,6 +7,7 @@ package nkolkoikrzyzyk.events;
  * @author elohhim
  *
  */
-public class StartTestEvent extends ProgramEvent {
+public class StartTestEvent extends ProgramEvent 
+{
 
 }

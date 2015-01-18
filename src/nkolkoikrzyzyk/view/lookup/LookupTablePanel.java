@@ -24,6 +24,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -32,12 +33,15 @@ import javax.swing.SwingConstants;
 import nkolkoikrzyzyk.controller.Filler;
 import nkolkoikrzyzyk.controller.LookupTablePlayer;
 import nkolkoikrzyzyk.controller.Trainer;
+import nkolkoikrzyzyk.events.DeleteLookupTableEvent;
+import nkolkoikrzyzyk.events.GenerateTrainingDataEvent;
 import nkolkoikrzyzyk.events.NewLookupTableEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.model.LookupTable;
 import nkolkoikrzyzyk.model.Mark;
 import nkolkoikrzyzyk.model.NeuralNetwork;
 import nkolkoikrzyzyk.model.TrainingData;
+import nkolkoikrzyzyk.model.TrainingData.TrainingDataType;
 import nkolkoikrzyzyk.view.LabeledForm;
 import nkolkoikrzyzyk.view.SteppedComboBox;
 import nkolkoikrzyzyk.view.ViewUtilities;
@@ -50,9 +54,9 @@ import nkolkoikrzyzyk.view.neuralnetworks.TrainNetworkPanel;
  */
 public class LookupTablePanel extends JPanel implements PropertyChangeListener 
 {
-	private static final int MIN_WIDTH =580;
+	private static final int MIN_WIDTH =600;
 	private static final int MIN_HEIGHT= 200;
-	private static final int MAX_WIDTH = 580;
+	private static final int MAX_WIDTH = 600;
 	private static final int MAX_HEIGHT = 200;
 
 	//outside
@@ -84,6 +88,8 @@ public class LookupTablePanel extends JPanel implements PropertyChangeListener
 		initializeSpinners();
 		initializeComboBoxes();
 		initializeTextFields();
+		initializeProgressBar();
+		initializeFillButton();
 
 		fill();
 	}
@@ -109,6 +115,8 @@ public class LookupTablePanel extends JPanel implements PropertyChangeListener
 	private void initializeSpinners()
 	{		
 		this.alphaFactor = ViewUtilities.spinner(0.9995f, 0.9990f, 1.0f, 0.00001f, "0.00000");
+		//TODO: nie dziala
+		this.alphaFactor.setEnabled(false);
 		this.games = ViewUtilities.spinner(100000, 100000, 500000, 10000, "0");
 	}
 
@@ -118,19 +126,51 @@ public class LookupTablePanel extends JPanel implements PropertyChangeListener
 		tableName.setColumns(10);
 	}
 
+	private void initializeProgressBar()
+	{
+		progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
+		progressBar.setValue(0);
+		progressBar.setStringPainted(true);
+	}
+
+	private void initializeFillButton()
+	{
+		fillButton = new JButton("Play games");
+		fillButton.addActionListener( new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if( table1ComboBox.getSelectedIndex() == -1 || table1ComboBox.getSelectedIndex() == -1)
+				{
+					noTableSelected();
+				}
+				else
+				{
+					Filler filler = getFiller();
+					filler.addPropertyChangeListener( LookupTablePanel.this );
+					filler.execute();
+					fillButton.setEnabled(false);
+				}
+			}
+		});
+	}
+
 	private void fill()
 	{
 		this.add(leftPanel(), BorderLayout.LINE_START);
+		this.add(centralPanel(), BorderLayout.CENTER);
 		this.add(rightPanel(), BorderLayout.LINE_END);
 	}
 
-	private JPanel leftPanel()
+	private JPanel centralPanel()
 	{
 		JPanel leftPanel = new JPanel();
 		leftPanel.setLayout(new BorderLayout(5,5));
 
-		leftPanel.add(new JLabel("Lookup tables"), BorderLayout.PAGE_START);	
-		leftPanel.add(ViewUtilities.scroll(tableList), BorderLayout.CENTER);
+		leftPanel.add(new JLabel("Lookup tables"), BorderLayout.PAGE_START);
+		JScrollPane scrollPane = ViewUtilities.scroll(tableList);
+		leftPanel.add(scrollPane, BorderLayout.CENTER);
 		leftPanel.add(bottomLeftPanel(), BorderLayout.PAGE_END);
 
 		return leftPanel;
@@ -140,21 +180,53 @@ public class LookupTablePanel extends JPanel implements PropertyChangeListener
 	{
 		JPanel leftBottomPanel = new JPanel();
 		leftBottomPanel.setLayout( new BoxLayout(leftBottomPanel,BoxLayout.PAGE_AXIS)); 
-		leftBottomPanel.add(lookupButtons());
-		JPanel namePanel = new JPanel();
+		leftBottomPanel.add(newDeleteButtons());
 
-		JLabel nameLabel = new JLabel("New table name");
+		JPanel namePanel = new JPanel();
+		JLabel nameLabel = new JLabel("Table name");
 		nameLabel.setLabelFor(tableName);
 		namePanel.add(nameLabel);
 		namePanel.add(tableName);
-
 		leftBottomPanel.add(namePanel);
 		return leftBottomPanel;
 	}
 
-	private JPanel lookupButtons()
+	private JPanel newDeleteButtons()
 	{
 		JPanel buttons = new JPanel( new GridLayout(1,2));
+		buttons.add(createNewButton());
+		buttons.add(createDeleteButton());
+		return buttons;
+	}
+
+	private JButton createDeleteButton()
+	{
+		JButton deleteTableButton = new JButton("Delete");
+		deleteTableButton.addActionListener( new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if( tableList.isSelectionEmpty() )
+				{
+					noTableSelected();
+				}
+				else
+				{
+					LookupTablePanel.this.blockingQueue.add( 
+							new DeleteLookupTableEvent(
+									LookupTablePanel.this.tableList.getSelectedValue()
+									));
+				}
+			}
+
+
+		});
+		return deleteTableButton;
+	}
+
+	private JButton createNewButton()
+	{
 		JButton newTableButton = new JButton("New");
 		newTableButton.addActionListener(new ActionListener()
 		{
@@ -167,10 +239,68 @@ public class LookupTablePanel extends JPanel implements PropertyChangeListener
 				blockingQueue.add( new NewLookupTableEvent(name) );
 			}
 		});
-		JButton deleteTableButton = new JButton("Delete");
-		buttons.add(newTableButton);
-		buttons.add(deleteTableButton);
-		return buttons;
+		return newTableButton;
+	}
+
+	private JPanel leftPanel()
+	{
+		JPanel centerPanel = new JPanel(new BorderLayout(5,5));
+		JLabel generateLabel = new JLabel("<html>Generate training<br>data based on:</html>");
+		JPanel generateButtons = new JPanel( new GridLayout(3,1));
+
+		generateButtons.add(afterstatesButton());
+		generateButtons.add(beforestatesButton());
+
+		centerPanel.add(generateLabel, BorderLayout.PAGE_START);
+		centerPanel.add(generateButtons, BorderLayout.CENTER);
+
+		return centerPanel;
+	}
+
+	private JButton beforestatesButton()
+	{
+		JButton beforestatesButton = new JButton("<html><center>Beforestates<br>(i:9 o:9)</center></html>");
+		beforestatesButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+
+				LookupTablePanel.this.blockingQueue.add( 
+						new GenerateTrainingDataEvent(
+								LookupTablePanel.this.tableList.getSelectedValue(),
+								TrainingDataType.BEFORESTATES
+								));				
+			}
+		});
+		//TODO: 
+		beforestatesButton.setEnabled(false);
+		return beforestatesButton;
+	}
+
+	private JButton afterstatesButton()
+	{
+		JButton afterstatesButton = new JButton("<html><center>Afterstates<br>(i:9 o:1)</center></html>");
+		afterstatesButton.addActionListener(new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if( tableList.isSelectionEmpty() )
+				{
+					noTableSelected();
+				}
+				else
+				{
+					LookupTablePanel.this.blockingQueue.add( 
+							new GenerateTrainingDataEvent(
+									LookupTablePanel.this.tableList.getSelectedValue(),
+									TrainingDataType.AFTERSTATES
+									));	
+				}
+			}
+		});
+		return afterstatesButton;
 	}
 
 	private JPanel rightPanel()
@@ -189,25 +319,6 @@ public class LookupTablePanel extends JPanel implements PropertyChangeListener
 	{
 		JPanel bottomPanel = new JPanel( );
 		bottomPanel.setLayout(new BorderLayout(5,5));
-
-		//TODO: wyniesc do funkcji inicjalizujacej
-		progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
-		progressBar.setValue(0);
-		progressBar.setStringPainted(true);
-
-		fillButton = new JButton("Play games");
-		fillButton.addActionListener( new ActionListener()
-		{
-			@Override
-			public void actionPerformed(ActionEvent e)
-			{
-				Filler filler = getFiller();
-				filler.addPropertyChangeListener( LookupTablePanel.this );
-				filler.execute();
-				fillButton.setEnabled(false);
-			}
-		});
-
 		bottomPanel.add(fillButton, BorderLayout.LINE_START);
 		bottomPanel.add(progressBar, BorderLayout.CENTER);
 		return bottomPanel;
@@ -221,13 +332,18 @@ public class LookupTablePanel extends JPanel implements PropertyChangeListener
 						"Table 1",
 						Mark.CROSS,
 						table1ComboBox.getItemAt(table1ComboBox.getSelectedIndex()) ), 
-				new LookupTablePlayer(
-						"Table 2",
-						Mark.NOUGHT,
-						table2ComboBox.getItemAt(table2ComboBox.getSelectedIndex()) ),
-				(Integer)games.getValue(),
-				fillButton
+						new LookupTablePlayer(
+								"Table 2",
+								Mark.NOUGHT,
+								table2ComboBox.getItemAt(table2ComboBox.getSelectedIndex()) ),
+								(Integer)games.getValue(),
+								fillButton
 				);
+	}
+
+	private void noTableSelected()
+	{
+		JOptionPane.showMessageDialog(null, "You must select lookup table to perform operation!");
 	}
 
 	@Override

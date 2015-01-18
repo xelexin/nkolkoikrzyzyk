@@ -41,7 +41,7 @@ public class NewNetworkPanel extends JPanel
 	private static final int MAX_INPUT = 20;
 	private static final int MAX_OUTPUT = 9;
 	private static final int MAX_HIDDEN_LAYERS = 10;
-	private static final int MAX_LAYER_SIZE = 20;
+	private static final int MAX_LAYER_SIZE = 100;
 
 	//outside
 	private BlockingQueue<ProgramEvent> blockingQueue;

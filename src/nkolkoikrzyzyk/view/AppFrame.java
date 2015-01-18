@@ -32,7 +32,7 @@ public class AppFrame extends JFrame {
 
 	private void initialize()
 	{
-		this.setBounds(100, 100, 600, 600);
+		this.setBounds(100, 100, 600, 300);
 		this.setResizable( false );
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout( new GridLayout(0,2) );
@@ -42,7 +42,7 @@ public class AppFrame extends JFrame {
 	}
 
 	private void fill() {
-		JButton newGameButton = new JButton("New game");
+		JButton newGameButton = new JButton("<html><center>Play<br>Tic-Tac-Toe</center></html>");
 		newGameButton.addActionListener( new ActionListener() {
 			
 			@Override
@@ -52,7 +52,8 @@ public class AppFrame extends JFrame {
 		});
 		this.add(newGameButton);
 		
-		JButton neuralNetworksButton = new JButton("Neural Networks");
+		JButton neuralNetworksButton = 
+				new JButton("<html><center>Manage Artificial<br>Neural Networks</center></html>");
 		neuralNetworksButton.addActionListener( new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -60,15 +61,15 @@ public class AppFrame extends JFrame {
 			}
 		});
 		this.add(neuralNetworksButton);
-		
-		JButton startTestButton = new JButton("Start test WARNING: long");
-		startTestButton.addActionListener( new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				blockingQueue.add( new StartTestEvent() );
-			}
-		});
-		this.add(startTestButton);
+//		
+//		JButton startTestButton = new JButton("Start test WARNING: long");
+//		startTestButton.addActionListener( new ActionListener() {
+//			
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				blockingQueue.add( new StartTestEvent() );
+//			}
+//		});
+//		this.add(startTestButton);
 	}
 }

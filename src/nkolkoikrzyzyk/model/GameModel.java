@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Stack;
 
+import javax.swing.JOptionPane;
+
 import nkolkoikrzyzyk.controller.Player;
 
 
@@ -48,7 +50,8 @@ public class GameModel
 
 	public void fastPlay( Player player1, Player player2 )
 	{
-		System.out.println("Game #" + id);
+		//TODO: print
+		//System.out.println("Game #" + id);
 
 		Player activePlayer = player1;
 		Player waitingPlayer = player2;
@@ -57,10 +60,11 @@ public class GameModel
 		{
 			board = activePlayer.makeMove(board, -1);
 			history.add(Arrays.copyOf(board, board.length) );
-			printBoard();
+			//TODO: print
+			//printBoard();
 			if(ifWin()==true)
 			{
-				System.out.println(activePlayer.getName() + " won!");
+				//System.out.println(activePlayer.getName() + " won!");
 				activePlayer.youWin( getEnderHistoryStack() );
 				waitingPlayer.youLost( getNotEnderHistoryStack() );
 				break;
@@ -69,7 +73,7 @@ public class GameModel
 			{
 				activePlayer.youDraw(getEnderHistoryStack());
 				waitingPlayer.youDraw(getNotEnderHistoryStack());
-				System.out.println("Remis");
+				//System.out.println("Remis");
 				break;
 			}			
 			//swapping players
@@ -176,20 +180,6 @@ public class GameModel
 			board[i]=0;
 	}
 
-	/*public static double[] hashXO( int[] board )
-	{
-		double hashX = 0.0f;
-		double hashO = 0.0f;
-		for( int i = 0; i<9; i++)
-		{
-			if(board[i] == 1)
-				hashX += Math.pow(0.5, i+1);
-			if(board[i] == -1)
-				hashO += Math.pow(0.5, i+1);
-		}
-		return new double[]{hashX, hashO};
-	}*/
-
 	public static double hash( int[] board )
 	{
 		double hash = 0.0f;
@@ -222,27 +212,16 @@ public class GameModel
 	public static int[] map(int[] board)
 	{
 		int[] temp = Arrays.copyOf(board, board.length);
-		//		double[] tempHashXO = hashXO(temp);
 		double tempHash = hash(temp);
 		int[] mapped = temp;
-		//		double[] mappedHashXO = tempHashXO;
 		double mappedHash = hash(temp);
 		int [] flip = verticalFlip(temp);
-		//		double[] flipHashXO = hashXO(flip);
 		double flipHash = hash(temp);
-		if(flipHash/*XO[0]*/ < mappedHash/*XO[0]*/)
+		if(flipHash < mappedHash)
 		{
 			mapped = temp;
-			mappedHash/*XO*/ = tempHash/*XO*/;
+			mappedHash = tempHash;
 		} 
-		/*else if ( flipHashXO[0] == mappedHashXO[0]) 
-		{
-			if( flipHashXO[1] < mappedHashXO[1])
-			{
-				mapped = temp;
-				mappedHashXO = tempHashXO;
-			}
-		}*/
 
 		for( int i = 0; i<3; i++)
 		{

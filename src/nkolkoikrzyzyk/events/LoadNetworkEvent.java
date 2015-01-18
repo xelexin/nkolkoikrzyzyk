@@ -11,7 +11,7 @@ import java.io.File;
  */
 public class LoadNetworkEvent extends ProgramEvent 
 {
-	public File file;
+	public final File file;
 
 	public LoadNetworkEvent(File file) 
 	{

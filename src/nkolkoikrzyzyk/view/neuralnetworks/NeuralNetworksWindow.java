@@ -155,8 +155,9 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 		            	JOptionPane.showMessageDialog(null, "File: " + file.getAbsolutePath() + " does not exist!");
 		            }
 		            			            
-		        } else {
-		            System.out.println("Failed to choose file.");
+		        } else 
+		        {
+		        	JOptionPane.showMessageDialog(null, "Failed to choose file.");
 		        }
 			}
 		});
@@ -173,12 +174,11 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 					int returnVal = fileChooserNetwork.showSaveDialog(NeuralNetworksWindow.this);
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 			            File file = fileChooserNetwork.getSelectedFile();
-			            //TODO 	To mogloby byc w sumie na poziomie GUIa ale 
-			            //		nie wiem czy robic wyjatek 
 			            blockingQueue.add( new SaveNetworkEvent(file,
 			            		NeuralNetworksWindow.this.networkList.getSelectedValue()));		            
-			        } else {
-			            System.out.println("Failed to choose file.");
+			        } else 
+			        {
+			        	JOptionPane.showMessageDialog(null,"Failed to choose file.");
 			        }
 				}
 				

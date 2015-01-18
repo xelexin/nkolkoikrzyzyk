@@ -13,8 +13,8 @@ import nkolkoikrzyzyk.model.NeuralNetwork;
  */
 public class SaveNetworkEvent extends ProgramEvent 
 {
-	public File file;
-	public NeuralNetwork network;
+	public final File file;
+	public final NeuralNetwork network;
 	
 
 	public SaveNetworkEvent(File file, NeuralNetwork network) 

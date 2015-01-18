@@ -41,8 +41,6 @@ public class Model {
 		mlp3.getLayer(1).setIsSigmoid(false);
 		networkList.add(mlp3);
 
-		NeuralNetwork afterstates = new NeuralNetwork( "AfterstatesANN", 9, new int[]{27,81,27,9,1}, 1.0f);
-		networkList.add(afterstates);
 		// inputs
 		float[][] inputs = new float[][]
 				{
@@ -74,12 +72,6 @@ public class Model {
 				};
 
 		trainingDataList.add(new TrainingData("15dots data set", inputs, outputs));
-
-		//tworzenie tabel
-		LookupTable tableX = new LookupTable("Table X");
-		addLookupTable(tableX);
-		LookupTable tableO = new LookupTable("Table O");
-		addLookupTable(tableO);		
 		//TEST END
 	}
 
@@ -98,6 +90,11 @@ public class Model {
 		this.lookupTableList.add(lookupTable);
 	}
 	
+
+	public void deleteLookupTable(LookupTable table)
+	{
+		this.lookupTableList.remove(table);
+	}
 
 	public NeuralNetwork[] getNetworkListModel()
 	{

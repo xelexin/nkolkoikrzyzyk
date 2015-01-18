@@ -7,6 +7,7 @@ import java.awt.Toolkit;
 import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 
+import javax.swing.JButton;
 import javax.swing.SwingWorker;
 
 import nkolkoikrzyzyk.events.ProgramEvent;
@@ -21,16 +22,21 @@ import nkolkoikrzyzyk.model.TrainingData;
 
 public class Trainer extends SwingWorker<NeuralNetwork, Void>
 {
+	//outside
 	private BlockingQueue<ProgramEvent> blockingQueue;
+	private final JButton trainButton;
+	
+	//inside
 	private NeuralNetwork student;
 	private TrainingData data;
 	private float learningRate;
 	private float momentum;
 	private int epoches;
 
-	public Trainer( BlockingQueue<ProgramEvent> blockingQueue, NeuralNetwork student, TrainingData data, float learnigRare, float momentum, int epoches)
+	public Trainer( BlockingQueue<ProgramEvent> blockingQueue, NeuralNetwork student, TrainingData data, float learnigRare, float momentum, int epoches, JButton trainButton)
 	{
 		this.blockingQueue = blockingQueue;
+		this.trainButton = trainButton;
 		try {
 			this.student = (NeuralNetwork) student.clone();
 		} catch (CloneNotSupportedException e) {
@@ -61,8 +67,9 @@ public class Trainer extends SwingWorker<NeuralNetwork, Void>
 			if (epoch % (epoches/100) == 0)
 			{
 				setProgress((100*epoch)/epoches);
-				System.out.println();
-				System.out.printf("%d epoch:\n", epoch);
+				//TODO: print
+//				System.out.println();
+//				System.out.printf("%d epoch:\n", epoch);
 				for (int i = 0; i < data.getOutputs().length; i++)
 				{
 					float[] t = data.getInputs()[i];
@@ -73,7 +80,8 @@ public class Trainer extends SwingWorker<NeuralNetwork, Void>
 					{
 						error += Math.abs(ret[j] - data.getOutputs()[i][j]);
 					}
-					System.out.printf("%s => %s (tot. error = %f)\n", Arrays.toString(t), Arrays.toString(ret), error);
+					//TODO: print
+//					System.out.printf("%s => %s (tot. error = %f)\n", Arrays.toString(t), Arrays.toString(ret), error);
 				}
 			}
 		}
@@ -90,6 +98,7 @@ public class Trainer extends SwingWorker<NeuralNetwork, Void>
 	public void done()
 	{
 		Toolkit.getDefaultToolkit().beep();
+		trainButton.setEnabled(true);
 		blockingQueue.add( new TrainingEndedEvent(this));
 	}
 	

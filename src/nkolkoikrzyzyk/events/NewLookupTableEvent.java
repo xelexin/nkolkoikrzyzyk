@@ -2,7 +2,7 @@ package nkolkoikrzyzyk.events;
 
 public class NewLookupTableEvent extends ProgramEvent
 {
-	public String name;
+	public final String name;
 	
 	public NewLookupTableEvent(String name)
 	{
