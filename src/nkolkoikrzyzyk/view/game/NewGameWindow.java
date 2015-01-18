@@ -20,7 +20,6 @@ import javax.swing.JTextField;
 
 import nkolkoikrzyzyk.controller.AfterstatesANNPlayer;
 import nkolkoikrzyzyk.controller.HumanPlayer;
-import nkolkoikrzyzyk.controller.NeuralNetworkPlayer;
 import nkolkoikrzyzyk.controller.Player;
 import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;

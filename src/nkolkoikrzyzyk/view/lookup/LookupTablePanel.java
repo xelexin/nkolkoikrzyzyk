@@ -11,14 +11,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.File;
 import java.util.concurrent.BlockingQueue;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -32,21 +29,16 @@ import javax.swing.SwingConstants;
 
 import nkolkoikrzyzyk.controller.Filler;
 import nkolkoikrzyzyk.controller.LookupTablePlayer;
-import nkolkoikrzyzyk.controller.Trainer;
 import nkolkoikrzyzyk.events.DeleteLookupTableEvent;
 import nkolkoikrzyzyk.events.GenerateTrainingDataEvent;
 import nkolkoikrzyzyk.events.NewLookupTableEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.model.LookupTable;
 import nkolkoikrzyzyk.model.Mark;
-import nkolkoikrzyzyk.model.NeuralNetwork;
-import nkolkoikrzyzyk.model.TrainingData;
 import nkolkoikrzyzyk.model.TrainingData.TrainingDataType;
 import nkolkoikrzyzyk.view.LabeledForm;
 import nkolkoikrzyzyk.view.SteppedComboBox;
 import nkolkoikrzyzyk.view.ViewUtilities;
-import nkolkoikrzyzyk.view.neuralnetworks.NewNetworkPanel;
-import nkolkoikrzyzyk.view.neuralnetworks.TrainNetworkPanel;
 
 /**
  * @author Johhny

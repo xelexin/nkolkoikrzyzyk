@@ -4,7 +4,6 @@
 package nkolkoikrzyzyk.controller;
 
 import java.awt.Toolkit;
-import java.util.Arrays;
 import java.util.concurrent.BlockingQueue;
 
 import javax.swing.JButton;

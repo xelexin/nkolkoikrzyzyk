@@ -14,8 +14,6 @@ import javax.swing.JFrame;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.StartGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
-import nkolkoikrzyzyk.events.StartTestEvent;
-import nkolkoikrzyzyk.events.StartTrainingEvent;
 
 /**
  * @author elohhim

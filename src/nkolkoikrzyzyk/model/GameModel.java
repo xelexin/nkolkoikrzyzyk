@@ -6,10 +6,7 @@ package nkolkoikrzyzyk.model;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Stack;
-
-import javax.swing.JOptionPane;
 
 import nkolkoikrzyzyk.controller.Player;
 

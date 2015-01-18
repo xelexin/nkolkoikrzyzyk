@@ -14,11 +14,13 @@ import nkolkoikrzyzyk.events.CloseNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.DeleteLookupTableEvent;
 import nkolkoikrzyzyk.events.GenerateTrainingDataEvent;
 import nkolkoikrzyzyk.events.LoadNetworkEvent;
+import nkolkoikrzyzyk.events.LoadTrainingDataEvent;
 import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.NewLookupTableEvent;
 import nkolkoikrzyzyk.events.NewNetworkEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.SaveNetworkEvent;
+import nkolkoikrzyzyk.events.SaveTrainingDataEvent;
 import nkolkoikrzyzyk.events.StartGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.StartTestEvent;
@@ -29,6 +31,7 @@ import nkolkoikrzyzyk.model.LookupTable;
 import nkolkoikrzyzyk.model.Mark;
 import nkolkoikrzyzyk.model.Model;
 import nkolkoikrzyzyk.model.NeuralNetwork;
+import nkolkoikrzyzyk.model.TrainingData;
 import nkolkoikrzyzyk.model.TrainingData.TrainingDataType;
 import nkolkoikrzyzyk.view.View;
 import nkolkoikrzyzyk.view.game.GameWindow;
@@ -107,6 +110,8 @@ public class AppController
 		startGameModuleEventHandler();
 		generateTrainingDataEventHandler();
 		deleteLookupTableEventHandler();
+		loadTrainingDataEventHandler();
+		saveTrainingDataEventHandler();
 	}
 
 	private void startTestEventHandler()
@@ -253,6 +258,33 @@ public class AppController
 		});
 	}
 
+	private void loadTrainingDataEventHandler()
+	{
+		this.eventActionMap.put( LoadTrainingDataEvent.class, new ProgramAction()
+		{
+			@Override
+			public void go(ProgramEvent event)
+			{
+				LoadTrainingDataEvent lTDE = (LoadTrainingDataEvent)event;
+				AppController.this.model.addTrainingData(new TrainingData(lTDE.file) );
+				refreshTrainingDataList();
+			}
+		});
+	}
+
+	private void saveTrainingDataEventHandler()
+	{
+		this.eventActionMap.put( SaveTrainingDataEvent.class, new ProgramAction()
+		{
+			@Override
+			public void go(ProgramEvent event)
+			{
+				SaveTrainingDataEvent sTDE = (SaveTrainingDataEvent)event;
+				sTDE.data.saveToFile(sTDE.file);
+			}
+		});
+	}
+	
 	private void generateTrainingDataEventHandler()
 	{
 		this.eventActionMap.put( GenerateTrainingDataEvent.class, new ProgramAction()
@@ -345,7 +377,6 @@ public class AppController
 			}
 		});
 	}
-
 	
 	private void refreshLookupTableList()
 	{

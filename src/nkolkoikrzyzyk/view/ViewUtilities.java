@@ -28,6 +28,7 @@ public class ViewUtilities
 		return new JScrollPane(component);
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public static JSpinner spinner(Number val, Comparable min, Comparable max, Number step, String format )
 	{
 		JSpinner spinner = new JSpinner();

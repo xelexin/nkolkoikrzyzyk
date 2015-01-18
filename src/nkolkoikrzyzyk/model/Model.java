@@ -8,16 +8,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-import nkolkoikrzyzyk.controller.HumanPlayer;
-import nkolkoikrzyzyk.controller.LookupTablePlayer;
-import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 
 /**
  * @author elohhim
  *
  */
-public class Model {
+public class Model 
+{
 
 	private final BlockingQueue<ProgramEvent> blockingQueue;
 	private final List<NeuralNetwork> networkList;

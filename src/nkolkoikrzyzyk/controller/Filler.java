@@ -11,7 +11,6 @@ import nkolkoikrzyzyk.model.GameModel;
 
 public class Filler extends SwingWorker<Void, Void>
 {
-	private BlockingQueue<ProgramEvent> blockingQueue;
 	private LookupTablePlayer player1;
 	private LookupTablePlayer player2;
 	private int games;

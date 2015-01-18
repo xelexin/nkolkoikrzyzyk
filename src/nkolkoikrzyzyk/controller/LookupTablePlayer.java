@@ -9,7 +9,6 @@ import java.util.Stack;
 
 import nkolkoikrzyzyk.model.LookupTable;
 import nkolkoikrzyzyk.model.Mark;
-import nkolkoikrzyzyk.model.TrainingData;
 
 /**
  * @author elohhim

@@ -16,7 +16,6 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -27,7 +26,10 @@ import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
 
 import nkolkoikrzyzyk.controller.Trainer;
+import nkolkoikrzyzyk.events.LoadTrainingDataEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
+import nkolkoikrzyzyk.events.SaveNetworkEvent;
+import nkolkoikrzyzyk.events.SaveTrainingDataEvent;
 import nkolkoikrzyzyk.model.NeuralNetwork;
 import nkolkoikrzyzyk.model.TrainingData;
 import nkolkoikrzyzyk.view.LabeledForm;
@@ -44,11 +46,11 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	private static final int MIN_HEIGHT= 200;
 	private static final int MAX_WIDTH = 500;
 	private static final int MAX_HEIGHT = 200;
-	
+
 	//outside
 	private BlockingQueue<ProgramEvent> blockingQueue;
 	private NeuralNetworkDrawPanel drawPanel;
-	
+
 	//inside
 	private JFileChooser fileChooser;
 	private SteppedComboBox<NeuralNetwork> networkComboBox;
@@ -58,28 +60,28 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	private JList<TrainingData> dataList;
 	private JProgressBar progressBar;
 	private JButton trainButton;
-	
+
 	public TrainNetworkPanel(
 			BlockingQueue<ProgramEvent> blockingQueue,
 			NeuralNetworkDrawPanel drawPanel)
 	{
 		this.blockingQueue = blockingQueue;
 		this.drawPanel = drawPanel;
-		
+
 		initialize();
-	
+
 	}
 
 	private void initialize()
 	{
 		this.setBorder(ViewUtilities.titledBorder("Train Artificial Neural Network"));
 		this.setLayout(new BorderLayout(5,5));
-		
+
 		initializeSpinners();
 		initializeComboBox();
 		this.dataList = new JList<TrainingData>();
 		initializeTrainButton();
-		
+
 		fill();
 	}
 
@@ -94,11 +96,11 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	private void initializeSpinners()
 	{
 		this.fileChooser = new JFileChooser();
-		
+
 		this.momentum = ViewUtilities.spinner(0.5f, 0.0f, 1.0f, 0.01f, "0.00");
-		
+
 		this.learningRatio = ViewUtilities.spinner(0.5f, 0.0f, 1.0f, 0.01f, "0.00");
-		
+
 		this.epoches = ViewUtilities.spinner(1000, 100, 10000, 100, "0");
 	}
 
@@ -135,18 +137,18 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 		this.add(leftPanel(), BorderLayout.LINE_START);
 		this.add(rightPanel(), BorderLayout.LINE_END);
 		this.add(bottomPanel(), BorderLayout.PAGE_END);
-		
+
 	}
-	
+
 	private JPanel leftPanel()
 	{
 		JPanel leftPanel = new JPanel();
 		leftPanel.setLayout(new BorderLayout(5,5));
-		
+
 		leftPanel.add(new JLabel("Training data sets"), BorderLayout.PAGE_START);	
 		leftPanel.add(ViewUtilities.scroll(dataList), BorderLayout.CENTER);
 		leftPanel.add(dataButtons(), BorderLayout.PAGE_END);
-		
+
 		return leftPanel;
 	}
 
@@ -154,7 +156,7 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	{
 		JPanel buttons = new JPanel( new GridLayout(1,2));
 		buttons.add(createLoadButton());
-		buttons.add(createShowButton());
+		buttons.add(createSaveButton());
 		return buttons;
 	}
 
@@ -168,54 +170,69 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 			{
 				int returnVal = fileChooser.showOpenDialog(TrainNetworkPanel.this);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-		            File file = fileChooser.getSelectedFile();
-		            if(file.exists())
-		            {
-		            }
-		            else
-		            {
-		            	JOptionPane.showMessageDialog(null, "File: " + file.getAbsolutePath() + " does not exist!");
-		            }
+					File file = fileChooser.getSelectedFile();
+					if(file.exists())
+					{
+						TrainNetworkPanel.this.blockingQueue.add(
+								new LoadTrainingDataEvent( file )
+								);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(null, "File: " + file.getAbsolutePath() + " does not exist!");
+					}
 				}
 			}
 		});
 		return loadButton;
 	}
-	
-	private JButton createShowButton()
+
+	private JButton createSaveButton()
 	{
-		JButton showButton = new JButton("Show");
-		showButton.addActionListener(new ActionListener()
+		JButton saveButton = new JButton("Save");
+		saveButton.addActionListener(new ActionListener()
 		{
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				// TODO Auto-generated method stub
+				if(TrainNetworkPanel.this.dataList.isSelectionEmpty() == false)
+				{
+					int returnVal = fileChooser.showSaveDialog(TrainNetworkPanel.this);
+					if (returnVal == JFileChooser.APPROVE_OPTION) {
+						File file = fileChooser.getSelectedFile();
+						blockingQueue.add( new SaveTrainingDataEvent(file,
+								TrainNetworkPanel.this.dataList.getSelectedValue())
+								);		            
+					} 
+					else 
+					{
+						JOptionPane.showMessageDialog(null,"Failed to choose file.");
+					}
+				}
 			}
 		});
-		showButton.setEnabled(false);
-		return showButton;
+		return saveButton;
 	}
-	
+
 	private JPanel rightPanel()
 	{
 		String[] labels = { "ANN", "Momentum", "Learning ratio", "Epoches"};
-	    char[] mnemonics = { '0', 'M','R','E'};
-	    Component[] fields = { networkComboBox, momentum, learningRatio, epoches};
+		char[] mnemonics = { '0', 'M','R','E'};
+		Component[] fields = { networkComboBox, momentum, learningRatio, epoches};
 		LabeledForm form = new LabeledForm(fields, labels, mnemonics);		
 		return form;
 	}
-	
+
 	private JPanel bottomPanel()
 	{
 		JPanel bottomPanel = new JPanel( );
 		bottomPanel.setLayout(new BorderLayout(5,5));
-		
+
 		//TODO: wyniesc do funkcji inicjalizujacej
 		progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
 		progressBar.setValue(0);
 		progressBar.setStringPainted(true);
-		
+
 		bottomPanel.add(trainButton, BorderLayout.LINE_START);
 		bottomPanel.add(progressBar, BorderLayout.CENTER);
 		return bottomPanel;
@@ -233,13 +250,13 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 				this.trainButton
 				);
 	}
-	
+
 	@Override
 	public Dimension getPreferredSize()
 	{
 		return new Dimension(MIN_WIDTH, MIN_HEIGHT);
 	}
-	
+
 	@Override
 	public Dimension getMaximumSize()
 	{
@@ -260,7 +277,7 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	{
 		this.dataList.setListData(trainingDataListModel);
 	}
-	
+
 	public void populateNetworkCombo(NeuralNetwork[] networkList)
 	{
 		this.networkComboBox.setModel( new DefaultComboBoxModel<>(networkList));

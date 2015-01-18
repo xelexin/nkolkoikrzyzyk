@@ -320,7 +320,7 @@ public class NeuralNetwork implements Cloneable
 			java.util.Scanner scanner = new java.util.Scanner(fin);
 			scanner.useLocale(Locale.ENGLISH); 
 
-			this.name = scanner.next();
+			this.name = scanner.nextLine();
 			int numLayers = scanner.nextInt();
 			System.out.println("Num layers = " + numLayers);
 
