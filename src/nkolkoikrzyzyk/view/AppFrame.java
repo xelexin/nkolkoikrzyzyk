@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.StartGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
+import nkolkoikrzyzyk.events.StartTestEvent;
 
 /**
  * @author elohhim
@@ -30,10 +31,10 @@ public class AppFrame extends JFrame {
 
 	private void initialize()
 	{
-		this.setBounds(100, 100, 600, 300);
+		this.setBounds(100, 100, 900, 300);
 		this.setResizable( false );
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout( new GridLayout(0,2) );
+		this.setLayout( new GridLayout(0,3) );
 		this.setVisible( true );
 		
 		fill();
@@ -59,15 +60,15 @@ public class AppFrame extends JFrame {
 			}
 		});
 		this.add(neuralNetworksButton);
-//		
-//		JButton startTestButton = new JButton("Start test WARNING: long");
-//		startTestButton.addActionListener( new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				blockingQueue.add( new StartTestEvent() );
-//			}
-//		});
-//		this.add(startTestButton);
+		
+		JButton startTestButton = new JButton("Start test WARNING: long");
+		startTestButton.addActionListener( new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				blockingQueue.add( new StartTestEvent() );
+			}
+		});
+		this.add(startTestButton);
 	}
 }

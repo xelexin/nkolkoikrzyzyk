@@ -3,12 +3,14 @@
  */
 package nkolkoikrzyzyk.model;
 
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
-import nkolkoikrzyzyk.controller.Player;
+import nkolkoikrzyzyk.controller.players.Player;
 
 
 /**
@@ -113,16 +115,21 @@ public class GameModel
 		}
 	}
 
-	public static void printBoard(int[]  board) 
+	public static void printBoard(int[]  board)
+	{
+		printBoard(board, System.out);
+	}
+	
+	public static void printBoard(int[]  board, PrintStream out) 
 	{
 		for(int i=0;i<9;i++)
 		{
 			if(board[i]<0)
-				System.out.print("O");
+				out.print("O");
 			else if(board[i]>0)
-				System.out.print("X");
+				out.print("X");
 			else
-				System.out.print(".");
+				out.print(".");
 
 			if (i%3==2)
 				System.out.println();

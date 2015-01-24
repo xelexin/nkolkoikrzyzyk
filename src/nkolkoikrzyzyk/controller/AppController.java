@@ -10,6 +10,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import nkolkoikrzyzyk.commons.GameData;
+import nkolkoikrzyzyk.controller.players.ChaoticNeutralPlayer;
+import nkolkoikrzyzyk.controller.players.LookupTablePlayer;
 import nkolkoikrzyzyk.events.CloseNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.DeleteLookupTableEvent;
 import nkolkoikrzyzyk.events.GenerateTrainingDataEvent;
@@ -137,24 +139,34 @@ public class AppController
 				LookupTablePlayer p4 = new LookupTablePlayer("Player XO-O", Mark.NOUGHT, tableXO);
 
 				//rozgrywanie gier
-				int games = 5000;
+				int games = 500000;
 				long start = System.currentTimeMillis();
 				for( int i = 0; i<games; i++)
 					new GameModel().fastPlay( p1, p2);
 				System.out.println("Playing " + games + " games took " + (System.currentTimeMillis()-start)/1000 + "s.");
 
+				System.out.println("Player 1: Win: " + p1.getWinCounter() + 
+						" Draw: " + p1.getDrawCounter() + " Lost: " + p1.getLostCounter());
+				System.out.println("Player 2: Win: " + p2.getWinCounter() + 
+						" Draw: " + p2.getDrawCounter() + " Lost: " + p2.getLostCounter());
+				
+				p1.resetCounters();
+				p2.resetCounters();
+				p1.setTrainingInProgress(false);
 				start = System.currentTimeMillis();
-				for( int i = 0; i<games; i++)
-					new GameModel().fastPlay( p3, p4);
-				System.out.println("Playing " + games + " games took " + (System.currentTimeMillis()-start)/1000 + "s.");
-
-				//generowanie danych testowych
-				AppController.this.model.addTrainingData( 
-						tableX.getAfterstateTrainingData());
-				AppController.this.model.addTrainingData( 
-						tableO.getAfterstateTrainingData());
-
-				p2.setTrainingInProgress(false);
+				for( int i = 0; i<games*20; i++)
+				{
+					new GameModel().fastPlay( p1, new ChaoticNeutralPlayer("Chaos", Mark.NOUGHT));
+					new GameModel().fastPlay( new ChaoticNeutralPlayer("Chaos", Mark.CROSS), p2 );
+				}
+					
+				System.out.println("Playing " + 2*games + " games took " + (System.currentTimeMillis()-start)/1000 + "s.");
+				
+				
+				System.out.println("Player 1: Win: " + p1.getWinCounter() + 
+						" Draw: " + p1.getDrawCounter() + " Lost: " + p1.getLostCounter());
+				System.out.println("Player 2: Win: " + p2.getWinCounter() + 
+						" Draw: " + p2.getDrawCounter() + " Lost: " + p2.getLostCounter());
 			}
 		});
 	}

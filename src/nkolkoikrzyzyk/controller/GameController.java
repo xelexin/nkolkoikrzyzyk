@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
+import nkolkoikrzyzyk.controller.players.HumanPlayer;
+import nkolkoikrzyzyk.controller.players.Player;
 import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.game.BoardClickedEvent;

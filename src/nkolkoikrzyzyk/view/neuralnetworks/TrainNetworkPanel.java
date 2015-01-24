@@ -26,6 +26,7 @@ import javax.swing.JSpinner;
 import javax.swing.SwingConstants;
 
 import nkolkoikrzyzyk.controller.Trainer;
+import nkolkoikrzyzyk.events.CancelTrainingEvent;
 import nkolkoikrzyzyk.events.LoadTrainingDataEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.SaveNetworkEvent;
@@ -60,6 +61,7 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	private JList<TrainingData> dataList;
 	private JProgressBar progressBar;
 	private JButton trainButton;
+	private Trainer currentTrainer=null;
 
 	public TrainNetworkPanel(
 			BlockingQueue<ProgramEvent> blockingQueue,
@@ -124,12 +126,20 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 				else
 				{
 					TrainNetworkPanel.this.trainButton.setEnabled(false);
-					Trainer trainer = getTrainer();
-					trainer.addPropertyChangeListener( TrainNetworkPanel.this );
-					trainer.execute();
+					progressBar.setValue(0);
+					currentTrainer = getTrainer();
+					currentTrainer.addPropertyChangeListener( TrainNetworkPanel.this );
+					currentTrainer.execute();
 				}
 			}
 		});
+	}
+
+	private void initializeProgressBar()
+	{
+		progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
+		progressBar.setValue(0);
+		progressBar.setStringPainted(true);
 	}
 
 	private void fill()
@@ -228,14 +238,30 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 		JPanel bottomPanel = new JPanel( );
 		bottomPanel.setLayout(new BorderLayout(5,5));
 
-		//TODO: wyniesc do funkcji inicjalizujacej
-		progressBar = new JProgressBar(SwingConstants.HORIZONTAL);
-		progressBar.setValue(0);
-		progressBar.setStringPainted(true);
+		initializeProgressBar();
 
 		bottomPanel.add(trainButton, BorderLayout.LINE_START);
 		bottomPanel.add(progressBar, BorderLayout.CENTER);
+		
+		bottomPanel.add(createCancelButton(), BorderLayout.LINE_END);
 		return bottomPanel;
+	}
+
+	private JButton createCancelButton()
+	{
+		JButton cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener( new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if(currentTrainer!=null)
+					TrainNetworkPanel.this.blockingQueue.add(
+							new CancelTrainingEvent(currentTrainer)
+							);
+			}
+		});
+		return cancelButton;
 	}
 
 	private Trainer getTrainer()

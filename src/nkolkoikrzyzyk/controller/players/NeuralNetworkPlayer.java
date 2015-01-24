@@ -1,4 +1,4 @@
-package nkolkoikrzyzyk.controller;
+package nkolkoikrzyzyk.controller.players;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -49,20 +49,5 @@ public class NeuralNetworkPlayer extends Player
 		System.out.println("Neural network player selected " + bestMove + " as a best move");
 		board[bestMove] = markType.value();
 		return board;
-	}
-
-	@Override
-	public void youWin(Stack<int[]> history) 
-	{
-	}
-
-	@Override
-	public void youLost(Stack<int[]> history) 
-	{
-	}
-	
-	@Override
-	public void youDraw(Stack<int[]> history) 
-	{
 	}
 }

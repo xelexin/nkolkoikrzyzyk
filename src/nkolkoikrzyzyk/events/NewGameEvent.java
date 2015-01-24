@@ -3,7 +3,7 @@
  */
 package nkolkoikrzyzyk.events;
 
-import nkolkoikrzyzyk.controller.Player;
+import nkolkoikrzyzyk.controller.players.Player;
 
 /**
  * @author Johhny

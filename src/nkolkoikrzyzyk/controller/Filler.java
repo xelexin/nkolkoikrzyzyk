@@ -6,6 +6,7 @@ import java.util.concurrent.BlockingQueue;
 import javax.swing.JButton;
 import javax.swing.SwingWorker;
 
+import nkolkoikrzyzyk.controller.players.LookupTablePlayer;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.model.GameModel;
 

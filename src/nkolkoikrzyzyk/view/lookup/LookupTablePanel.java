@@ -28,7 +28,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 
 import nkolkoikrzyzyk.controller.Filler;
-import nkolkoikrzyzyk.controller.LookupTablePlayer;
+import nkolkoikrzyzyk.controller.players.LookupTablePlayer;
 import nkolkoikrzyzyk.events.DeleteLookupTableEvent;
 import nkolkoikrzyzyk.events.GenerateTrainingDataEvent;
 import nkolkoikrzyzyk.events.NewLookupTableEvent;
@@ -139,10 +139,11 @@ public class LookupTablePanel extends JPanel implements PropertyChangeListener
 				}
 				else
 				{
+					fillButton.setEnabled(false);
+					progressBar.setValue(0);
 					Filler filler = getFiller();
 					filler.addPropertyChangeListener( LookupTablePanel.this );
 					filler.execute();
-					fillButton.setEnabled(false);
 				}
 			}
 		});

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package nkolkoikrzyzyk.controller;
+package nkolkoikrzyzyk.controller.players;
 
 import java.util.Arrays;
 

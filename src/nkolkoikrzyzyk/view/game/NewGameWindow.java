@@ -18,9 +18,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import nkolkoikrzyzyk.controller.AfterstatesANNPlayer;
-import nkolkoikrzyzyk.controller.HumanPlayer;
-import nkolkoikrzyzyk.controller.Player;
+import nkolkoikrzyzyk.controller.players.AfterstatesANNPlayer;
+import nkolkoikrzyzyk.controller.players.HumanPlayer;
+import nkolkoikrzyzyk.controller.players.Player;
 import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.model.Mark;

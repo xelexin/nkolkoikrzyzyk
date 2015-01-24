@@ -1,12 +1,18 @@
 /**
  * 
  */
-package nkolkoikrzyzyk.controller;
+package nkolkoikrzyzyk.controller.players;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.Stack;
 
+import nkolkoikrzyzyk.model.GameModel;
 import nkolkoikrzyzyk.model.LookupTable;
 import nkolkoikrzyzyk.model.Mark;
 
@@ -102,6 +108,7 @@ public class LookupTablePlayer extends Player
 	@Override
 	public void youWin(Stack<int[]> historyStack) 
 	{
+		super.youWin(historyStack);
 		if(trainingInProgress) lookupTable.updateProcedure(historyStack, 1.0);
 	}
 
@@ -111,6 +118,7 @@ public class LookupTablePlayer extends Player
 	@Override
 	public void youDraw(Stack<int[]> historyStack) 
 	{
+		super.youDraw(historyStack);
 		if(trainingInProgress) lookupTable.updateProcedure(historyStack, 0.5);
 	}
 
@@ -118,12 +126,26 @@ public class LookupTablePlayer extends Player
 	 * @see nkolkoikrzyzyk.controller.Player#youLost(java.util.Stack)
 	 */
 	@Override
-	public void youLost(Stack<int[]> history) 
+	public void youLost(Stack<int[]> historyStack) 
 	{
-		if(trainingInProgress) lookupTable.updateProcedure(history, 0.0);
+		super.youLost(historyStack);
+		if(trainingInProgress) lookupTable.updateProcedure(historyStack, 0.0);
+		try
+		{
+			PrintStream out = new PrintStream( new File("lost.txt"));
+			while(!historyStack.isEmpty())
+			{
+				GameModel.printBoard(historyStack.pop(), out);
+			}
+		} catch (FileNotFoundException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	public boolean isTrainingInProgress() {
+	public boolean isTrainingInProgress() 
+	{
 		return trainingInProgress;
 	}
 
