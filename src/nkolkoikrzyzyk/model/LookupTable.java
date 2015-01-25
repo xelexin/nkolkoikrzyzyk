@@ -107,7 +107,64 @@ public class LookupTable
 		List<float[]> inputs = new LinkedList<float[]>();
 		List<float[]> outputs = new LinkedList<float[]>();
 		
-		//TODO: wypelnic beforestates
+		// generate first move beforestate
+		{
+			float[] output = new float [9];
+			float[] beforeState = new float[9];
+	
+			for (int i = 0; i<9; i++)
+			{
+				int[] afterState = new int[9];
+				afterState[i] = 1;
+				
+				double hash = GameModel.hash(afterState);
+				Double probability = probabilityMap.get(hash);  
+				if( probability == null)
+					continue;
+				output[i] = probability.floatValue();
+			}
+		
+			inputs.add(beforeState);
+			outputs.add(output);
+		}
+	
+		for( Map.Entry<Double, Double> entry : probabilityMap.entrySet() )
+		{
+			int emptyFields = 0;
+			int[] iBeforeState = GameModel.unhash(entry.getKey());
+			float[] beforeState = new float[iBeforeState.length];
+			int[] emptyFieldsIdx = new int[9];
+			int[] afterState = new int[9];
+			for( int i = 0; i<iBeforeState.length; i++)
+			{
+				beforeState[i] = (float)iBeforeState[i];
+				if (iBeforeState[i] == 0)
+				{
+					emptyFieldsIdx[emptyFields] = i;
+					emptyFields++;
+				}
+			}
+
+			if (emptyFields > 0 && emptyFields % 2 == 1)
+			{
+				float[] output = new float [9];
+
+				for (int i = 0; i<emptyFields; i++)
+				{
+					System.arraycopy(iBeforeState, 0, afterState, 0, iBeforeState.length);
+					afterState[emptyFieldsIdx[i]] = 1;
+
+					double hash = GameModel.hash(afterState);
+					Double probability = probabilityMap.get(hash);  
+					if( probability == null)
+						continue;
+					output[emptyFieldsIdx[i]] = probability.floatValue();
+				}
+				
+				inputs.add(beforeState);
+				outputs.add(output);
+			}
+		}
 		
 		float[][] inputsArray = new float[inputs.size()][];
 		inputs.toArray( inputsArray );

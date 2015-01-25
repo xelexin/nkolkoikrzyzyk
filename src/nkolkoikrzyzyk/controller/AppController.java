@@ -3,6 +3,7 @@
  */
 package nkolkoikrzyzyk.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -214,10 +215,11 @@ public class AppController
 				LookupTablePlayer p1 = new LookupTablePlayer("Player X", Mark.CROSS, tableX);
 				LookupTablePlayer p2 = new LookupTablePlayer("Player O", Mark.NOUGHT, tableO);
 
-				LookupTablePlayer p3 = new LookupTablePlayer("Player XO-X", Mark.CROSS, tableXO);
-				LookupTablePlayer p4 = new LookupTablePlayer("Player XO-O", Mark.NOUGHT, tableXO);
+				//LookupTablePlayer p3 = new LookupTablePlayer("Player XO-X", Mark.CROSS, tableXO);
+				//LookupTablePlayer p4 = new LookupTablePlayer("Player XO-O", Mark.NOUGHT, tableXO);
 
 				//rozgrywanie gier
+				System.out.println("Learning LUTs...");
 				int games = 500000;
 				long start = System.currentTimeMillis();
 				for( int i = 0; i<games; i++)
@@ -229,23 +231,51 @@ public class AppController
 				System.out.println("Player 2: Win: " + p2.getWinCounter() + 
 						" Draw: " + p2.getDrawCounter() + " Lost: " + p2.getLostCounter());
 				
+				// TODO: remove
+				TrainingData beforeStatesData = p1.getLookupTable().getBeforestatesTrainingData();
+				beforeStatesData.saveToFile(new File("before.txt"));
+				System.out.println("Player 1 LUT: " + p1.getLookupTable().toString());
+				System.out.println("Player 2 LUT: " + p2.getLookupTable().toString());
+				
+				System.out.println("Playing LUTs vs random...");
 				p1.resetCounters();
 				p2.resetCounters();
 				p1.setTrainingInProgress(false);
+				p2.setTrainingInProgress(false);
 				start = System.currentTimeMillis();
-				for( int i = 0; i<games*20; i++)
+				for( int i = 0; i<2*games; i++)
 				{
 					new GameModel().fastPlay( p1, new ChaoticNeutralPlayer("Chaos", Mark.NOUGHT));
 					new GameModel().fastPlay( new ChaoticNeutralPlayer("Chaos", Mark.CROSS), p2 );
 				}
 					
 				System.out.println("Playing " + 2*games + " games took " + (System.currentTimeMillis()-start)/1000 + "s.");
-				
-				
 				System.out.println("Player 1: Win: " + p1.getWinCounter() + 
 						" Draw: " + p1.getDrawCounter() + " Lost: " + p1.getLostCounter());
 				System.out.println("Player 2: Win: " + p2.getWinCounter() + 
 						" Draw: " + p2.getDrawCounter() + " Lost: " + p2.getLostCounter());
+				
+				
+				System.out.println("Playing LUT 1 vs LUT 2...");
+				p1.resetCounters();
+				p2.resetCounters();
+				start = System.currentTimeMillis();
+				for( int i = 0; i<games; i++)
+				{
+					new GameModel().fastPlay( p1, p2);
+				}
+					
+				System.out.println("Playing " + games + " games took " + (System.currentTimeMillis()-start)/1000 + "s.");
+				System.out.println("Player 1: Win: " + p1.getWinCounter() + 
+						" Draw: " + p1.getDrawCounter() + " Lost: " + p1.getLostCounter());
+				System.out.println("Player 2: Win: " + p2.getWinCounter() + 
+						" Draw: " + p2.getDrawCounter() + " Lost: " + p2.getLostCounter());
+			}
+
+			private File String(String string)
+			{
+				// TODO Auto-generated method stub
+				return null;
 			}
 		});
 	}
