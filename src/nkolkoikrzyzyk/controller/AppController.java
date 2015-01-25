@@ -13,7 +13,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import nkolkoikrzyzyk.commons.GameData;
 import nkolkoikrzyzyk.controller.players.ChaoticNeutralPlayer;
 import nkolkoikrzyzyk.controller.players.LookupTablePlayer;
-import nkolkoikrzyzyk.events.CloseNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.DeleteLookupTableEvent;
 import nkolkoikrzyzyk.events.DeletePlayerEvent;
 import nkolkoikrzyzyk.events.GenerateTrainingDataEvent;
@@ -28,7 +27,6 @@ import nkolkoikrzyzyk.events.SaveNetworkEvent;
 import nkolkoikrzyzyk.events.SaveTrainingDataEvent;
 import nkolkoikrzyzyk.events.StartGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
-import nkolkoikrzyzyk.events.StartNewGameModuleEvent;
 import nkolkoikrzyzyk.events.StartTestEvent;
 import nkolkoikrzyzyk.events.StartTrainingEvent;
 import nkolkoikrzyzyk.events.TestEndedEvent;
@@ -115,7 +113,6 @@ public class AppController
 		saveNetworkEventHandler();
 		newNetworkEventHandler();
 		newLookupTableEventHandler();
-		startNewGameModuleEventHandler();
 		startGameModuleEventHandler();
 		generateTrainingDataEventHandler();
 		deleteLookupTableEventHandler();
@@ -438,20 +435,6 @@ public class AppController
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
-		});
-	}
-
-	private void startNewGameModuleEventHandler()
-	{
-		this.eventActionMap.put( StartNewGameModuleEvent.class, new ProgramAction()
-		{
-			@Override
-			public void go( ProgramEvent event )
-			{
-				StartNewGameModuleEvent sGME = (StartNewGameModuleEvent) event;
-				AppController.this.view.invokeNewGameWindow(
-						AppController.this.model.getFilteredNetworkListModel(9, 1));				
 			}
 		});
 	}

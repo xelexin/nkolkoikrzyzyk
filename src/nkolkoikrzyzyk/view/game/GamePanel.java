@@ -3,8 +3,6 @@
  */
 package nkolkoikrzyzyk.view.game;
 
-import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -15,17 +13,14 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import nkolkoikrzyzyk.controller.players.HumanPlayer;
 import nkolkoikrzyzyk.controller.players.Player;
 import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.model.Mark;
-import nkolkoikrzyzyk.view.LabeledForm;
 import nkolkoikrzyzyk.view.SteppedComboBox;
 import nkolkoikrzyzyk.view.ViewUtilities;
 

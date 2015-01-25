@@ -9,8 +9,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.concurrent.BlockingQueue;
 
 import javax.swing.Box;
@@ -18,14 +16,12 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.border.Border;
 
 import nkolkoikrzyzyk.controller.players.AfterstatesANNPlayer;
 import nkolkoikrzyzyk.controller.players.BeforestatesANNPlayer;
@@ -42,7 +38,6 @@ import nkolkoikrzyzyk.model.NeuralNetwork;
 import nkolkoikrzyzyk.view.LabeledForm;
 import nkolkoikrzyzyk.view.SteppedComboBox;
 import nkolkoikrzyzyk.view.ViewUtilities;
-import nkolkoikrzyzyk.view.neuralnetworks.NewNetworkPanel;
 
 /**
  * @author elohhim

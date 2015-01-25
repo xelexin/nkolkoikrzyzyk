@@ -5,21 +5,15 @@ package nkolkoikrzyzyk.view.neuralnetworks;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.concurrent.BlockingQueue;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,7 +23,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import nkolkoikrzyzyk.commons.NeuralNetworkMockup;
-import nkolkoikrzyzyk.events.CloseNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.LoadNetworkEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.SaveNetworkEvent;
@@ -43,7 +36,7 @@ import nkolkoikrzyzyk.view.lookup.LookupTablePanel;
  * @author Johhny
  *
  */
-public class NeuralNetworksWindow extends JPanel /*implements WindowListener*/ 
+public class ANNModule extends JPanel /*implements WindowListener*/ 
 {	
 	private final BlockingQueue<ProgramEvent> blockingQueue;
 	private NeuralNetworkDrawPanel drawPanel;
@@ -53,7 +46,7 @@ public class NeuralNetworksWindow extends JPanel /*implements WindowListener*/
 	private TrainNetworkPanel trainPanel;
 	private LookupTablePanel lookupPanel;
 	
-	public NeuralNetworksWindow(BlockingQueue<ProgramEvent> blockingQueue) {
+	public ANNModule(BlockingQueue<ProgramEvent> blockingQueue) {
 		this.blockingQueue = blockingQueue;
 		this.initialize();
 	}
@@ -98,12 +91,12 @@ public class NeuralNetworksWindow extends JPanel /*implements WindowListener*/
 		    {
 		    	if (e.getValueIsAdjusting() == false) 
 		    	{
-		    		if(NeuralNetworksWindow.this.networkList.isSelectionEmpty() == false)
+		    		if(ANNModule.this.networkList.isSelectionEmpty() == false)
 		            {
-		                NeuralNetworksWindow.this.drawPanel.setMockup(
-		                		NeuralNetworksWindow.this.networkList.getSelectedValue().getMockup());
-		                NeuralNetworksWindow.this.drawPanel.revalidate();
-		                NeuralNetworksWindow.this.repaint();
+		                ANNModule.this.drawPanel.setMockup(
+		                		ANNModule.this.networkList.getSelectedValue().getMockup());
+		                ANNModule.this.drawPanel.revalidate();
+		                ANNModule.this.repaint();
 		            } 
 		        }
 			}
@@ -143,7 +136,7 @@ public class NeuralNetworksWindow extends JPanel /*implements WindowListener*/
 			@Override
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				int returnVal = fileChooserNetwork.showOpenDialog(NeuralNetworksWindow.this);
+				int returnVal = fileChooserNetwork.showOpenDialog(ANNModule.this);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 		            File file = fileChooserNetwork.getSelectedFile();
 		            if(file.exists())
@@ -169,13 +162,13 @@ public class NeuralNetworksWindow extends JPanel /*implements WindowListener*/
 			@Override
 			public void actionPerformed(ActionEvent e) 
 			{
-				if(NeuralNetworksWindow.this.networkList.isSelectionEmpty() == false)
+				if(ANNModule.this.networkList.isSelectionEmpty() == false)
 				{
-					int returnVal = fileChooserNetwork.showSaveDialog(NeuralNetworksWindow.this);
+					int returnVal = fileChooserNetwork.showSaveDialog(ANNModule.this);
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 			            File file = fileChooserNetwork.getSelectedFile();
 			            blockingQueue.add( new SaveNetworkEvent(file,
-			            		NeuralNetworksWindow.this.networkList.getSelectedValue()));		            
+			            		ANNModule.this.networkList.getSelectedValue()));		            
 			        } else 
 			        {
 			        	JOptionPane.showMessageDialog(null,"Failed to choose file.");

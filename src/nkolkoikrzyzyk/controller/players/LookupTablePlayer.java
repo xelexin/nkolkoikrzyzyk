@@ -3,16 +3,10 @@
  */
 package nkolkoikrzyzyk.controller.players;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Stack;
 
-import nkolkoikrzyzyk.model.GameModel;
 import nkolkoikrzyzyk.model.LookupTable;
 import nkolkoikrzyzyk.model.Mark;
 

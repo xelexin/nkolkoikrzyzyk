@@ -9,11 +9,9 @@ import javax.swing.SwingUtilities;
 
 import nkolkoikrzyzyk.commons.GameData;
 import nkolkoikrzyzyk.events.ProgramEvent;
-import nkolkoikrzyzyk.model.NeuralNetwork;
-import nkolkoikrzyzyk.view.game.GameModuleWindow;
+import nkolkoikrzyzyk.view.game.GameModule;
 import nkolkoikrzyzyk.view.game.GameWindow;
-import nkolkoikrzyzyk.view.game.NewGameWindow;
-import nkolkoikrzyzyk.view.neuralnetworks.NeuralNetworksWindow;
+import nkolkoikrzyzyk.view.neuralnetworks.ANNModule;
 
 /**
  * @author elohhim
@@ -25,9 +23,8 @@ public class View {
 
 	private AppFrame mainFrame = null;
 	private GameWindow gameWindow = null;
-	private NewGameWindow newGameWindow = null;
-	private NeuralNetworksWindow neuralNetworksWindow = null;
-	private GameModuleWindow gameModuleWindow = null;
+	private ANNModule neuralNetworksWindow = null;
+	private GameModule gameModuleWindow = null;
 
 	/**
 	 * Creates new View
@@ -59,26 +56,18 @@ public class View {
 		this.gameWindow = new GameWindow(blockingQueue, gameData);
 		return this.gameWindow;
 	}
-
-	public void invokeNewGameWindow( NeuralNetwork[] networkList )
-	{
-		if( this.newGameWindow == null)
-			this.newGameWindow = new NewGameWindow(this.blockingQueue);
-		this.newGameWindow.setVisible(true);
-		this.newGameWindow.populateNetworkList( networkList );
-	}
 	
 	public void invokeNeuralNetworksWindow() 
 	{
 		if( this.getNeuralNetworksWindow() == null)
-			this.neuralNetworksWindow = new NeuralNetworksWindow(this.blockingQueue);
+			this.neuralNetworksWindow = new ANNModule(this.blockingQueue);
 		this.getNeuralNetworksWindow().setVisible(true);
 	}
 
 	/**
 	 * @return the neuralNetworksWindow
 	 */
-	public NeuralNetworksWindow getNeuralNetworksWindow()
+	public ANNModule getNeuralNetworksWindow()
 	{
 		return neuralNetworksWindow;
 	}
@@ -86,11 +75,11 @@ public class View {
 	public void invokeGameModuleWindow() 
 	{
 		if( this.gameModuleWindow == null)
-			this.gameModuleWindow = new GameModuleWindow(this.blockingQueue);
+			this.gameModuleWindow = new GameModule(this.blockingQueue);
 		this.gameModuleWindow.setVisible(true);		
 	}
 
-	public GameModuleWindow getGameModuleWindow() 
+	public GameModule getGameModuleWindow() 
 	{	
 		return gameModuleWindow;
 	}	

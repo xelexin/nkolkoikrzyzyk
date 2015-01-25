@@ -1,7 +1,6 @@
 package nkolkoikrzyzyk.controller.players;
 
 import java.util.Random;
-import java.util.Stack;
 
 import nkolkoikrzyzyk.model.Mark;
 

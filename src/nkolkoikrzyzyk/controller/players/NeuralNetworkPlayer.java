@@ -1,10 +1,7 @@
 package nkolkoikrzyzyk.controller.players;
 
-import java.util.Arrays;
 import java.util.Random;
-import java.util.Stack;
 
-import nkolkoikrzyzyk.model.GameModel;
 import nkolkoikrzyzyk.model.Mark;
 import nkolkoikrzyzyk.model.NeuralNetwork;
 

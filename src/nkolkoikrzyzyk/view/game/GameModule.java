@@ -5,18 +5,12 @@ package nkolkoikrzyzyk.view.game;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.GraphicsEnvironment;
-import java.awt.Rectangle;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.beans.PropertyVetoException;
 import java.util.concurrent.BlockingQueue;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDesktopPane;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import nkolkoikrzyzyk.commons.TestResult;
@@ -30,7 +24,7 @@ import nkolkoikrzyzyk.view.ViewUtilities;
  * @author elohhim
  *
  */
-public class GameModuleWindow extends JPanel 
+public class GameModule extends JPanel 
 {
 	//outside
 	private final BlockingQueue<ProgramEvent> blockingQueue;
@@ -40,7 +34,7 @@ public class GameModuleWindow extends JPanel
 	private GamePanel gamePanel;
 	private JDesktopPane desktop;
 
-	public GameModuleWindow( BlockingQueue<ProgramEvent> blockingQueue)
+	public GameModule( BlockingQueue<ProgramEvent> blockingQueue)
 	{
 		this.blockingQueue = blockingQueue;
 		initialize();

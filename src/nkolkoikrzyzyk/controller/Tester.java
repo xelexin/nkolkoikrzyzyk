@@ -13,10 +13,7 @@ import nkolkoikrzyzyk.commons.TestResult;
 import nkolkoikrzyzyk.controller.players.Player;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.TestEndedEvent;
-import nkolkoikrzyzyk.events.TrainingEndedEvent;
 import nkolkoikrzyzyk.model.GameModel;
-import nkolkoikrzyzyk.model.NeuralNetwork;
-import nkolkoikrzyzyk.model.TrainingData;
 
 /**
  * @author elohhim

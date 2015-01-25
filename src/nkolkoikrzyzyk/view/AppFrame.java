@@ -4,28 +4,23 @@
 package nkolkoikrzyzyk.view;
 
 import java.awt.BorderLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.BlockingQueue;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.StartGameModuleEvent;
-import nkolkoikrzyzyk.events.StartNewGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.StartTestEvent;
-import nkolkoikrzyzyk.view.game.GameModuleWindow;
-import nkolkoikrzyzyk.view.neuralnetworks.NeuralNetworksWindow;
+import nkolkoikrzyzyk.view.game.GameModule;
+import nkolkoikrzyzyk.view.neuralnetworks.ANNModule;
 
 /**
  * @author elohhim
@@ -36,16 +31,16 @@ public class AppFrame extends JFrame
 {
 	//outside
 	private final BlockingQueue<ProgramEvent> blockingQueue;
-	private final NeuralNetworksWindow aNNModule;
-	private final GameModuleWindow gameModule;
+	private final ANNModule aNNModule;
+	private final GameModule gameModule;
 	//inside
 	private JPanel mainPanel;
 	
 
 	public AppFrame(
 			BlockingQueue<ProgramEvent> blockingQueue,
-			NeuralNetworksWindow aNNModule, 
-			GameModuleWindow gameModule) 
+			ANNModule aNNModule, 
+			GameModule gameModule) 
 	{
 		this.blockingQueue = blockingQueue;
 		this.aNNModule = aNNModule;

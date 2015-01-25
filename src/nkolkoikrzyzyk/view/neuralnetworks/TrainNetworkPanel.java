@@ -29,7 +29,6 @@ import nkolkoikrzyzyk.controller.Trainer;
 import nkolkoikrzyzyk.events.CancelTrainingEvent;
 import nkolkoikrzyzyk.events.LoadTrainingDataEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
-import nkolkoikrzyzyk.events.SaveNetworkEvent;
 import nkolkoikrzyzyk.events.SaveTrainingDataEvent;
 import nkolkoikrzyzyk.model.NeuralNetwork;
 import nkolkoikrzyzyk.model.TrainingData;
