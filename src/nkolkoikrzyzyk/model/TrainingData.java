@@ -73,7 +73,28 @@ public class TrainingData
 	{
 		return name;
 	}
+	
+	public void printAll()
+	{
 
+		for (int i = 0; i<inputs.length; i++)
+		{
+			for( Float element : inputs[i] )
+			{
+				System.out.print(element);
+				System.out.print(" ");
+			}
+			System.out.println("");
+			for( Float element : outputs[i] )
+			{
+				System.out.print(element);
+				System.out.print(" ");
+			}
+			System.out.println("");
+		}
+		System.out.close();
+	}
+	
 	/**
 	 * Serialize training data to a file
 	 */
