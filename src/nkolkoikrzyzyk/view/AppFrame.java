@@ -57,7 +57,7 @@ public class AppFrame extends JFrame
 		
 		initializeMainPanel();
 		fill();
-		pack();
+		this.setBounds(100, 100, 700, 500);		
 		this.setVisible( true );
 	}
 
@@ -65,6 +65,8 @@ public class AppFrame extends JFrame
 	{
 		mainPanel = new JPanel( new BorderLayout());
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+		mainPanel.add(aNNModule);
+		blockingQueue.add( new StartNeuralNetworksModuleEvent());
 		
 	}
 
@@ -91,6 +93,8 @@ public class AppFrame extends JFrame
 			{
 				mainPanel.removeAll();
 				mainPanel.add(aNNModule);
+				AppFrame.this.revalidate();
+				AppFrame.this.repaint();
 				blockingQueue.add( new StartNeuralNetworksModuleEvent());
 			}
 		});
@@ -103,6 +107,8 @@ public class AppFrame extends JFrame
 			{
 				mainPanel.removeAll();
 				mainPanel.add(gameModule);
+				AppFrame.this.revalidate();
+				AppFrame.this.repaint();
 				blockingQueue.add( new StartGameModuleEvent());
 			}
 		});

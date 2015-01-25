@@ -216,7 +216,7 @@ public class TestPlayerPanel extends JPanel implements PropertyChangeListener
 
 	private void noPlayerSelected() 
 	{
-		JOptionPane.showMessageDialog(this, "You must select two players");
+		JOptionPane.showMessageDialog(null, "You must select two players");
 	}
 
 	@Override

@@ -77,7 +77,7 @@ public class LookupTable
 
 	public TrainingData getAfterstateTrainingData()
 	{
-		String dataName = name + " data";
+		String dataName = name + "-ADATA";
 		List<float[]> inputs = new LinkedList<float[]>();
 		List<float[]> outputs = new LinkedList<float[]>();
 
@@ -103,7 +103,7 @@ public class LookupTable
 
 	public TrainingData getBeforestatesTrainingData()
 	{
-		String dataName = name + " data";
+		String dataName = name + "-BDATA";
 		List<float[]> inputs = new LinkedList<float[]>();
 		List<float[]> outputs = new LinkedList<float[]>();
 		

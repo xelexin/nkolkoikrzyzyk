@@ -112,7 +112,14 @@ public class ANNModule extends JPanel /*implements WindowListener*/
 
 	private void fillCentralPanel()
 	{	
-		JScrollPane drawPanelScroll = new JScrollPane(drawPanel);
+		JScrollPane drawPanelScroll = new JScrollPane(drawPanel)
+		{
+			@Override
+			public Dimension getPreferredSize()
+			{
+				return new Dimension(600,600);
+			}
+		};
 		drawPanelScroll.setBorder(ViewUtilities.titledBorder("Selected Artificial Neural Network"));
 		this.add(drawPanelScroll, BorderLayout.CENTER);
 	}

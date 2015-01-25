@@ -95,7 +95,7 @@ public class GamePanel extends JPanel
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(GamePanel.this, "You must select two players.");
+					JOptionPane.showMessageDialog(null, "You must select two players.");
 				}
 			}
 		});

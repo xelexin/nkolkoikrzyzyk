@@ -25,6 +25,7 @@ public class NeuralNetworkDrawPanel extends JPanel
 {
 	private static final int PREF_WIDTH = 600;
 	private static final int PREF_HEIGHT = 600;
+	
 	private NeuralNetworkMockup mockup = null;
 	private static int size = 15;
 	private static int spacingX = 200;

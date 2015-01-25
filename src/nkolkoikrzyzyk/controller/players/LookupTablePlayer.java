@@ -108,7 +108,7 @@ public class LookupTablePlayer extends Player
 	public void youDraw(Stack<int[]> historyStack) 
 	{
 		super.youDraw(historyStack);
-		if(trainingInProgress) lookupTable.updateProcedure(historyStack, 0.5);
+		if(trainingInProgress) lookupTable.updateProcedure(historyStack, 0.7);
 	}
 
 	/* (non-Javadoc)
