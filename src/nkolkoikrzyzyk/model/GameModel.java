@@ -60,7 +60,8 @@ public class GameModel
 			board = activePlayer.makeMove(board, -1);
 			history.add(Arrays.copyOf(board, board.length) );
 			//TODO: print
-			//printBoard();
+//			System.out.println("");
+//			printBoard();
 			if(ifWin()==true)
 			{
 				//System.out.println(activePlayer.getName() + " won!");

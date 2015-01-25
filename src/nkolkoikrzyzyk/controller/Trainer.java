@@ -100,6 +100,4 @@ public class Trainer extends SwingWorker<NeuralNetwork, Void>
 		trainButton.setEnabled(true);
 		blockingQueue.add( new TrainingEndedEvent(this));
 	}
-	
-	
 }

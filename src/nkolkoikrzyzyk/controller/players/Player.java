@@ -13,6 +13,8 @@ import nkolkoikrzyzyk.model.Mark;
  */
 public abstract class Player 
 {
+	private static int counter = 0;
+	
 	protected String name;
 	protected Mark markType;
 	
@@ -20,8 +22,17 @@ public abstract class Player
 	protected long drawCounter = 0;
 	protected long lostCounter = 0;
 		
-	public Player(String name, Mark markType) {
-		this.name = name;
+	public Player(String name, Mark markType) 
+	{
+		counter++;
+		if( name != null)
+		{
+			this.name = name; 
+		}
+		else
+		{
+			this.name = "Player #" + counter;
+		}
 		this.markType = markType;
 	}
 	
@@ -41,6 +52,7 @@ public abstract class Player
 	 * @return			Board state after executing a move.
 	 */
 	public abstract int[] makeMove(int[] board, int position);
+	public abstract String getMnemo();
 	
 	public void youWin(Stack<int[]> history)
 	{
@@ -79,5 +91,9 @@ public abstract class Player
 		lostCounter=0;
 	}
 
-	
+	@Override
+	public String toString()
+	{
+		return "["+markType.str()+"]["+getMnemo()+"] "+name;
+	}
 }

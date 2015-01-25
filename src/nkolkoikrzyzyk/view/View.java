@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import nkolkoikrzyzyk.commons.GameData;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.model.NeuralNetwork;
+import nkolkoikrzyzyk.view.game.GameModuleWindow;
 import nkolkoikrzyzyk.view.game.GameWindow;
 import nkolkoikrzyzyk.view.game.NewGameWindow;
 import nkolkoikrzyzyk.view.neuralnetworks.NeuralNetworksWindow;
@@ -26,6 +27,7 @@ public class View {
 	private GameWindow gameWindow = null;
 	private NewGameWindow newGameWindow = null;
 	private NeuralNetworksWindow neuralNetworksWindow = null;
+	private GameModuleWindow gameModuleWindow = null;
 
 	/**
 	 * Creates new View
@@ -74,5 +76,17 @@ public class View {
 	public NeuralNetworksWindow getNeuralNetworksWindow()
 	{
 		return neuralNetworksWindow;
+	}
+
+	public void invokeGameModuleWindow() 
+	{
+		if( this.gameModuleWindow == null)
+			this.gameModuleWindow = new GameModuleWindow(this.blockingQueue);
+		this.gameModuleWindow.setVisible(true);		
+	}
+
+	public GameModuleWindow getGameModuleWindow() 
+	{	
+		return gameModuleWindow;
 	}	
 }

@@ -14,19 +14,23 @@ import nkolkoikrzyzyk.controller.players.ChaoticNeutralPlayer;
 import nkolkoikrzyzyk.controller.players.LookupTablePlayer;
 import nkolkoikrzyzyk.events.CloseNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.DeleteLookupTableEvent;
+import nkolkoikrzyzyk.events.DeletePlayerEvent;
 import nkolkoikrzyzyk.events.GenerateTrainingDataEvent;
 import nkolkoikrzyzyk.events.LoadNetworkEvent;
 import nkolkoikrzyzyk.events.LoadTrainingDataEvent;
 import nkolkoikrzyzyk.events.NewGameEvent;
 import nkolkoikrzyzyk.events.NewLookupTableEvent;
 import nkolkoikrzyzyk.events.NewNetworkEvent;
+import nkolkoikrzyzyk.events.NewPlayerEvent;
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.SaveNetworkEvent;
 import nkolkoikrzyzyk.events.SaveTrainingDataEvent;
 import nkolkoikrzyzyk.events.StartGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
+import nkolkoikrzyzyk.events.StartNewGameModuleEvent;
 import nkolkoikrzyzyk.events.StartTestEvent;
 import nkolkoikrzyzyk.events.StartTrainingEvent;
+import nkolkoikrzyzyk.events.TestEndedEvent;
 import nkolkoikrzyzyk.events.TrainingEndedEvent;
 import nkolkoikrzyzyk.model.GameModel;
 import nkolkoikrzyzyk.model.LookupTable;
@@ -61,11 +65,13 @@ public class AppController
 	 * @param model reference to model
 	 * @param blockingQueue reference to blockingQueue for communication
 	 */
-	public AppController(final View view, final  Model model, final BlockingQueue<ProgramEvent> blockingQueue) {
+	public AppController(final View view, final  Model model, final BlockingQueue<ProgramEvent> blockingQueue) 
+	{
 		this.view = view;
 		this.model = model;
 		this.blockingQueue = blockingQueue;
-		this.eventActionMap = new HashMap<Class<? extends ProgramEvent>, ProgramAction>();
+		this.eventActionMap = 
+				new HashMap<Class<? extends ProgramEvent>, ProgramAction>();
 		this.fillEventActionMap();
 	}
 
@@ -109,13 +115,86 @@ public class AppController
 		saveNetworkEventHandler();
 		newNetworkEventHandler();
 		newLookupTableEventHandler();
+		startNewGameModuleEventHandler();
 		startGameModuleEventHandler();
 		generateTrainingDataEventHandler();
 		deleteLookupTableEventHandler();
 		loadTrainingDataEventHandler();
 		saveTrainingDataEventHandler();
+		deletePlayerEventHandler();
+		newPlayerEventHandler();
+		testEndedEventHandler();
 	}
 
+	private void testEndedEventHandler() 
+	{
+		this.eventActionMap.put( TestEndedEvent.class, new ProgramAction() 
+		{	
+			@Override
+			public void go(ProgramEvent event) 
+			{
+				TestEndedEvent tEE = ( TestEndedEvent ) event;
+				try {
+					AppController.this.view.getGameModuleWindow().setResults(tEE.tester.get());
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+		
+	}
+
+	private void newPlayerEventHandler() 
+	{
+		this.eventActionMap.put(NewPlayerEvent.class, new ProgramAction() 
+		{	
+			@Override
+			public void go(ProgramEvent event) 
+			{
+				NewPlayerEvent nPE = (NewPlayerEvent)event;
+				AppController.this.model.addPlayer(nPE.player);
+				AppController.this.refreshPlayerList();
+			}
+		});
+	}
+
+	private void deletePlayerEventHandler() 
+	{
+		this.eventActionMap.put(DeletePlayerEvent.class, new ProgramAction()
+		{	
+			@Override
+			public void go(ProgramEvent event) 
+			{
+				DeletePlayerEvent dPE = (DeletePlayerEvent) event;
+				AppController.this.model.deletePlayer(dPE.player);	
+				refreshPlayerList();
+			}
+		});
+		
+	}
+
+	private void startGameModuleEventHandler()
+	{
+		this.eventActionMap.put( StartGameModuleEvent.class, new ProgramAction()
+		{
+			@Override
+			public void go( ProgramEvent event )
+			{
+				StartGameModuleEvent sGME = (StartGameModuleEvent) event;
+				AppController.this.view.invokeGameModuleWindow();
+				AppController.this.view.getGameModuleWindow().populateLists(
+						model.getFilteredNetworkListModel(9, 1),
+						model.getFilteredNetworkListModel(9, 9),
+						model.getLookupTableListModel()
+						);
+			}
+		});
+	}
+	
 	private void startTestEventHandler()
 	{
 		this.eventActionMap.put( StartTestEvent.class, new ProgramAction()
@@ -349,14 +428,14 @@ public class AppController
 		});
 	}
 
-	private void startGameModuleEventHandler()
+	private void startNewGameModuleEventHandler()
 	{
-		this.eventActionMap.put( StartGameModuleEvent.class, new ProgramAction()
+		this.eventActionMap.put( StartNewGameModuleEvent.class, new ProgramAction()
 		{
 			@Override
 			public void go( ProgramEvent event )
 			{
-				StartGameModuleEvent sGME = (StartGameModuleEvent) event;
+				StartNewGameModuleEvent sGME = (StartNewGameModuleEvent) event;
 				AppController.this.view.invokeNewGameWindow(
 						AppController.this.model.getFilteredNetworkListModel(9, 1));				
 			}
@@ -401,6 +480,14 @@ public class AppController
 		AppController.this.view.getNeuralNetworksWindow().populateNetworkList(
 				AppController.this.model.getNetworkListModel()
 				);
+	}
+
+	private void refreshPlayerList() 
+	{
+		AppController.this.view.getGameModuleWindow().populatePlayerList(
+				AppController.this.model.getPlayerListModel()
+				);
+		
 	}
 
 	private void refreshTrainingDataList()

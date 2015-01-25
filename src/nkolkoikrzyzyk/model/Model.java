@@ -8,6 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
+import nkolkoikrzyzyk.controller.players.Player;
 import nkolkoikrzyzyk.events.ProgramEvent;
 
 /**
@@ -21,6 +22,7 @@ public class Model
 	private final List<NeuralNetwork> networkList;
 	private final List<TrainingData> trainingDataList;
 	private final List<LookupTable> lookupTableList;
+	private final List<Player> playerList;
 
 	public List<NeuralNetwork> getNetworkList() 
 	{
@@ -33,6 +35,7 @@ public class Model
 		this.networkList = new LinkedList<NeuralNetwork>();
 		this.trainingDataList = new LinkedList<TrainingData>();
 		this.lookupTableList = new LinkedList<LookupTable>();
+		this.playerList = new LinkedList<Player>();
 		
 		//TEST
 		NeuralNetwork mlp3 = new NeuralNetwork("15dots ANN" ,15, new int[]{ 10, 4 }, 1.0f); 
@@ -93,6 +96,17 @@ public class Model
 	{
 		this.lookupTableList.remove(table);
 	}
+	
+	public void addPlayer( Player player)
+	{
+		this.playerList.add(player);
+	}
+	
+
+	public void deletePlayer(Player player)
+	{
+		this.playerList.remove(player);
+	}
 
 	public NeuralNetwork[] getNetworkListModel()
 	{
@@ -131,6 +145,13 @@ public class Model
 	{
 		LookupTable[] array = new LookupTable[lookupTableList.size()];
 		lookupTableList.toArray(array);
+		return array;
+	}
+	
+	public Player[] getPlayerListModel()
+	{
+		Player[] array = new Player[playerList.size()];
+		playerList.toArray(array);
 		return array;
 	}
 }

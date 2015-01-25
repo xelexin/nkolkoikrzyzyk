@@ -45,7 +45,7 @@ import nkolkoikrzyzyk.view.lookup.LookupTablePanel;
  */
 public class NeuralNetworksWindow extends JFrame implements WindowListener 
 {	
-	private BlockingQueue<ProgramEvent> blockingQueue;
+	private final BlockingQueue<ProgramEvent> blockingQueue;
 	private NeuralNetworkDrawPanel drawPanel;
 	private JList<NeuralNetwork> networkList;
 	private JFileChooser fileChooserNetwork;
@@ -239,7 +239,8 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 	public void windowClosed(WindowEvent arg0) {}
 
 	@Override
-	public void windowClosing(WindowEvent arg0) {
+	public void windowClosing(WindowEvent arg0) 
+	{
 		blockingQueue.add( new CloseNeuralNetworksModuleEvent());
 	}
 

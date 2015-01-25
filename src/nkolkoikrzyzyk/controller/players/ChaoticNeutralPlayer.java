@@ -26,4 +26,10 @@ public class ChaoticNeutralPlayer extends Player
 		board[input] = markType.value();
 		return board;
 	}
+
+	@Override
+	public String getMnemo() 
+	{
+		return "CHS";
+	}
 }

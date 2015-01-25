@@ -266,8 +266,6 @@ public class LookupTablePanel extends JPanel implements PropertyChangeListener
 								));				
 			}
 		});
-		//TODO: 
-		beforestatesButton.setEnabled(false);
 		return beforestatesButton;
 	}
 

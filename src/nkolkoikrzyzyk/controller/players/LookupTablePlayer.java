@@ -26,12 +26,7 @@ public class LookupTablePlayer extends Player
 	
 	private LookupTable lookupTable;
 	private static Random random = new Random(System.nanoTime());
-	private boolean trainingInProgress = true;
-	
-	public LookupTablePlayer(String name, Mark markType)
-	{
-		this(name, markType, new LookupTable() );
-	}
+	private boolean trainingInProgress = false;
 	
 	public LookupTablePlayer(String name, Mark markType, LookupTable lookupTable) 
 	{
@@ -130,18 +125,6 @@ public class LookupTablePlayer extends Player
 	{
 		super.youLost(historyStack);
 		if(trainingInProgress) lookupTable.updateProcedure(historyStack, 0.0);
-		try
-		{
-			PrintStream out = new PrintStream( new File("lost.txt"));
-			while(!historyStack.isEmpty())
-			{
-				GameModel.printBoard(historyStack.pop(), out);
-			}
-		} catch (FileNotFoundException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public boolean isTrainingInProgress() 
@@ -157,5 +140,10 @@ public class LookupTablePlayer extends Player
 	{
 		return this.lookupTable;
 	}
-
+	
+	@Override
+	public String getMnemo()
+	{
+		return "LUT";
+	}
 }

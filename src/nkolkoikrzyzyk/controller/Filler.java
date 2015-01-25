@@ -31,6 +31,8 @@ public class Filler extends SwingWorker<Void, Void>
 	
 	public void playGames()
 	{
+		player1.setTrainingInProgress(true);
+		player2.setTrainingInProgress(true);
 		long start = System.currentTimeMillis();
 		for( int i = 1; i<=games; i++)
 		{
@@ -38,7 +40,8 @@ public class Filler extends SwingWorker<Void, Void>
 			if (i % (games/100) == 0)
 				setProgress((100*i)/games);
 		}
-		System.out.println("Playing " + games + " games took " + (System.currentTimeMillis()-start)/1000 + "s.");
+		player1.setTrainingInProgress(false);
+		player2.setTrainingInProgress(false);
 	}
 	
 	@Override

@@ -36,23 +36,24 @@ public class AfterstatesANNPlayer extends NeuralNetworkPlayer
 				if( board[i] == 0 )
 				{
 					temp[i] = markType.value();
-					System.out.println("Testing");
-					GameModel.printBoard(temp);
+					//TODO: print
+//					System.out.println("Testing");
+//					GameModel.printBoard(temp);
 					float[] input = GameModel.toFloat(temp);
 					float[] output = network.run(input);
-					System.out.println("Network output: " + output[0] + " Current best probability: " + bestProbability);
+//					System.out.println("Network output: " + output[0] + " Current best probability: " + bestProbability);
 					if( output[0] > bestProbability )
 					{
 						bestMove = i;
 						bestProbability = output[0];
-						System.out.println("Now best move is: " + bestMove);
+//						System.out.println("Now best move is: " + bestMove);
 					}
 				}
 			}
 		} 
 		else
 		{
-			System.out.println("network == null, doing random move...");
+//			System.out.println("network == null, doing random move...");
 		}
 
 		if (bestMove == -1)
@@ -63,8 +64,14 @@ public class AfterstatesANNPlayer extends NeuralNetworkPlayer
 			} while (board[bestMove] == 0);
 		}
 			
-		System.out.println("Afterstates ANN player selected " + bestMove + " as a best move");
+//		System.out.println("Afterstates ANN player selected " + bestMove + " as a best move");
 		board[bestMove] = markType.value();
 		return board;
+	}
+
+	@Override
+	public String getMnemo() 
+	{
+		return "AANN";
 	}
 }
