@@ -111,7 +111,6 @@ public class AppController
 		startTrainingEventHandler();
 		trainingEndedEventHandler();
 		startNeuralNetworksModuleEventHandler();
-		closeNeuralNetworksModuleEventHandler();
 		loadNetworkEventHandler();
 		saveNetworkEventHandler();
 		newNetworkEventHandler();
@@ -186,7 +185,6 @@ public class AppController
 			public void go( ProgramEvent event )
 			{
 				StartGameModuleEvent sGME = (StartGameModuleEvent) event;
-				AppController.this.view.invokeGameModuleWindow();
 				AppController.this.view.getGameModuleWindow().populateLists(
 						model.getFilteredNetworkListModel(9, 1),
 						model.getFilteredNetworkListModel(9, 9),
@@ -358,23 +356,9 @@ public class AppController
 			@Override
 			public void go( ProgramEvent event ) {
 				StartNeuralNetworksModuleEvent sNNME = ( StartNeuralNetworksModuleEvent ) event;
-				AppController.this.view.invokeNeuralNetworksWindow();
-				AppController.this.view.setAppWindowVisible( false );
 				refreshNetworkList();
 				refreshTrainingDataList();
 				refreshLookupTableList();
-			}
-		});
-	}
-
-	private void closeNeuralNetworksModuleEventHandler()
-	{
-		this.eventActionMap.put( CloseNeuralNetworksModuleEvent.class, new ProgramAction()
-		{
-			@Override
-			public void go( ProgramEvent event ) {
-				CloseNeuralNetworksModuleEvent eNNME = ( CloseNeuralNetworksModuleEvent ) event;
-				AppController.this.view.setAppWindowVisible( true );
 			}
 		});
 	}
@@ -477,24 +461,16 @@ public class AppController
 		this.eventActionMap.put( NewGameEvent.class, new ProgramAction()
 		{
 			@Override
-			public void go( ProgramEvent event ) {
+			public void go( ProgramEvent event ) 
+			{
 				NewGameEvent nGE = ( NewGameEvent ) event;
-				System.out.println("New game button clicked");
-
 				BlockingQueue<ProgramEvent> gameQueue = new LinkedBlockingQueue<ProgramEvent>();
 				GameModel model = new GameModel();
 				GameData gameData = new GameData(model.getId(), nGE.player1.getName(), nGE.player2.getName());
-				GameWindow view = AppController.this.view.invokeGameWindow(gameQueue, gameData);
-				System.out.println(view);
-				GameController controller = new GameController(view, model, gameQueue, blockingQueue, nGE.player1, nGE.player2);
-				AppController.this.view.setAppWindowVisible( false );
-				try {
-					controller.work();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				AppController.this.view.setAppWindowVisible( true );
+				GameWindow gameView = new GameWindow(gameQueue, gameData);
+				AppController.this.view.addGameWindow(gameView);
+				GameController controller = new GameController(gameView, model, gameQueue, blockingQueue, nGE.player1, nGE.player2);
+				new Thread(controller).start();
 			}
 		});
 	}

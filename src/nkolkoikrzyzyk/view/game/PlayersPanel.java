@@ -255,6 +255,7 @@ public class PlayersPanel extends JPanel implements ActionListener
 		humanButton.setActionCommand("human");
 		humanButton.addActionListener(this);
 		group.add(humanButton);
+		humanButton.setSelected(true);
 		return humanButton;
 	}
 

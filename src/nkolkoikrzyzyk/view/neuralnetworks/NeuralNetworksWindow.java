@@ -43,7 +43,7 @@ import nkolkoikrzyzyk.view.lookup.LookupTablePanel;
  * @author Johhny
  *
  */
-public class NeuralNetworksWindow extends JFrame implements WindowListener 
+public class NeuralNetworksWindow extends JPanel /*implements WindowListener*/ 
 {	
 	private final BlockingQueue<ProgramEvent> blockingQueue;
 	private NeuralNetworkDrawPanel drawPanel;
@@ -60,11 +60,11 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 
 	private void initialize()
 	{
-		this.addWindowListener(this);
-		this.setTitle("Neural Networks Module");
-		JPanel padding = new JPanel();
-		padding.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-		this.setContentPane(padding);
+//		this.addWindowListener(this);
+//		this.setTitle("Neural Networks Module");
+//		JPanel padding = new JPanel();
+//		padding.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+//		this.setContentPane(padding);
 		this.setLayout( new BorderLayout() );
 		
 		drawPanel = new NeuralNetworkDrawPanel();
@@ -73,18 +73,18 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 		
 		fill();
 		
-		this.pack();
+		this.setVisible(false);
+//		this.pack();
 		
-		Rectangle  bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-		Dimension mSize =new Dimension(
-				Math.min( this.getSize().width, bounds.width),
-				Math.min( this.getSize().height, bounds.height-10)
-				);
-		this.setMinimumSize(mSize);
-		this.setResizable( true );
-			
-		this.setVisible( true );
-		
+//		Rectangle  bounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+//		Dimension mSize =new Dimension(
+//				Math.min( this.getSize().width, bounds.width),
+//				Math.min( this.getSize().height, bounds.height-10)
+//				);
+//		this.setMinimumSize(mSize);
+//		this.setResizable( true );
+//			
+//		this.setVisible( true );
 	}
 
 	private void initializeNetworkList() 
@@ -231,29 +231,29 @@ public class NeuralNetworksWindow extends JFrame implements WindowListener
 	{
 		this.drawPanel.setMockup(mockup);
 	}
-
-	@Override
-	public void windowActivated(WindowEvent arg0) {}
-
-	@Override
-	public void windowClosed(WindowEvent arg0) {}
-
-	@Override
-	public void windowClosing(WindowEvent arg0) 
-	{
-		blockingQueue.add( new CloseNeuralNetworksModuleEvent());
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent arg0) {}
-
-	@Override
-	public void windowDeiconified(WindowEvent arg0) {}
-
-	@Override
-	public void windowIconified(WindowEvent arg0) {}
-
-	@Override
-	public void windowOpened(WindowEvent arg0) {}
+//
+//	@Override
+//	public void windowActivated(WindowEvent arg0) {}
+//
+//	@Override
+//	public void windowClosed(WindowEvent arg0) {}
+//
+//	@Override
+//	public void windowClosing(WindowEvent arg0) 
+//	{
+//		blockingQueue.add( new CloseNeuralNetworksModuleEvent());
+//	}
+//
+//	@Override
+//	public void windowDeactivated(WindowEvent arg0) {}
+//
+//	@Override
+//	public void windowDeiconified(WindowEvent arg0) {}
+//
+//	@Override
+//	public void windowIconified(WindowEvent arg0) {}
+//
+//	@Override
+//	public void windowOpened(WindowEvent arg0) {}
 
 }

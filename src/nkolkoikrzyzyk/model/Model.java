@@ -122,8 +122,6 @@ public class Model
 		while( iterator.hasNext())
 		{
 			NeuralNetwork element = iterator.next();
-			System.out.println(element.getInputSize() + " " + element.getOutputSize());
-
 			if ( element.getInputSize() == inputSize && element.getOutputSize() == outputSize)
 			{
 				filteredList.add(element);

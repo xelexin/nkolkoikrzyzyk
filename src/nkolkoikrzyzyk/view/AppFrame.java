@@ -3,113 +3,130 @@
  */
 package nkolkoikrzyzyk.view;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.BlockingQueue;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import nkolkoikrzyzyk.events.ProgramEvent;
 import nkolkoikrzyzyk.events.StartGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNewGameModuleEvent;
 import nkolkoikrzyzyk.events.StartNeuralNetworksModuleEvent;
 import nkolkoikrzyzyk.events.StartTestEvent;
+import nkolkoikrzyzyk.view.game.GameModuleWindow;
+import nkolkoikrzyzyk.view.neuralnetworks.NeuralNetworksWindow;
 
 /**
  * @author elohhim
  *
  */
 @SuppressWarnings("serial")
-public class AppFrame extends JFrame {
-	private BlockingQueue<ProgramEvent> blockingQueue;
-		
-	public AppFrame(BlockingQueue<ProgramEvent> blockingQueue) 
+public class AppFrame extends JFrame 
+{
+	//outside
+	private final BlockingQueue<ProgramEvent> blockingQueue;
+	private final NeuralNetworksWindow aNNModule;
+	private final GameModuleWindow gameModule;
+	//inside
+	private JPanel mainPanel;
+	
+
+	public AppFrame(
+			BlockingQueue<ProgramEvent> blockingQueue,
+			NeuralNetworksWindow aNNModule, 
+			GameModuleWindow gameModule) 
 	{
 		this.blockingQueue = blockingQueue;
+		this.aNNModule = aNNModule;
+		this.gameModule = gameModule;
 		this.initialize();
 	}
 
 	private void initialize()
 	{
-		this.setBounds(100, 100, 1200, 300);
+		this.setTitle("ANNPTTT (Artificial Neural Networks playing Tic-Tac-Toe)");
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		this.setResizable( true );
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout( new GridLayout(0,4) );
-		this.setVisible( true );
 		
+		initializeMainPanel();
 		fill();
+		pack();
+		this.setVisible( true );
+	}
+
+	private void initializeMainPanel() 
+	{
+		mainPanel = new JPanel( new BorderLayout());
+		mainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+		
 	}
 
 	private void fill() 
 	{
 		createMenuBar();
-		
-//		JDesktopPane desktop = new JDesktopPane();
-//		this.setContentPane(desktop);
-		
-		JButton newGameButton = new JButton("<html><center>Play<br>Tic-Tac-Toe</center></html>");
-		newGameButton.addActionListener( new ActionListener() {
-			
+		this.add(ViewUtilities.scroll(mainPanel));
+	}
+
+	private void createMenuBar() 
+	{
+		JMenuBar menuBar = new JMenuBar();
+		JMenu module = new JMenu("Select module");
+		module.getAccessibleContext().setAccessibleDescription(
+				"Select one of the application modules."
+				);
+
+		JMenuItem aNNModuleMenu = 
+				new JMenuItem("Artificial Neural Networks Module");
+		module.add(aNNModuleMenu);
+		aNNModuleMenu.addActionListener( new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				blockingQueue.add( new StartNewGameModuleEvent());
-			}
-		});
-		this.add(newGameButton);
-		
-		JButton neuralNetworksButton = 
-				new JButton("<html><center>Manage Artificial<br>Neural Networks</center></html>");
-		neuralNetworksButton.addActionListener( new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(ActionEvent e) 
+			{
+				mainPanel.removeAll();
+				mainPanel.add(aNNModule);
 				blockingQueue.add( new StartNeuralNetworksModuleEvent());
 			}
 		});
-		this.add(neuralNetworksButton);
 		
-		JButton startTestButton = new JButton("Start test WARNING: long");
-		startTestButton.addActionListener( new ActionListener() {
-			
+		JMenuItem tTTGameModuleMenu = 
+				new JMenuItem("Tic-Tac-Toe Game Module");
+		tTTGameModuleMenu.addActionListener( new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) 
+			{
+				mainPanel.removeAll();
+				mainPanel.add(gameModule);
+				blockingQueue.add( new StartGameModuleEvent());
+			}
+		});
+		module.add(tTTGameModuleMenu);
+
+		JMenuItem startTest = new JMenuItem("Start test WARNING: long");
+		startTest.addActionListener( new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				blockingQueue.add( new StartTestEvent() );
 			}
 		});
-		this.add(startTestButton);
-		
-		JButton gameModuleButton = new JButton("<html><center>Tic-Tac-Toe<br>Game Module</center></html>");
-		gameModuleButton.addActionListener( new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				blockingQueue.add( new StartGameModuleEvent());
-			}
-		});
-		this.add(gameModuleButton);
-	}
+		module.add(startTest);
 
-	private void createMenuBar() {
-		JMenuBar menuBar = new JMenuBar();
-		JMenu module = new JMenu("Select module");
-		module.getAccessibleContext().setAccessibleDescription(
-		        "Select one of the application modules."
-				);
 		
-		JMenuItem aNNModule = 
-				new JMenuItem("Artificial Neural Networks Module");
-		module.add(aNNModule);
 		
-		JMenuItem tTTGameModule = 
-				new JMenuItem("Tic-Tac-Toe Game Module");
-		module.add(tTTGameModule);
 		menuBar.add(module);
-		
+
 		this.setJMenuBar(menuBar);
 	}
 }

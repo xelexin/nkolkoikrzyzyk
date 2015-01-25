@@ -43,9 +43,9 @@ public class TestPlayerPanel extends JPanel implements PropertyChangeListener
 	private static final long serialVersionUID = 1L;
 
 	private static final int MIN_WIDTH = 550;
-	private static final int MIN_HEIGHT= 260;
+	private static final int MIN_HEIGHT= 200;
 	private static final int MAX_WIDTH = 550;
-	private static final int MAX_HEIGHT = 260;
+	private static final int MAX_HEIGHT = 200;
 	//outside
 	private final BlockingQueue<ProgramEvent> blockingQueue;
 	//inside
@@ -240,5 +240,17 @@ public class TestPlayerPanel extends JPanel implements PropertyChangeListener
 		draws.setText(Long.toString(testResult.draws) + " (" +
 				String.format("%.2f", testResult.dpercent) + "%)");
 		time.setText(Long.toString(testResult.time) + "ms.");
+	}
+	
+	@Override
+	public Dimension getPreferredSize()
+	{
+		return new Dimension(MIN_WIDTH, MIN_HEIGHT);
+	}
+
+	@Override
+	public Dimension getMaximumSize()
+	{
+		return new Dimension(MAX_WIDTH, MAX_HEIGHT);
 	}
 }

@@ -26,7 +26,7 @@ import nkolkoikrzyzyk.view.game.GameWindow;
  * @author Johhny
  *
  */
-public class GameController
+public class GameController implements Runnable
 {
 	private static final int DELAY = 100;
 	
@@ -124,7 +124,6 @@ public class GameController
 				throw new RuntimeException(e);
 			}
 		}
-		System.out.println("Controlls returned.");
 	}
 
 	/**
@@ -261,5 +260,16 @@ public class GameController
 		}		
 		swapPlayers();
 		startTurn();
+	}
+
+	@Override
+	public void run() 
+	{
+		try {
+			work();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

@@ -18,6 +18,7 @@ import java.util.concurrent.BlockingQueue;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -27,12 +28,13 @@ import nkolkoikrzyzyk.events.game.GameRestartEvent;
 import nkolkoikrzyzyk.events.game.GameTerminatedEvent;
 import nkolkoikrzyzyk.events.game.RematchEvent;
 import nkolkoikrzyzyk.events.game.StartGameEvent;
+import nkolkoikrzyzyk.view.ViewUtilities;
 
 /**
  * @author Johhny
  *
  */
-public class GameWindow extends JFrame implements WindowListener
+public class GameWindow extends JInternalFrame
 {
 	private BlockingQueue<ProgramEvent> blockingQueue;
 	
@@ -45,6 +47,11 @@ public class GameWindow extends JFrame implements WindowListener
 	
 	public GameWindow(BlockingQueue<ProgramEvent> blockingQueue, GameData gameData) 
 	{
+		super("Game #" + gameData.gameId,
+		          false, //resizable
+		          true, //closable
+		          false, //maximizable
+		          true);//iconifiable
 		this.blockingQueue = blockingQueue;
 		this.message = new JLabel("Welcome!");
 		this.gameId = gameData.gameId;
@@ -55,28 +62,20 @@ public class GameWindow extends JFrame implements WindowListener
 	
 	private void initialize()
 	{
-		this.addWindowListener(this);
-		this.setTitle("Tic-Tac-Toe - Game#" + gameId );
-		this.setBounds(320, 100, 400, 600);
-		this.setResizable( false );
-		this.setLocationRelativeTo( null );
-		this.setLayout( null );
-				
-		fillTopPanel();
-		fillBottomPanel();
-		fillGlassPanel();
-		
-		this.setVisible( true );
-	}
-
-	private void fillTopPanel() {
+		this.setLayout( new BorderLayout(5,5) );
 		this.gameBoard = new GameBoard(blockingQueue, gameId);
-		this.add( gameBoard );
-		gameBoard.setBounds(0, 0, 400, 400);
+		
+		this.add(gameBoard, BorderLayout.CENTER);
+		this.add(bottomPanel(), BorderLayout.PAGE_END);
+		fillGlassPanel();
+		this.pack();
+		blockingQueue.add(new StartGameEvent());
 	}
 
-	private void fillGlassPanel() {
-		glass = new JPanel() {
+	private void fillGlassPanel() 
+	{
+		glass = new JPanel() 
+		{
 			@Override
 			protected void paintComponent(Graphics g)
 		    {
@@ -129,11 +128,10 @@ public class GameWindow extends JFrame implements WindowListener
 		this.setGlassPane(glass);
 	}
 
-	private void fillBottomPanel() {
+	private JPanel bottomPanel() 
+	{
 		JPanel bottomPanel = new JPanel();
-		bottomPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createTitledBorder("Game"),
-                BorderFactory.createEmptyBorder(5,5,5,5)));
+		bottomPanel.setBorder(ViewUtilities.titledBorder("Game"));
 		bottomPanel.setLayout( new GridLayout(4,1));
 		
 		message.setForeground(Color.RED);
@@ -150,39 +148,12 @@ public class GameWindow extends JFrame implements WindowListener
 			}
 		});
 		bottomPanel.add(restartButton);
-		this.add(bottomPanel);
-		bottomPanel.setBounds(0,410,400,150);
+		return bottomPanel;
 	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {}
-
-	@Override
-	public void windowClosed(WindowEvent e) {}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-        blockingQueue.add(new GameTerminatedEvent());
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {}
-
-	@Override
-	public void windowIconified(WindowEvent e) {}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		blockingQueue.add( new StartGameEvent());
-	}
-
+	
 	public void refresh(int[] newBoard) 
 	{
 		this.gameBoard.updateState( newBoard );
-		
 		this.repaint();
 	}
 

@@ -37,10 +37,15 @@ public class View {
 	 */
 	public View(final BlockingQueue<ProgramEvent> blockingQueue){
 		this.blockingQueue = blockingQueue;
+		invokeNeuralNetworksWindow();
+		invokeGameModuleWindow();
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				View.this.mainFrame = new AppFrame(blockingQueue);
+				View.this.mainFrame = new AppFrame(
+						blockingQueue, 
+						neuralNetworksWindow,
+						gameModuleWindow);
 			}
 		});
 	}
@@ -89,4 +94,9 @@ public class View {
 	{	
 		return gameModuleWindow;
 	}	
+	
+	public void addGameWindow( GameWindow game )
+	{
+		this.gameModuleWindow.addGameWindow(game);
+	}
 }
