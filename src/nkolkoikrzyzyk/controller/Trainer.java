@@ -74,7 +74,8 @@ public class Trainer extends SwingWorker<NeuralNetwork, Void>
 				
 			time += System.nanoTime() - startTime;
 
-			if (epoch % (epoches/100) == 0)
+			int step = epoches>100?epoches/100:1;
+			if (epoch % step == 0)
 			{
 				setProgress((100*epoch)/epoches);
 			}
@@ -84,6 +85,7 @@ public class Trainer extends SwingWorker<NeuralNetwork, Void>
 	
 	private float calculateMeanError()
 	{
+		globalMaxError = 0.0f;
 		float meanError = 0.0f;
 		for (int i = 0; i < data.getOutputs().length; i++)
 		{
@@ -126,14 +128,14 @@ public class Trainer extends SwingWorker<NeuralNetwork, Void>
 	{
 		
 		JPanel msgPanel = new JPanel( new BorderLayout(5,5));
-		JLabel msg = new JLabel("Max Error: " + globalMaxError +
-				" Mean max error: " + calculateMeanError() +  
+		JLabel msg = new JLabel("Mean max error: " + calculateMeanError() +
+				" Max Error: " + globalMaxError +
 				". Learning time per epoch: " + meanTime + "ms.");
 		msgPanel.add(msg, BorderLayout.PAGE_START);
 		String[] labels = {"Momentum", "Learning ratio", "Epoches"};
-		JSpinner momentum = ViewUtilities.spinner(this.momentum, 0.0f, 1.0f, 0.01f, "0.00");
-		JSpinner learningRatio = ViewUtilities.spinner(this.learningRate, 0.0f, 1.0f, 0.01f, "0.00");
-		JSpinner epoches = ViewUtilities.spinner(this.epoches, 100, 10000, 100, "0");	
+		JSpinner momentum = ViewUtilities.spinner(this.momentum, 0.0f, 1.0f, 0.001f, "0.000");
+		JSpinner learningRatio = ViewUtilities.spinner(this.learningRate, 0.0f, 1.0f, 0.001f, "0.000");
+		JSpinner epoches = ViewUtilities.spinner(this.epoches, 10, 1000, 10, "0");	
 		Component[] fields = {momentum, learningRatio, epoches};
 		LabeledForm form  = new LabeledForm(fields, labels);
 		msgPanel.add(form, BorderLayout.CENTER);

@@ -146,7 +146,8 @@ public class GameModel
 		return true;
 	}
 
-	public boolean ifWin() {
+	public boolean ifWin() 
+	{
 		boolean win=false;
 		//test poziomy
 		for(int i=0;i<3;i++)
@@ -177,6 +178,38 @@ public class GameModel
 		return win;
 	}
 
+	public static boolean isWin( int[] board ) 
+	{
+		boolean win=false;
+		//test poziomy
+		for(int i=0;i<3;i++)
+		{
+			if(board[i*3]==board[i*3+1] && board[i*3+1]==board[i*3+2] && (board[i*3]==1 || board[i*3]==-1))
+			{
+				win=true;
+			}
+		}
+		//test pionowy
+		for(int i=0;i<3;i++)
+		{
+			if(board[i]==board[(i+6)] && board[(i+6)]==board[(i+3)] && (board[i]==1 || board[i]==-1))
+			{
+				win=true;
+			}
+		}
+		//test z lewej na prawa
+		if(board[0]==board[4] && board[8]==board[4] && (board[0]==1 || board[0]==-1))
+		{
+			win=true;
+		}
+		//test z prawej na lewa
+		if(board[2]==board[4] && board[6]==board[4] && (board[4]==1 || board[4]==-1))
+		{
+			win=true;
+		}
+		return win;
+	}
+	
 	public void reset() 
 	{
 		history.clear();

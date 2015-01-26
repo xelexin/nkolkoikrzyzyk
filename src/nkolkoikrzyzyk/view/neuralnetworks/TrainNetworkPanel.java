@@ -98,11 +98,11 @@ public class TrainNetworkPanel extends JPanel implements PropertyChangeListener
 	{
 		this.fileChooser = new JFileChooser();
 
-		this.momentum = ViewUtilities.spinner(0.5f, 0.0f, 1.0f, 0.01f, "0.00");
+		this.momentum = ViewUtilities.spinner(0.5f, 0.001f, 1.0f, 0.001f, "0.000");
 
-		this.learningRatio = ViewUtilities.spinner(0.5f, 0.0f, 1.0f, 0.01f, "0.00");
+		this.learningRatio = ViewUtilities.spinner(0.5f, 0.001f, 1.0f, 0.001f, "0.000");
 
-		this.epoches = ViewUtilities.spinner(1000, 100, 10000, 100, "0");
+		this.epoches = ViewUtilities.spinner(100, 10, 1000, 10, "0");
 	}
 
 	private void initializeTrainButton()

@@ -37,9 +37,9 @@ public class BeforestatesANNPlayer extends NeuralNetworkPlayer
 			}
 		}
 		//TODO print
-		GameModel.printBoard(board);
-		System.out.println("Best move is:" + bestMove);
-		System.out.println("");
+		//GameModel.printBoard(board);
+		//System.out.println("Best move is:" + bestMove);
+		//System.out.println("");
 		if (bestMove == -1)
 		{
 			do 

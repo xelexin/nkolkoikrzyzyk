@@ -36,44 +36,43 @@ public class Model
 		this.trainingDataList = new LinkedList<TrainingData>();
 		this.lookupTableList = new LinkedList<LookupTable>();
 		this.playerList = new LinkedList<Player>();
-		
-		//TEST
-		NeuralNetwork mlp3 = new NeuralNetwork("15dots ANN" ,15, new int[]{ 10, 4 }, 1.0f); 
-		mlp3.getLayer(1).setIsSigmoid(false);
-		networkList.add(mlp3);
-
-		// inputs
-		float[][] inputs = new float[][]
-				{
-				new float[]{ 1, 1, 1,  1, 0, 1,  1, 0, 1,  1, 0, 1,  1, 1, 1 }, // 0
-				new float[]{ 0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1 }, // 1
-				new float[]{ 1, 1, 1,  0, 0, 1,  1, 1, 1,  1, 0, 0,  1, 1, 1 }, // 2
-				new float[]{ 1, 1, 1,  0, 0, 1,  1, 1, 1,  0, 0, 1,  1, 1, 1 }, // 3
-				new float[]{ 1, 0, 1,  1, 0, 1,  1, 1, 1,  0, 0, 1,  0, 0, 1 }, // 4
-				new float[]{ 1, 1, 1,  1, 0, 0,  1, 1, 1,  0, 0, 1,  1, 1, 1 }, // 5
-				new float[]{ 1, 1, 1,  1, 0, 0,  1, 1, 1,  1, 0, 1,  1, 1, 1 }, // 6
-				new float[]{ 1, 1, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1 }, // 7
-				new float[]{ 1, 1, 1,  1, 0, 1,  1, 1, 1,  1, 0, 1,  1, 1, 1 }, // 8
-				new float[]{ 1, 1, 1,  1, 0, 1,  1, 1, 1,  0, 0, 1,  1, 1, 1 }, // 9
-				};
-
-		// outputs
-		float[][] outputs = new float[][]
-				{
-				new float[]{ 0, 0, 0, 0 },
-				new float[]{ 0, 0, 0, 1 },
-				new float[]{ 0, 0, 1, 0 },
-				new float[]{ 0, 0, 1, 1 },
-				new float[]{ 0, 1, 0, 0 },
-				new float[]{ 0, 1, 0, 1 },
-				new float[]{ 0, 1, 1, 0 },
-				new float[]{ 0, 1, 1, 1 },
-				new float[]{ 1, 0, 0, 0 },
-				new float[]{ 1, 0, 0, 1 },
-				};
-
-		trainingDataList.add(new TrainingData("15dots data set", inputs, outputs));
-		//TEST END
+//		//TEST
+//		NeuralNetwork mlp3 = new NeuralNetwork("15dots ANN" ,15, new int[]{ 10, 4 }, 1.0f); 
+//		mlp3.getLayer(1).setIsSigmoid(false);
+//		networkList.add(mlp3);
+//
+//		// inputs
+//		float[][] inputs = new float[][]
+//				{
+//				new float[]{ 1, 1, 1,  1, 0, 1,  1, 0, 1,  1, 0, 1,  1, 1, 1 }, // 0
+//				new float[]{ 0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1 }, // 1
+//				new float[]{ 1, 1, 1,  0, 0, 1,  1, 1, 1,  1, 0, 0,  1, 1, 1 }, // 2
+//				new float[]{ 1, 1, 1,  0, 0, 1,  1, 1, 1,  0, 0, 1,  1, 1, 1 }, // 3
+//				new float[]{ 1, 0, 1,  1, 0, 1,  1, 1, 1,  0, 0, 1,  0, 0, 1 }, // 4
+//				new float[]{ 1, 1, 1,  1, 0, 0,  1, 1, 1,  0, 0, 1,  1, 1, 1 }, // 5
+//				new float[]{ 1, 1, 1,  1, 0, 0,  1, 1, 1,  1, 0, 1,  1, 1, 1 }, // 6
+//				new float[]{ 1, 1, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1,  0, 0, 1 }, // 7
+//				new float[]{ 1, 1, 1,  1, 0, 1,  1, 1, 1,  1, 0, 1,  1, 1, 1 }, // 8
+//				new float[]{ 1, 1, 1,  1, 0, 1,  1, 1, 1,  0, 0, 1,  1, 1, 1 }, // 9
+//				};
+//
+//		// outputs
+//		float[][] outputs = new float[][]
+//				{
+//				new float[]{ 0, 0, 0, 0 },
+//				new float[]{ 0, 0, 0, 1 },
+//				new float[]{ 0, 0, 1, 0 },
+//				new float[]{ 0, 0, 1, 1 },
+//				new float[]{ 0, 1, 0, 0 },
+//				new float[]{ 0, 1, 0, 1 },
+//				new float[]{ 0, 1, 1, 0 },
+//				new float[]{ 0, 1, 1, 1 },
+//				new float[]{ 1, 0, 0, 0 },
+//				new float[]{ 1, 0, 0, 1 },
+//				};
+//
+//		trainingDataList.add(new TrainingData("15dots data set", inputs, outputs));
+//		//TEST END
 	}
 
 	public void addNetwork(NeuralNetwork neuralNetwork) 

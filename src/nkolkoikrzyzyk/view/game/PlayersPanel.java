@@ -164,6 +164,8 @@ public class PlayersPanel extends JPanel implements ActionListener
 				//TADA
 			}
 		});
+		//TODO
+		detailsButton.setEnabled(false);
 		return detailsButton;
 	}
 

@@ -1,5 +1,6 @@
 package nkolkoikrzyzyk.model;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -102,6 +103,75 @@ public class LookupTable
 	}
 
 	public TrainingData getBeforestatesTrainingData()
+	{
+		String dataName = name + "-BDATA";
+		HashMap<Double, float[]> converted = convertMap();
+		List<float[]> inputs = new LinkedList<float[]>();
+		List<float[]> outputs = new LinkedList<float[]>();
+		for( Map.Entry<Double, float[]> entry : converted.entrySet() )
+		{
+			int[] unhashed = GameModel.unhash(entry.getKey());
+			float[] fUnhashed = GameModel.toFloat(unhashed);
+			inputs.add(fUnhashed);
+			outputs.add( Arrays.copyOf(entry.getValue(), entry.getValue().length) );
+		}
+
+		float[][] inputsArray = new float[inputs.size()][];
+		inputs.toArray( inputsArray );
+		float[][] outputsArray = new float[outputs.size()][];
+		outputs.toArray( outputsArray );
+		return new TrainingData(dataName, inputsArray, outputsArray);
+	}
+	
+	private HashMap<Double, float[]> convertMap()
+	{
+		HashMap<Double, float[]> converted = new HashMap<Double, float[]>();
+		for(Map.Entry<Double, Double> afterstateEntry : probabilityMap.entrySet())
+		{
+			Double afterstateHash = afterstateEntry.getKey();
+			int[] afterstate = GameModel.unhash(afterstateHash);
+			//System.out.println("#########Afterstate#########");
+			//GameModel.printBoard(afterstate);
+			
+			//checking all possibilities of beforestates
+			for( int i = 0; i<afterstate.length; i++)
+			{
+				if( afterstate[i] != 0 )
+				{
+					int[] tempBeforestate = Arrays.copyOf(afterstate, afterstate.length);
+					tempBeforestate[i] = 0;
+					int boardSum = 0;
+					for( int value : tempBeforestate) boardSum+=value;
+					//System.out.println(i + ". Beforestate - bsum: " + boardSum);
+					//GameModel.printBoard(tempBeforestate);
+					//if legal state
+					if( (boardSum == 0 || boardSum == 1) && !GameModel.isWin(tempBeforestate) )
+					{
+						//System.out.println("Legal beforestate");
+						
+						double beforestateHash = GameModel.hash(tempBeforestate);
+						float[] probabilities = converted.get(beforestateHash);
+						if( probabilities == null)
+						{
+							probabilities = new float[afterstate.length];
+							converted.put(beforestateHash, probabilities);
+						}
+						//System.out.println( "Probs for beforestate " + Arrays.toString(probabilities) );
+						probabilities[i] = afterstateEntry.getValue().floatValue();
+						//System.out.println( "Modified probs for beforestate " + Arrays.toString(probabilities) );
+					}
+					else
+					{
+						//System.out.println("Illegal beforestate");
+						continue;
+					}
+				}
+			}
+		}
+		return converted;
+	}
+
+	public TrainingData getBeforestatesTrainingData2()
 	{
 		String dataName = name + "-BDATA";
 		List<float[]> inputs = new LinkedList<float[]>();
